@@ -1,4 +1,4 @@
-package com.akos.server;
+package com.akos.uno.server;
 
 import java.io.IOException;
 import java.net.*;

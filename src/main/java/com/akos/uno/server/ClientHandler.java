@@ -1,4 +1,4 @@
-package com.akos.server;
+package com.akos.uno.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
