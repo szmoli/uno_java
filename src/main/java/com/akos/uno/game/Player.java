@@ -1,13 +1,17 @@
 package com.akos.uno.game;
 
+import java.util.List;
+
 public class Player {
     public void drawCard(Card card) {
-        hand.addCard(card);
+        hand.add(card);
     }
 
     public void playCard(Card card) {
-        hand.removeCard(card);
+        hand.remove(card);
     }
 
-    private CardPile hand;
+    private List<Card> hand;
+    private String playerName;
+    boolean hasSaidUno;
 }
