@@ -23,12 +23,10 @@ public class Server {
             serverLogger.error("Server socket was not correctly initialized.");
         }
 
-        isRunning = true;
-
         try {
             serverLogger.trace("Server is listening on port: {}", serverSocket.getLocalPort());
 
-            while (isRunning) {
+            while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
                 serverLogger.trace("New client connected");
 
@@ -45,7 +43,6 @@ public class Server {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
-                isRunning = false;
             }
         } catch (IOException IOe) {
             serverLogger.error("Error stopping server: {}", IOe.getMessage());
@@ -58,6 +55,5 @@ public class Server {
     }
 
     private ServerSocket serverSocket;
-    private boolean isRunning;
     protected Logger serverLogger = LogManager.getLogger();
 }
