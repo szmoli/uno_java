@@ -2,38 +2,40 @@ package com.akos.server;
 
 import java.io.IOException;
 import java.net.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // sources:
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
+// - https://betterstack.com/community/guides/logging/how-to-start-logging-with-log4j/
 public class Server {
     public Server(int port) {
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println("Server socket initialized on port: " + port);
-        } catch (IOException IOe) {
-            // @todo: implement proper logging
-            System.err.println("Error initializing server socket: " + IOe.getMessage());
+            serverLogger.info("Server socket initialized on port: {}", port);
+        } catch (IOException e) {
+            serverLogger.error("Error initializing server socket: {}", e.getMessage());
         }
     }
 
     public void startServer() {
         if (serverSocket == null) {
-            System.err.println("Server socket was not correctly initialized.");
+            serverLogger.error("Server socket was not correctly initialized.");
         }
 
         isRunning = true;
 
         try {
-            System.out.println("Server is listening on port: " + serverSocket.getLocalPort());
+            serverLogger.trace("Server is listening on port: {}", serverSocket.getLocalPort());
 
             while (isRunning) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("New client connected");
+                serverLogger.trace("New client connected");
 
                 new ClientHandler(clientSocket).start();
             }
         } catch (IOException IOe) {
-            System.err.println("Error starting server: " + IOe.getMessage());
+            serverLogger.error("Error starting server: {}", IOe.getMessage());
         } finally {
             stopServer();
         }
@@ -43,9 +45,10 @@ public class Server {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
+                isRunning = false;
             }
         } catch (IOException IOe) {
-            System.err.println("Error stopping server: " + IOe.getMessage());
+            serverLogger.error("Error stopping server: {}", IOe.getMessage());
         }
     }
 
@@ -56,4 +59,5 @@ public class Server {
 
     private ServerSocket serverSocket;
     private boolean isRunning;
+    protected Logger serverLogger = LogManager.getLogger();
 }

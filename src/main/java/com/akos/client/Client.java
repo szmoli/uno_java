@@ -7,15 +7,17 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Client {
-    public void startConnection(InetAddress address, int port) {
+    public void startConnection(String address, int port) {
         try {
             clientSocket = new Socket(address, port);
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (IOException ioe) {
-            System.err.println("Error initializing client socket: " + ioe.getMessage());
+        } catch (IOException e) {
+            clientLogger.error("Error initializing client socket: {}", e.getMessage());
         }
     }
 
@@ -24,8 +26,8 @@ public class Client {
             out.close();
             in.close();
             clientSocket.close();
-        } catch (IOException ioe) {
-            System.err.println(ioe.getMessage());
+        } catch (IOException e) {
+            clientLogger.error("Error closing connection: {}", e.getMessage());
         }
     }
 
@@ -34,19 +36,16 @@ public class Client {
         Client client1 = new Client();
         Client client2 = new Client();
 
-        try {
-            client0.startConnection(InetAddress.getByName("127.0.0.1"), 1326);
-            client1.startConnection(InetAddress.getByName("127.0.0.1"), 1326);
-            client2.startConnection(InetAddress.getByName("127.0.0.1"), 1326);
-            client0.stopConnection();
-            client1.stopConnection();
-            client2.stopConnection();
-        } catch (UnknownHostException e) {
-            System.err.println("Error starting connection: " + e.getMessage());
-        }
+        client0.startConnection("127.0.0.1", 1326);
+        client1.startConnection("127.0.0.1", 1326);
+        client2.startConnection("127.0.0.1", 1326);
+        client0.stopConnection();
+        client1.stopConnection();
+        client2.stopConnection();
     }
 
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
+    protected Logger clientLogger = LogManager.getLogger();
 }
