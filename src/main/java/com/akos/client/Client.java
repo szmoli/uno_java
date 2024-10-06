@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class Client {
     public void startConnection(InetAddress address, int port) {
@@ -25,6 +26,23 @@ public class Client {
             clientSocket.close();
         } catch (IOException ioe) {
             System.err.println(ioe.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        Client client0 = new Client();
+        Client client1 = new Client();
+        Client client2 = new Client();
+
+        try {
+            client0.startConnection(InetAddress.getByName("127.0.0.1"), 1326);
+            client1.startConnection(InetAddress.getByName("127.0.0.1"), 1326);
+            client2.startConnection(InetAddress.getByName("127.0.0.1"), 1326);
+            client0.stopConnection();
+            client1.stopConnection();
+            client2.stopConnection();
+        } catch (UnknownHostException e) {
+            System.err.println("Error starting connection: " + e.getMessage());
         }
     }
 
