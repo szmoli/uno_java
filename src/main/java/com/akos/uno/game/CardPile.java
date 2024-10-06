@@ -1,9 +1,8 @@
 package com.akos.uno.game;
 
 import java.util.List;
-import java.util.ArrayList;
 
-public class Deck {
+public class CardPile {
     public void addCard(Card card) {
         cards.add(card);
     }

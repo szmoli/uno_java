@@ -1,7 +1,5 @@
 package com.akos.uno.game;
 
-import java.util.List;
-
 public class Player {
     public void drawCard(Card card) {
         hand.addCard(card);
@@ -11,5 +9,5 @@ public class Player {
         hand.removeCard(card);
     }
 
-    private Deck hand;
+    private CardPile hand;
 }
