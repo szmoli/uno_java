@@ -4,7 +4,7 @@ import java.util.*;
 
 // sources:
 // - https://www.geeksforgeeks.org/stack-class-in-java/
-public class CardPile {
+public class CardPile implements Iterable<Card> {
     // adds cards to the top of the pile
     public void pushCards(Collection<Card> cards) {
         for (Card card : cards) {
@@ -27,6 +27,16 @@ public class CardPile {
         return removedCards;
     }
 
+    // adds a single card to the top of the pile
+    public void pushCard(Card card) {
+        cards.push(card);
+    }
+
+    // removes and returns a single card from the top of the pile
+    public Card popCard() {
+        return cards.pop();
+    }
+
     public void shuffle() {
         List<Card> cardsList = new ArrayList<>(cards);
         Collections.shuffle(cardsList);
@@ -43,6 +53,14 @@ public class CardPile {
 
     public boolean isEmpty() {
         return cards.isEmpty();
+    }
+
+    public void clear() {
+        cards.clear();
+    }
+
+    public Iterator<Card> iterator() {
+        return cards.iterator();
     }
 
     private Stack<Card> cards;
