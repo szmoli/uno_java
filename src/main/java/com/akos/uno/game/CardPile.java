@@ -1,22 +1,19 @@
 package com.akos.uno.game;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 // sources:
 // - https://www.geeksforgeeks.org/stack-class-in-java/
 public class CardPile {
     // adds cards to the top of the pile
-    public void addCards(Collection<Card> cards) {
+    public void pushCards(Collection<Card> cards) {
         for (Card card : cards) {
             this.cards.push(card);
         }
     }
 
     // removes n cards from the top of the pile
-    public List<Card> removeCards(int n) {
+    public List<Card> popCards(int n) {
         if (this.cards.isEmpty()) {
             throw new IllegalStateException("CardPile is empty.");
         }
@@ -28,6 +25,16 @@ public class CardPile {
         }
 
         return removedCards;
+    }
+
+    public void shuffle() {
+        List<Card> cardsList = new ArrayList<>(cards);
+        Collections.shuffle(cardsList);
+
+        cards.clear();
+        for (Card card : cardsList) {
+            cards.push(card);
+        }
     }
 
     public int size() {

@@ -3,18 +3,18 @@ package com.akos.uno.game;
 import java.util.List;
 
 public class Deck {
-    public Card drawCard() {
+    public List<Card> drawCards(int n) {
         if (drawPile.isEmpty()) {
             // todo: implement shuffle logic
         }
 
-        return drawPile.removeFirst();
+        return drawPile.popCards(n);
     }
 
-    public void addCardToDiscardPile(Card card) {
-        discardPile.add(card);
+    public void addCardsToDiscardPile(List<Card> cards) {
+        discardPile.pushCards(cards);
     }
 
-    private List<Card> drawPile;
-    private List<Card> discardPile;
+    private CardPile drawPile;
+    private CardPile discardPile;
 }
