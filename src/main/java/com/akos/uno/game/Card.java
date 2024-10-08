@@ -6,6 +6,14 @@ public class Card {
         this.symbol = symbol;
     }
 
+    public CardColor getColor() {
+        return color;
+    }
+
+    public CardSymbol getSymbol() {
+        return symbol;
+    }
+
     private CardColor color;
     private CardSymbol symbol;
 }
