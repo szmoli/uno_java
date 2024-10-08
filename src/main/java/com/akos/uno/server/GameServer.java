@@ -1,5 +1,7 @@
 package com.akos.uno.server;
 
-public class GameServer extends Server {
+import com.akos.uno.game.Game;
 
+public class GameServer extends Server {
+    private Game game;
 }
