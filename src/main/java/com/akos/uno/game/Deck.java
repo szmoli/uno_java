@@ -27,6 +27,42 @@ public class Deck {
         discardPile.pushCards(cards);
     }
 
+    // create deck according to official UNO rules and shuffle it
+    public Deck() {
+        drawPile = new CardPile();
+        discardPile = new CardPile();
+
+        for (CardSymbol symbol : CardSymbol.values()) {
+            if (symbol == CardSymbol.ZERO) {
+                addColoredCards(symbol, 1); // adds only one set of zero cards
+            } else if (symbol != CardSymbol.WILD && symbol != CardSymbol.WILD_FOUR) {
+                addColoredCards(symbol, 2); // adds two sets of non-zero cards
+            }
+        }
+
+        addWildCards(); // adds 4 of each wild card
+        drawPile.shuffle();
+    }
+
     private CardPile drawPile;
     private CardPile discardPile;
+
+    // adds specified number of cards of each regular color
+    private void addColoredCards(CardSymbol symbol, int count) {
+        for (CardColor color : CardColor.values()) {
+            if (color != CardColor.BLACK) {
+                for (int i = 0; i < count; i++) {
+                    drawPile.pushCard(new Card(color, symbol));
+                }
+            }
+        }
+    }
+
+    // adds 4 of each wild card
+    private void addWildCards() {
+        for (int i = 0; i < 4; i++) {
+            drawPile.pushCard(new Card(CardColor.BLACK, CardSymbol.WILD));
+            drawPile.pushCard(new Card(CardColor.BLACK, CardSymbol.WILD_FOUR));
+        }
+    }
 }
