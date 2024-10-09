@@ -3,8 +3,8 @@ package com.akos.uno.game;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
-    public Game(GameRules rules) {
+public class GameModel {
+    public GameModel(GameRules rules) {
         this.state = GameState.OPEN;
         this.rules = rules;
         this.currentPlayerIndex = 0;
