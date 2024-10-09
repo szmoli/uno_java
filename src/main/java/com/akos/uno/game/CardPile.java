@@ -63,5 +63,9 @@ public class CardPile implements Iterable<Card> {
         return cards.iterator();
     }
 
+    public Card top() {
+        return cards.peek();
+    }
+
     private Stack<Card> cards;
 }

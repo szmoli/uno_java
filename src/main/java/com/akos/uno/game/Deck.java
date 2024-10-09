@@ -44,6 +44,14 @@ public class Deck {
         drawPile.shuffle();
     }
 
+    public CardPile getDrawPile() {
+        return drawPile;
+    }
+
+    public CardPile getDiscardPile() {
+        return discardPile;
+    }
+
     private CardPile drawPile;
     private CardPile discardPile;
 
