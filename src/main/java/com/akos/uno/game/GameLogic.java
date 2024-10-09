@@ -41,20 +41,10 @@ public class GameLogic {
             game.setCurrentPlayerIndex((game.getCurrentPlayerIndex() + 1) % game.getPlayers().size());
         }
 
-        Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
-        player.setCanDiscard(false);
-        Card topCard = topDiscardPile();
-        int cardIndex = 0;
-
-        while (!player.canDiscard() || cardIndex < player.getHand().size()) {
-            Card card = player.getHand().get(cardIndex);
-
-            if (card.getSymbol() == topCard.getSymbol() || card.getColor() == topCard.getColor()) {
-                player.setCanDiscard(true);
-            }
-
-            cardIndex++;
-        }
+        // check if player can discard a card
+        // todo: implement it in another place
+//        Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
+//        player.setCanDiscard(game.getRules().canDiscard(player, topDiscardPile()));
     }
 
     public boolean applyPenaltyToPlayer(Player player, int numOfCardsToBeDrawn) {
