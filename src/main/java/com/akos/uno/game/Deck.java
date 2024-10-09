@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Deck {
     public List<Card> drawCards(int n) {
-        // if the draw pile is empty:
+        // if there aren't enough cards in the draw pile:
         // - take all the cards except the last discarded one from the discard pile
         // - transfer them to the draw pile
         // - shuffle the draw pile
-        if (drawPile.isEmpty()) {
+        if (drawPile.size() < drawPile.size() - n) {
             Card topCard = discardPile.popCard(); // save the last discarded card
 
             // transfer all the other cards to the draw pile
@@ -25,6 +25,10 @@ public class Deck {
 
     public void addCardsToDiscardPile(List<Card> cards) {
         discardPile.pushCards(cards);
+    }
+
+    public void addCardToDiscardPile(Card card) {
+        discardPile.pushCard(card);
     }
 
     // create deck according to official UNO rules and shuffle it
