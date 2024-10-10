@@ -1,63 +1,71 @@
 package com.akos.uno.game;
 
 import com.akos.uno.server.Server;
+import java.util.List;
 
 public class GameLogic {
     public boolean addPlayer(Player player) {
-        if (game.getPlayers().size() >= 10) {
+        FullGameState gameState = game.getGameState();
+
+        if (gameState.getPlayers().size() >= game.getRules().getMaxPlayerCount()) {
             throw new IllegalStateException("Maximum player capacity reached.");
         }
 
-        return game.getPlayers().add(player);
+        return gameState.getPlayers().add(player);
     }
 
     public boolean removePlayer(Player player) {
-        return game.getPlayers().remove(player);
+        return game.getGameState().getPlayers().remove(player);
     }
 
-    public Card topDiscardPile() {
-        return game.getDeck().getDiscardPile().top();
+    public Card getTopCard() {
+        return game.getGameState().getDeck().getDiscardPile().top();
     }
 
     public void addCardToDiscardPile(Card card) {
-        Card topCard = topDiscardPile();
+        Card topCard = getTopCard();
 
-        // check if the card can be discarded according to the rules
-        if (card.getColor() != topCard.getColor() && card.getSymbol() != topCard.getSymbol()) {
-            throw new IllegalStateException("This card cannot be played right now.");
+        if (!game.getRules().isValidMove(card, topCard)) {
+            throw new IllegalStateException("Illegal move.");
         }
 
-        game.getDeck().addCardToDiscardPile(card);
+        game.getGameState().getDeck().addCardToDiscardPile(card);
     }
 
-    public boolean drawCards(Player player, int n) {
-        return player.drawCards(game.getDeck().drawCards(n));
+    public List<Card> drawCards(int n) {
+        return game.getGameState().getDeck().drawCards(n);
     }
 
     public void selectNextPlayer() {
-        if (game.isOrderReversed()) {
-            game.setCurrentPlayerIndex((game.getCurrentPlayerIndex() - 1) % game.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
+        FullGameState gameState = game.getGameState();
+
+        if (gameState.isOrderReversed()) {
+            gameState.setCurrentPlayerIndex((gameState.getCurrentPlayerIndex() - 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
         } else {
-            game.setCurrentPlayerIndex((game.getCurrentPlayerIndex() + 1) % game.getPlayers().size());
+            gameState.setCurrentPlayerIndex((gameState.getCurrentPlayerIndex() + 1) % gameState.getPlayers().size());
         }
     }
 
     public Player getPreviousPlayer() {
-        if (game.isOrderReversed()) {
-            return game.getPlayers().get((game.getCurrentPlayerIndex() + 1) % game.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
+        FullGameState gameState = game.getGameState();
+
+        if (gameState.isOrderReversed()) {
+            return gameState.getPlayers().get((gameState.getCurrentPlayerIndex() + 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
         } else {
-            return game.getPlayers().get((game.getCurrentPlayerIndex() - 1) % game.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
+            return gameState.getPlayers().get((gameState.getCurrentPlayerIndex() - 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
         }
     }
 
     public void startGame() {
-        game.setState(GameState.IN_PROGRESS);
+        FullGameState gameState = game.getGameState();
 
-        while (game.getState() != GameState.FINISHED) {
+        gameState.setGameStatus(GameStatus.IN_PROGRESS);
+
+        while (gameState.getGameStatus() != GameStatus.FINISHED) {
             Player previousPlayer = getPreviousPlayer();
-            Player player = game.getPlayers().get(game.getCurrentPlayerIndex());
+            Player player = gameState.getPlayers().get(gameState.getCurrentPlayerIndex());
 //            player.playTurn(deck);
-            game.getRules().enforceForgotToSayUNOPenalty(previousPlayer, game.getDeck());
+            game.getRules().enforceForgotToSayUNOPenalty(previousPlayer, gameState.getDeck());
             selectNextPlayer();
         }
     }

@@ -1,13 +1,14 @@
 package com.akos.uno.game;
 
 public class GameRules {
-    public GameRules(boolean isJumpInAllowed, boolean isDrawStackingAllowed, boolean isSevenOAllowed, boolean isWildFourChallengeAllowed, int initialCardCount, int forgotToSayUNOPenaltyCardCount) {
+    public GameRules(boolean isJumpInAllowed, boolean isDrawStackingAllowed, boolean isSevenOAllowed, boolean isWildFourChallengeAllowed, int initialCardCount, int forgotToSayUNOPenaltyCardCount, int maxPlayerCount) {
         this.isJumpInAllowed = isJumpInAllowed;
         this.isDrawStackingAllowed = isDrawStackingAllowed;
         this.isSevenOAllowed = isSevenOAllowed;
         this.isWildFourChallengeAllowed = isWildFourChallengeAllowed;
         this.initialCardCount = initialCardCount;
         this.forgotToSayUNOPenaltyCardCount = forgotToSayUNOPenaltyCardCount;
+        this.maxPlayerCount = maxPlayerCount;
     }
 
     public boolean isJumpInAllowed() {
@@ -28,6 +29,14 @@ public class GameRules {
 
     public int getInitialCardCount() {
         return initialCardCount;
+    }
+
+    public int getForgotToSayUNOPenaltyCardCount() {
+        return forgotToSayUNOPenaltyCardCount;
+    }
+
+    public int getMaxPlayerCount() {
+        return maxPlayerCount;
     }
 
     public boolean isValidMove(Card card, Card topCard) {
@@ -63,4 +72,5 @@ public class GameRules {
     private boolean isWildFourChallengeAllowed;
     private int initialCardCount;
     private int forgotToSayUNOPenaltyCardCount;
+    private int maxPlayerCount;
 }
