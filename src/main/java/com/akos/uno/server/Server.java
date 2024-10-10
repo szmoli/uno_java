@@ -2,6 +2,9 @@ package com.akos.uno.server;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class Server {
     public void startServer(int port) {
         try {
+            clients = new ArrayList<>();
             serverSocket = new ServerSocket(port);
             serverLogger.info("Server is listening on port: {}", serverSocket.getLocalPort());
 
@@ -18,7 +22,8 @@ public class Server {
                 Socket clientSocket = serverSocket.accept();
                 serverLogger.trace("New client connected");
 
-                new ClientHandler(clientSocket).start();
+                clients.add(new ClientHandler(clientSocket));
+                clients.getLast().start();
             }
         } catch (IOException e) {
             serverLogger.error("Error starting server: {}", e.getMessage());
@@ -43,5 +48,6 @@ public class Server {
     }
 
     private ServerSocket serverSocket;
+    private List<ClientHandler> clients;
     protected Logger serverLogger = LogManager.getLogger();
 }
