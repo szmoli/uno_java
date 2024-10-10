@@ -1,12 +1,13 @@
 package com.akos.uno.game;
 
 public class GameRules {
-    public GameRules(boolean isJumpInAllowed, boolean isDrawStackingAllowed, boolean isSevenOAllowed, boolean isWildFourChallengeAllowed, int initialCardCount) {
+    public GameRules(boolean isJumpInAllowed, boolean isDrawStackingAllowed, boolean isSevenOAllowed, boolean isWildFourChallengeAllowed, int initialCardCount, int forgotToSayUNOPenaltyCardCount) {
         this.isJumpInAllowed = isJumpInAllowed;
         this.isDrawStackingAllowed = isDrawStackingAllowed;
         this.isSevenOAllowed = isSevenOAllowed;
         this.isWildFourChallengeAllowed = isWildFourChallengeAllowed;
         this.initialCardCount = initialCardCount;
+        this.forgotToSayUNOPenaltyCardCount = forgotToSayUNOPenaltyCardCount;
     }
 
     public boolean isJumpInAllowed() {
@@ -43,9 +44,23 @@ public class GameRules {
         return false;
     }
 
+    public boolean enforceForgotToSayUNOPenalty(Player player, Deck deck) {
+        if (!player.hasSaidUno && player.getHand().size() == 1) {
+            return player.drawCards(deck.drawCards(forgotToSayUNOPenaltyCardCount));
+        }
+
+        return false;
+    }
+
+    public boolean isValidJumpIn() {
+        // todo: implement logic
+        return true;
+    }
+
     private boolean isJumpInAllowed;
     private boolean isDrawStackingAllowed;
     private boolean isSevenOAllowed;
     private boolean isWildFourChallengeAllowed;
     private int initialCardCount;
+    private int forgotToSayUNOPenaltyCardCount;
 }
