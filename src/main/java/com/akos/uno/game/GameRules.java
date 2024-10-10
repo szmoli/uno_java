@@ -53,13 +53,13 @@ public class GameRules {
         return false;
     }
 
-    public boolean enforceForgotToSayUNOPenalty(Player player, Deck deck) {
-        if (!player.hasSaidUno && player.getHand().size() == 1) {
-            return player.drawCards(deck.drawCards(forgotToSayUNOPenaltyCardCount));
-        }
-
-        return false;
-    }
+//    public boolean enforceForgotToSayUNOPenalty(Player player, Deck deck) {
+//        if (!player.hasSaidUno && player.getHand().size() == 1) {
+//            return player.drawCards(deck.drawCards(forgotToSayUNOPenaltyCardCount));
+//        }
+//
+//        return false;
+//    }
 
     public boolean isValidJumpIn() {
         // todo: implement logic

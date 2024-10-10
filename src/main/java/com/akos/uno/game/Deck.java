@@ -8,12 +8,12 @@ public class Deck {
         // - take all the cards except the last discarded one from the discard pile
         // - transfer them to the draw pile
         // - shuffle the draw pile
-        if (drawPile.size() < drawPile.size() - n) {
+        if (drawPile.size() < n) {
             Card topCard = discardPile.popCard(); // save the last discarded card
 
             // transfer all the other cards to the draw pile
-            for (Card card : discardPile) {
-                drawPile.pushCard(card); // todo: this may be problematic?
+            while (!discardPile.isEmpty()) {
+                drawPile.pushCard(discardPile.popCard());
             }
             drawPile.shuffle();
 

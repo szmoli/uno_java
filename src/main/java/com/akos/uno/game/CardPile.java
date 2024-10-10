@@ -5,6 +5,10 @@ import java.util.*;
 // sources:
 // - https://www.geeksforgeeks.org/stack-class-in-java/
 public class CardPile implements Iterable<Card> {
+    public CardPile() {
+        cards = new Stack<>();
+    }
+
     // adds cards to the top of the pile
     public void pushCards(Collection<Card> cards) {
         for (Card card : cards) {
@@ -34,6 +38,10 @@ public class CardPile implements Iterable<Card> {
 
     // removes and returns a single card from the top of the pile
     public Card popCard() {
+        if (this.cards.isEmpty()) {
+            throw new IllegalStateException("CardPile is empty.");
+        }
+
         return cards.pop();
     }
 

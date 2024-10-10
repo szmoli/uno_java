@@ -30,19 +30,6 @@ public class Client {
         }
     }
 
-    public static void main(String[] args) {
-        Client client0 = new Client();
-        Client client1 = new Client();
-        Client client2 = new Client();
-
-        client0.startConnection("127.0.0.1", 1326);
-        client1.startConnection("127.0.0.1", 1326);
-        client2.startConnection("127.0.0.1", 1326);
-        client0.stopConnection();
-        client1.stopConnection();
-        client2.stopConnection();
-    }
-
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;

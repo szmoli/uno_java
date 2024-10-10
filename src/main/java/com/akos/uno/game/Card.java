@@ -14,6 +14,11 @@ public class Card {
         return symbol;
     }
 
+    @Override
+    public String toString() {
+        return "Card{" + color.name() + " " + symbol.name() + "}";
+    }
+
     private CardColor color;
     private CardSymbol symbol;
 }

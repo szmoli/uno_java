@@ -65,7 +65,7 @@ public class GameLogic {
             Player previousPlayer = getPreviousPlayer();
             Player player = gameState.getPlayers().get(gameState.getCurrentPlayerIndex());
 //            player.playTurn(deck);
-            game.getRules().enforceForgotToSayUNOPenalty(previousPlayer, gameState.getDeck());
+//            game.getRules().enforceForgotToSayUNOPenalty(previousPlayer, gameState.getDeck());
             selectNextPlayer();
         }
     }
