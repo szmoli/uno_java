@@ -1,6 +1,7 @@
 package com.akos.uno.server;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,15 @@ public class Server {
             }
         } catch (IOException e) {
             serverLogger.error("Error stopping server: {}", e.getMessage());
+        }
+    }
+
+    public void sendMessageToClient(Socket clientSocket, String message) {
+        try {
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            out.println(message);
+        } catch (IOException e) {
+            serverLogger.error("Error sending message to client: {}", e.getMessage());
         }
     }
 

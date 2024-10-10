@@ -30,6 +30,14 @@ public class Client {
         }
     }
 
+    public void sendMessageToServer(String message) {
+        if (out == null) {
+            clientLogger.error("Error sending message to server.");
+        }
+
+        out.println(message);
+    }
+
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
