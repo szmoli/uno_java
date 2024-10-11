@@ -7,11 +7,15 @@ public abstract class GameAction {
         return playerName;
     }
 
-    public GameAction(String playerName) {
+    public GameAction(String playerName, GameActionType type) {
         this.playerName = playerName;
+        this.type = type;
     }
 
-    public abstract GameActionType getActionType();
+    public GameActionType getActionType() {
+        return type;
+    }
 
     private String playerName;
+    private GameActionType type;
 }
