@@ -20,6 +20,7 @@ public class Server {
 
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
+                clientSocket.setKeepAlive(true); // keep alive connection because of the real-time nature of UNO
                 serverLogger.trace("New client connected");
 
                 clients.add(new ClientHandler(clientSocket));
