@@ -16,8 +16,8 @@ public class ClientController {
         return client;
     }
 
-    public void startConnection(String address, int port) {
-        client.startConnection(address, port);
+    public void startConnection(String address, int port, String playerName) {
+        client.startConnection(address, port, playerName);
     }
 
     public void stopConnection() {

@@ -10,6 +10,6 @@ public class ClientMain {
         int port = Integer.parseInt(args[2]);
 
         ClientController cc = new ClientController(new Client());
-        cc.startConnection(address, port);
+        cc.startConnection(address, port, name);
     }
 }

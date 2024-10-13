@@ -1,6 +1,5 @@
 package com.akos.uno.server;
 
-import com.akos.uno.client.ClientController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
@@ -21,15 +20,20 @@ public class ClientHandler extends Thread {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            String message;
+            while ((message = in.readLine()) != null) {
+                processMessage(message);
+            }
         } catch (IOException e) {
-            clientHandlerLogger.error("Error starting client thread: {}", e.getMessage());
+            logger.error("Error starting client thread: {}", e.getMessage());
         } finally {
             try {
                 in.close();
                 out.close();
                 clientSocket.close();
             } catch (IOException e) {
-                clientHandlerLogger.error("Error closing client thread: {}", e.getMessage());
+                logger.error("Error closing client thread: {}", e.getMessage());
             }
         }
     }
@@ -37,5 +41,9 @@ public class ClientHandler extends Thread {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-    protected Logger clientHandlerLogger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
+
+    private void processMessage(String message) {
+        logger.debug(message);
+    }
 }

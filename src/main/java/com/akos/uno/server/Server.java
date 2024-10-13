@@ -6,7 +6,6 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.akos.uno.game.FullGameState;
 import com.akos.uno.game.GameModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,20 +20,19 @@ public class Server {
 
     public void startServer(int port) {
         try {
-            clients = new ArrayList<>();
             serverSocket = new ServerSocket(port);
-            serverLogger.info("Server is listening on port: {}", serverSocket.getLocalPort());
+            logger.info("Server is listening on port: {}", serverSocket.getLocalPort());
 
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
 //                clientSocket.setKeepAlive(true); // keep alive connection because of the real-time nature of UNO
-                serverLogger.info("New client connected");
+                logger.info("New client connected");
 
                 clients.add(new ClientHandler(clientSocket));
                 clients.getLast().start();
             }
         } catch (IOException e) {
-            serverLogger.error("Error starting server: {}", e.getMessage());
+            logger.error("Error starting server: {}", e.getMessage());
         } finally {
             stopServer();
         }
@@ -46,25 +44,29 @@ public class Server {
                 serverSocket.close();
             }
         } catch (IOException e) {
-            serverLogger.error("Error stopping server: {}", e.getMessage());
+            logger.error("Error stopping server: {}", e.getMessage());
         }
     }
 
-    public void sendMessageToClient(Socket clientSocket, String message) {
+    public synchronized void sendMessageToClient(Socket clientSocket, String message) {
         try {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             out.println(message);
         } catch (IOException e) {
-            serverLogger.error("Error sending message to client: {}", e.getMessage());
+            logger.error("Error sending message to client: {}", e.getMessage());
         }
     }
 
-    public List<ClientHandler> getClients() {
+    public synchronized List<ClientHandler> getClients() {
         return clients;
     }
 
+    public synchronized void processMessage(String message) {
+        logger.debug(message);
+    }
+
     private ServerSocket serverSocket;
-    private List<ClientHandler> clients;
+    private List<ClientHandler> clients = new ArrayList<>();
     private GameModel game;
-    protected Logger serverLogger = LogManager.getLogger();
+    protected Logger logger = LogManager.getLogger();
 }

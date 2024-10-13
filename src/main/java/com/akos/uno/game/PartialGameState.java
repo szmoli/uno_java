@@ -5,6 +5,14 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class PartialGameState {
+    public PartialGameState() {
+        player = null;
+        otherPlayerNames = null;
+        otherPlayerHandSizes = null;
+        topCard = null;
+        gameStatus = GameStatus.INIT;
+    }
+
     public PartialGameState(Player player, List<String> otherPlayerNames, List<Integer> otherPlayerHandSizes, Card topCard, GameStatus gameStatus) {
         this.player = player;
         this.otherPlayerNames = otherPlayerNames;
