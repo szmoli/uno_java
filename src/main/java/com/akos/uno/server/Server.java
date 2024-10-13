@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.akos.uno.game.FullGameState;
+import com.akos.uno.game.GameModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +15,10 @@ import org.apache.logging.log4j.Logger;
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
 // - https://betterstack.com/community/guides/logging/how-to-start-logging-with-log4j/
 public class Server {
+    public Server(GameModel game) {
+        this.game = game;
+    }
+
     public void startServer(int port) {
         try {
             clients = new ArrayList<>();
@@ -20,8 +27,8 @@ public class Server {
 
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
-                clientSocket.setKeepAlive(true); // keep alive connection because of the real-time nature of UNO
-                serverLogger.trace("New client connected");
+//                clientSocket.setKeepAlive(true); // keep alive connection because of the real-time nature of UNO
+                serverLogger.info("New client connected");
 
                 clients.add(new ClientHandler(clientSocket));
                 clients.getLast().start();
@@ -52,7 +59,12 @@ public class Server {
         }
     }
 
+    public List<ClientHandler> getClients() {
+        return clients;
+    }
+
     private ServerSocket serverSocket;
     private List<ClientHandler> clients;
+    private GameModel game;
     protected Logger serverLogger = LogManager.getLogger();
 }

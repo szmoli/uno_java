@@ -1,9 +1,11 @@
 package com.akos.uno.game;
 
+import java.util.ArrayList;
+
 public class GameModel {
-    public GameModel(GameRules rules, FullGameState gameState) {
+    public GameModel(GameRules rules) {
         this.rules = rules;
-        this.gameState = gameState;
+        this.gameState = new FullGameState(0, new ArrayList<>(), new Deck(), 0, false, GameStatus.OPEN);
     }
 
     public GameRules getRules() {
