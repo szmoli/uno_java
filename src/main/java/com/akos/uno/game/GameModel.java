@@ -1,7 +1,6 @@
 package com.akos.uno.game;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.akos.uno.communication.FullGameState;
 
 public class GameModel {
     public GameModel(GameRules rules, FullGameState gameState) {
