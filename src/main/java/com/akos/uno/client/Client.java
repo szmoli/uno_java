@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
+import com.akos.uno.communication.response.PartialGameStateResponse;
+import com.akos.uno.game.PartialGameState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,8 +39,17 @@ public class Client {
         out.println(message);
     }
 
+    public String getResponseFromServer() throws IOException {
+        return in.readLine();
+    }
+
+    public void setGameState(PartialGameState gameState) {
+        this.gameState = gameState;
+    }
+
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
+    private PartialGameState gameState;
     protected Logger clientLogger = LogManager.getLogger();
 }

@@ -1,4 +1,4 @@
-package com.akos.uno.communication;
+package com.akos.uno.communication.action;
 
 public class DrawCardAction extends GameAction {
     public DrawCardAction(String playerName, int cardCount) {

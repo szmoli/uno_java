@@ -1,8 +1,4 @@
-package com.akos.uno.communication;
-
-import com.akos.uno.game.Deck;
-import com.akos.uno.game.GameStatus;
-import com.akos.uno.game.Player;
+package com.akos.uno.game;
 
 import java.util.List;
 

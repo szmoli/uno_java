@@ -1,4 +1,4 @@
-package com.akos.uno.communication;
+package com.akos.uno.communication.action;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

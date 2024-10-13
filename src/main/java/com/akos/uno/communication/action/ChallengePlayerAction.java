@@ -1,4 +1,4 @@
-package com.akos.uno.communication;
+package com.akos.uno.communication.action;
 
 public class ChallengePlayerAction extends GameAction {
     public ChallengePlayerAction(String playerName, String challengedPlayerName) {

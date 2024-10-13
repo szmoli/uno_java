@@ -1,6 +1,5 @@
 package com.akos.uno.game;
 
-import com.akos.uno.communication.FullGameState;
 import com.akos.uno.server.Server;
 import java.util.List;
 

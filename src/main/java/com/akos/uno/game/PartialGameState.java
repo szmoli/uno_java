@@ -1,8 +1,6 @@
-package com.akos.uno.communication;
+package com.akos.uno.game;
 
-import com.akos.uno.game.Card;
-import com.akos.uno.game.GameStatus;
-import com.akos.uno.game.Player;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -13,6 +11,10 @@ public class PartialGameState {
         this.otherPlayerHandSizes = otherPlayerHandSizes;
         this.topCard = topCard;
         this.gameStatus = gameStatus;
+    }
+
+    public static PartialGameState createFromJson(String json) {
+        return gson.fromJson(json, PartialGameState.class);
     }
 
     public Player getPlayer() {
@@ -40,4 +42,5 @@ public class PartialGameState {
     private List<Integer> otherPlayerHandSizes;
     private Card topCard;
     private GameStatus gameStatus;
+    private static final Gson gson = new Gson();
 }

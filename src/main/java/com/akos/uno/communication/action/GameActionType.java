@@ -1,4 +1,4 @@
-package com.akos.uno.communication;
+package com.akos.uno.communication.action;
 
 // source: https://www.baeldung.com/a-guide-to-java-enums
 public enum GameActionType {

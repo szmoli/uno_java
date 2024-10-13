@@ -1,4 +1,4 @@
-package com.akos.uno.communication;
+package com.akos.uno.communication.action;
 
 import com.akos.uno.game.*;
 import org.junit.jupiter.api.Test;

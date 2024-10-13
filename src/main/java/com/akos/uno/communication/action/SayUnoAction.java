@@ -1,4 +1,4 @@
-package com.akos.uno.communication;
+package com.akos.uno.communication.action;
 
 public class SayUnoAction extends GameAction {
     public SayUnoAction(String playerName) {
