@@ -1,15 +1,19 @@
 package com.akos.uno.client;
 
 import com.akos.uno.communication.response.PartialGameStateResponse;
+import com.akos.uno.game.PartialGameState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ClientView {
-    public ClientView(PartialGameStateResponse gameState) {
-        this.gameState = gameState;
+    public ClientView(ClientController controller) {
+        this.controller = controller;
     }
 
-    public void setGameState(PartialGameStateResponse gameState) {
-        this.gameState = gameState;
+    public void updateView(PartialGameState state) {
+        logger.debug("Updated view with: {}", state);
     }
 
-    private PartialGameStateResponse gameState;
+    private ClientController controller;
+    private static final Logger logger = LogManager.getLogger();
 }

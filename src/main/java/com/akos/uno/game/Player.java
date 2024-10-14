@@ -1,8 +1,16 @@
 package com.akos.uno.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
+    public Player(String playerName) {
+        this.playerName = playerName;
+        this.hand = new ArrayList<>();
+        this.hasSaidUno = false;
+        this.canDiscard = false;
+    }
+
     public boolean drawCards(List<Card> cards) {
         return hand.addAll(cards);
     }
@@ -25,6 +33,10 @@ public class Player {
 
     public void setCanDiscard(boolean state) {
         canDiscard = state;
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 
     private List<Card> hand;

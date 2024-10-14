@@ -7,21 +7,25 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import com.akos.uno.communication.action.JoinAction;
-import com.akos.uno.communication.response.PartialGameStateResponse;
-import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.PartialGameState;
-import com.akos.uno.game.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Client {
-    public void startConnection(String address, int port, String playerName) {
-        try {
-            clientSocket = new Socket(address, port);
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    public Client(ClientController controller, PartialGameState gameState) {
+        this.controller = controller;
+        this.gameState = gameState;
+    }
 
-            JoinAction joinAction = new JoinAction(playerName);
+    public void startConnection(String address, int port) {
+        try {
+            socket = new Socket(address, port);
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            listener = new ClientListener(this, controller);
+
+            listener.start();
+            JoinAction joinAction = new JoinAction(gameState.getPlayer().getPlayerName());
             sendMessageToServer(joinAction.getAsJson());
         } catch (IOException e) {
             clientLogger.error("Error initializing client socket: {}", e.getMessage());
@@ -32,7 +36,7 @@ public class Client {
         try {
             out.close();
             in.close();
-            clientSocket.close();
+            socket.close();
         } catch (IOException e) {
             clientLogger.error("Error closing connection: {}", e.getMessage());
         }
@@ -54,9 +58,15 @@ public class Client {
         this.gameState = gameState;
     }
 
-    private Socket clientSocket;
+    public Socket getSocket() {
+        return socket;
+    }
+
+    private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private PartialGameState gameState;
-    protected Logger clientLogger = LogManager.getLogger();
+    private ClientListener listener;
+    private ClientController controller;
+    private Logger clientLogger = LogManager.getLogger();
 }

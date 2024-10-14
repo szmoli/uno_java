@@ -5,8 +5,8 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class PartialGameState {
-    public PartialGameState() {
-        player = null;
+    public PartialGameState(String playerName) {
+        player = new Player(playerName);
         otherPlayerNames = null;
         otherPlayerHandSizes = null;
         topCard = null;

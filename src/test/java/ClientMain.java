@@ -9,7 +9,7 @@ public class ClientMain {
         String address = args[1];
         int port = Integer.parseInt(args[2]);
 
-        ClientController cc = new ClientController(new Client());
-        cc.startConnection(address, port, name);
+        ClientController cc = new ClientController(name);
+        cc.startConnection(address, port);
     }
 }

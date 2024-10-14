@@ -8,16 +8,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ClientController {
-    public ClientController(Client client) {
-        this.client = client;
+    public ClientController(String playerName) {
+        this.client = new Client(this, new PartialGameState(playerName));
+        this.view = new ClientView(this);
     }
 
-    public Client getClient() {
-        return client;
-    }
-
-    public void startConnection(String address, int port, String playerName) {
-        client.startConnection(address, port, playerName);
+    public void startConnection(String address, int port) {
+        client.startConnection(address, port);
     }
 
     public void stopConnection() {
@@ -35,6 +32,10 @@ public class ClientController {
         } catch (IOException e) {
             logger.error("Error getting response from server: {}", e.getMessage());
         }
+    }
+
+    public void processServerResponse(String response) {
+        logger.debug(response);
     }
 
     private Client client;
