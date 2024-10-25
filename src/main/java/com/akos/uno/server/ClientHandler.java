@@ -11,8 +11,14 @@ import java.net.Socket;
 // sources:
 // - https://www.w3schools.com/java/java_threads.asp
 public class ClientHandler extends Thread {
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
+        this.server = server;
+    }
+
+    public void sendMessageToClient(String message) {
+        out.println(message);
+        logger.debug("Sent response to client: {}", message);
     }
 
     // creates a new thread for the client
@@ -23,8 +29,7 @@ public class ClientHandler extends Thread {
 
             String message;
             while ((message = in.readLine()) != null) {
-                String response = processMessage(message);
-                sendResponse(message);
+                server.processMessage(message, this);
             }
         } catch (IOException e) {
             logger.error("Error starting client thread: {}", e.getMessage());
@@ -43,14 +48,5 @@ public class ClientHandler extends Thread {
     private PrintWriter out;
     private BufferedReader in;
     private Logger logger = LogManager.getLogger();
-
-    private String processMessage(String message) {
-        logger.debug("Processed message from client: {}", message);
-        return message;
-    }
-
-    private void sendResponse(String message) {
-        out.println(message);
-        logger.debug("Sent response to client: {}", message);
-    }
+    private Server server;
 }

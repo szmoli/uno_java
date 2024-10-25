@@ -1,21 +1,28 @@
 package com.akos.uno.game;
 
-import com.akos.uno.server.Server;
 import java.util.List;
 
-public class GameLogic {
-    public boolean addPlayer(Player player) {
+public class GameController {
+    public GameController(GameModel game) {
+        this.game = game;
+    }
+
+    public void initGame() {
+        
+    }
+
+    public Player addPlayer(Player player) {
         FullGameState gameState = game.getGameState();
 
         if (gameState.getPlayers().size() >= game.getRules().getMaxPlayerCount()) {
             throw new IllegalStateException("Maximum player capacity reached.");
         }
 
-        return gameState.getPlayers().add(player);
+        return gameState.getPlayers().put(player.getPlayerName(), player);
     }
 
-    public boolean removePlayer(Player player) {
-        return game.getGameState().getPlayers().remove(player);
+    public Player removePlayer(Player player) {
+        return game.getGameState().getPlayers().remove(player.getPlayerName());
     }
 
     public Card getTopCard() {
@@ -71,5 +78,4 @@ public class GameLogic {
     }
 
     private GameModel game;
-    private Server server;
 }

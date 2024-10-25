@@ -13,7 +13,7 @@ public abstract class GameAction {
         this.type = type;
     }
 
-    public GameActionType getActionType() {
+    public GameActionType getType() {
         return type;
     }
 
