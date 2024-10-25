@@ -1,4 +1,9 @@
 package com.akos.uno.gui;
 
-public class GamePanel {
+import javax.swing.*;
+
+public class GamePanel extends WindowContentPanel {
+    public GamePanel(JFrame frame) {
+        super(new JPanel(), frame);
+    }
 }
