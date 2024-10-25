@@ -5,18 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WindowContentPanel {
-    public WindowContentPanel(JPanel mainPanel) {
-        this.mainPanel = mainPanel;
+    public WindowContentPanel(JPanel panel, JFrame frame) {
+        this.panel = panel;
+        this.frame = frame;
     }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
+    public JPanel getPanel() {
+        return panel;
     }
 
-    public List<JComponent> getMainPanelComponents() {
-        return mainPanelComponents;
+    public List<JComponent> getPanelComponents() {
+        return panelComponents;
     }
 
-    private JPanel mainPanel;
-    private List<JComponent> mainPanelComponents = new ArrayList<>();
+    private JPanel panel;
+    private JFrame frame;
+    private List<JComponent> panelComponents = new ArrayList<>();
 }
