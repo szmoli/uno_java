@@ -10,10 +10,7 @@ import com.akos.uno.communication.action.GameAction;
 import com.akos.uno.communication.action.GameActionType;
 import com.akos.uno.communication.response.InvalidMoveResponse;
 import com.akos.uno.communication.response.PartialGameStateResponse;
-import com.akos.uno.game.GameModel;
-import com.akos.uno.game.GameRules;
-import com.akos.uno.game.PartialGameState;
-import com.akos.uno.game.Player;
+import com.akos.uno.game.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,20 +19,15 @@ import org.apache.logging.log4j.Logger;
 // - https://betterstack.com/community/guides/logging/how-to-start-logging-with-log4j/
 public class Server {
     public Server(GameRules rules) {
-        this.game = new GameModel(rules);
-        operations.put(GameActionType.CHALLENGE_PLAYER, (action) -> {});
-        operations.put(GameActionType.DISCARD_CARD, (action) -> {});
-        operations.put(GameActionType.DRAW_CARD, (action) -> {});
-        operations.put(GameActionType.JOIN, (action) -> {
-            String playerName = action.getPlayerName();
-            Player player = new Player(playerName);
-            game.getGameState().getPlayers().put(playerName, player);
-            broadcastMessage(new PartialGameStateResponse(new PartialGameState(player, game.getGameState())).getAsJson());
-        });
-        operations.put(GameActionType.JUMP_IN, (action) -> {});
-        operations.put(GameActionType.QUIT, (action) -> {});
-        operations.put(GameActionType.SAY_UNO, (action) -> {});
-        operations.put(GameActionType.START, (action) -> {});
+        this.gameController = new GameController(new GameModel(rules));
+        gameActionHandlers.put(GameActionType.CHALLENGE_PLAYER, (action) -> {});
+        gameActionHandlers.put(GameActionType.DISCARD_CARD, (action) -> {});
+        gameActionHandlers.put(GameActionType.DRAW_CARD, (action) -> {});
+        gameActionHandlers.put(GameActionType.JOIN, new JoinActionHandler(gameController, this));
+        gameActionHandlers.put(GameActionType.JUMP_IN, (action) -> {});
+        gameActionHandlers.put(GameActionType.QUIT, (action) -> {});
+        gameActionHandlers.put(GameActionType.SAY_UNO, (action) -> {});
+        gameActionHandlers.put(GameActionType.START, (action) -> {});
     }
 
     public void startServer(int port) {
@@ -86,8 +78,8 @@ public class Server {
         logger.debug("Processing message: " + message);
         GameAction action = GameAction.createFromJson(message);
 
-        if (operations.containsKey(action.getType())) {
-            operations.get(action.getType()).execute(action);
+        if (gameActionHandlers.containsKey(action.getType())) {
+            gameActionHandlers.get(action.getType()).handle(action);
         } else {
             clientHandler.sendMessageToClient(new InvalidMoveResponse().getAsJson());
         }
@@ -95,7 +87,7 @@ public class Server {
 
     private ServerSocket serverSocket;
     private List<ClientHandler> clients = new ArrayList<>();
-    private GameModel game;
-    private HashMap<GameActionType, ActionOperation> operations = new HashMap<>();
+    private GameController gameController;
+    private HashMap<GameActionType, GameActionHandler> gameActionHandlers = new HashMap<>();
     private Logger logger = LogManager.getLogger();
 }

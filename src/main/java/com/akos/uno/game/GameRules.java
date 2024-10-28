@@ -53,6 +53,23 @@ public class GameRules {
         return false;
     }
 
+    public void applyCardEffect(Card card) {
+        switch (card.getSymbol()) {
+            case DRAW_TWO:
+                break;
+            case WILD:
+                break;
+            case WILD_FOUR:
+                break;
+            case REVERSE:
+                break;
+            case SKIP:
+                break;
+            default:
+                break;
+        }
+    }
+
 //    public boolean enforceForgotToSayUNOPenalty(Player player, Deck deck) {
 //        if (!player.hasSaidUno && player.getHand().size() == 1) {
 //            return player.drawCards(deck.drawCards(forgotToSayUNOPenaltyCardCount));

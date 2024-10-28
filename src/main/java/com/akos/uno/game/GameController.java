@@ -7,6 +7,10 @@ public class GameController {
         this.game = game;
     }
 
+    public GameModel getGame() {
+        return game;
+    }
+
     public void initGame() {
         
     }

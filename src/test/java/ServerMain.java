@@ -1,3 +1,4 @@
+import com.akos.uno.game.GameController;
 import com.akos.uno.game.GameModel;
 import com.akos.uno.game.GameRules;
 import com.akos.uno.server.Server;

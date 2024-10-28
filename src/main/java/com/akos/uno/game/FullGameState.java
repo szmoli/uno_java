@@ -1,7 +1,9 @@
 package com.akos.uno.game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FullGameState {
     public FullGameState(int currentPlayerIndex, HashMap<String, Player> players, Deck deck, int currentRound, boolean isOrderReversed, GameStatus gameStatus) {
@@ -31,6 +33,10 @@ public class FullGameState {
 
     public HashMap<String, Player> getPlayers() {
         return players;
+    }
+
+    public List<String> getPlayerNamesInOrder() {
+        return players.keySet().stream().toList();
     }
 
     public Deck getDeck() {

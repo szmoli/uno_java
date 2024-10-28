@@ -8,5 +8,9 @@ public class DiscardCardAction extends GameAction {
         this.card = card;
     }
 
+    public Card getCard() {
+        return card;
+    }
+
     private Card card;
 }
