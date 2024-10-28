@@ -18,8 +18,8 @@ import org.apache.logging.log4j.Logger;
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
 // - https://betterstack.com/community/guides/logging/how-to-start-logging-with-log4j/
 public class Server {
-    public Server(GameRules rules) {
-        this.gameController = new GameController(new GameModel(rules));
+    public Server() {
+        this.gameController = new GameController(new GameModel());
         gameActionHandlers.put(GameActionType.CHALLENGE_PLAYER, (action) -> {});
         gameActionHandlers.put(GameActionType.DISCARD_CARD, (action) -> {});
         gameActionHandlers.put(GameActionType.DRAW_CARD, (action) -> {});
@@ -79,7 +79,7 @@ public class Server {
         GameAction action = GameAction.createFromJson(message);
 
         if (gameActionHandlers.containsKey(action.getType())) {
-            gameActionHandlers.get(action.getType()).handle(action);
+            gameActionHandlers.get(action.getType()).handleAction(action);
         } else {
             clientHandler.sendMessageToClient(new InvalidMoveResponse().getAsJson());
         }
@@ -88,6 +88,6 @@ public class Server {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients = new ArrayList<>();
     private GameController gameController;
-    private HashMap<GameActionType, GameActionHandler> gameActionHandlers = new HashMap<>();
+    private HashMap<GameActionType, GameActionHandler<?>> gameActionHandlers = new HashMap<>();
     private Logger logger = LogManager.getLogger();
 }

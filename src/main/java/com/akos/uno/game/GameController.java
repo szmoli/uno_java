@@ -18,7 +18,7 @@ public class GameController {
     public Player addPlayer(Player player) {
         FullGameState gameState = game.getGameState();
 
-        if (gameState.getPlayers().size() >= game.getRules().getMaxPlayerCount()) {
+        if (gameState.getPlayers().size() >= 10) {
             throw new IllegalStateException("Maximum player capacity reached.");
         }
 
@@ -33,14 +33,15 @@ public class GameController {
         return game.getGameState().getDeck().getDiscardPile().top();
     }
 
-    public void addCardToDiscardPile(Card card) {
+    public boolean addCardToDiscardPile(Card card) {
         Card topCard = getTopCard();
 
-        if (!game.getRules().isValidMove(card, topCard)) {
-            throw new IllegalStateException("Illegal move.");
+        if (!game.getRules().isValidMove(card)) {
+            return false;
         }
 
         game.getGameState().getDeck().addCardToDiscardPile(card);
+        return true;
     }
 
     public List<Card> drawCards(int n) {

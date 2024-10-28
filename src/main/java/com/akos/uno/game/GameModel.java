@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameModel {
-    public GameModel(GameRules rules) {
-        this.rules = rules;
+    public GameModel() {
+        this.rules = new GameRules(this);
         this.gameState = new FullGameState(0, new HashMap<>(), new Deck(), 0, false, GameStatus.OPEN);
     }
 
