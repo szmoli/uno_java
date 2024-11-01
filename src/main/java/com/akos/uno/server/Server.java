@@ -1,18 +1,20 @@
 package com.akos.uno.server;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.akos.uno.communication.action.GameAction;
 import com.akos.uno.communication.action.GameActionType;
 import com.akos.uno.communication.response.InvalidMoveResponse;
-import com.akos.uno.communication.response.PartialGameStateResponse;
-import com.akos.uno.game.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.akos.uno.game.GameController;
+import com.akos.uno.game.GameModel;
 
 // sources:
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
@@ -83,6 +85,13 @@ public class Server {
         } else {
             clientHandler.sendMessageToClient(new InvalidMoveResponse().getAsJson());
         }
+    }
+
+    public static void main(String[] args) {
+        int port = Integer.parseInt(args[0]);
+
+        Server server = new Server();
+        server.startServer(port);
     }
 
     private ServerSocket serverSocket;
