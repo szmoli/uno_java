@@ -17,6 +17,7 @@ import com.akos.uno.communication.action.GameAction;
 import com.akos.uno.communication.action.GameActionType;
 import com.akos.uno.communication.response.InvalidMoveResponse;
 import com.akos.uno.game.GameController;
+import com.akos.uno.game.PartialGameState;
 
 // sources:
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
@@ -79,14 +80,18 @@ public class Server extends Thread {
         clientHandler.sendMessageToClient(message);
     }
 
-    public synchronized void broadcastGameState() {
-        // for (ClientHandler clientHandler : clients) {
-        //     clientHandler.sendMessageToClient(message);
-        // }
+    public synchronized void broadcastGameState(String message) {
+        for (ClientHandler clientHandler : clients.values()) {
+            clientHandler.sendMessageToClient(message);
+        }
     }
 
     public synchronized Map<String, ClientHandler> getClients() {
         return clients;
+    }
+
+    public synchronized GameController getGameController() {
+        return gameController;
     }
 
     public synchronized void processMessage(String message, ClientHandler clientHandler) {

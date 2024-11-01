@@ -8,7 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.akos.uno.asserts.PartialGameStateAssert;
 import com.akos.uno.client.ClientController;
+import com.akos.uno.game.GameStatus;
+import com.akos.uno.game.Player;
 
 public class ServerTest {
     private CountDownLatch latch;
@@ -41,6 +44,12 @@ public class ServerTest {
         }       
 
         assertEquals(3, server.getClients().size());
+        Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
+        PartialGameStateAssert.assertThat(client1.getClient().getGameState())
+            .hasPlayer(player1)
+            .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player1))
+            .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player1))
+            .hasGameStatus(GameStatus.OPEN);
     }
 
     @AfterEach

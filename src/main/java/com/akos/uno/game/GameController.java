@@ -1,6 +1,8 @@
 package com.akos.uno.game;
 
+import java.util.EmptyStackException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameController {
     public GameController() {
@@ -26,7 +28,19 @@ public class GameController {
     }
 
     public Card getTopCard() {
-        return game.getState().getDeck().getDiscardPile().top();
+        try {
+            return game.getState().getDeck().getDiscardPile().top();
+        } catch (EmptyStackException e) {
+            return null;
+        }
+    }
+
+    public List<String> getOtherPlayerNames(Player excludedPlayer) {
+        return getGame().getState().getPlayers().keySet().stream().filter(name -> !name.equals(excludedPlayer.getPlayerName())).collect(Collectors.toList());
+    }
+
+    public List<Integer> getOtherPlayerHandSizes(Player excludedPlayer) {
+        return getGame().getState().getPlayers().values().stream().filter(p -> !p.getPlayerName().equals(excludedPlayer.getPlayerName())).map(p -> p.getHand().size()).collect(Collectors.toList());
     }
 
     public boolean addCardToDiscardPile(Card card) {

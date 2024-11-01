@@ -39,6 +39,19 @@ public class Player {
         return playerName;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
+        return this.playerName.equals(((Player) other).playerName);
+    }
+
     private List<Card> hand;
     private String playerName;
     boolean hasSaidUno;

@@ -36,6 +36,10 @@ public class Client {
         }
     }
 
+    public PartialGameState getGameState() {
+        return gameState;
+    }
+
     public Player getPlayer() {
         return gameState.getPlayer();
     }
