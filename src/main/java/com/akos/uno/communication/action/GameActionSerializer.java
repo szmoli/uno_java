@@ -13,7 +13,7 @@ public class GameActionSerializer implements JsonSerializer<GameAction> {
         JsonObject jsonObject = new JsonObject();
         JsonElement actionData = jsonSerializationContext.serialize(gameAction, gameAction.getClass());
 
-        jsonObject.addProperty("type", gameAction.getActionType().name());
+        jsonObject.addProperty("type", gameAction.getType().name());
         jsonObject.addProperty("playerName", gameAction.getPlayerName());
         jsonObject.add("actionData", actionData);
 

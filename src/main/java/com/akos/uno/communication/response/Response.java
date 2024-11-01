@@ -17,12 +17,12 @@ public abstract class Response {
     }
 
     public String getAsJson() {
-        return gson.toJson(this, Response.class);
+        return gson.toJson(this, this.getClass());
     }
 
     private ResponseType type;
     private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(ResponseSerializer.class, new ResponseSerializer())
-            .registerTypeAdapter(ResponseDeserializer.class, new ResponseDeserializer())
+            .registerTypeAdapter(Response.class, new ResponseSerializer())
+            .registerTypeAdapter(Response.class, new ResponseDeserializer())
             .create();
 }

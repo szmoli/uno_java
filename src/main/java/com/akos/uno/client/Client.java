@@ -6,10 +6,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.akos.uno.communication.action.JoinAction;
-import com.akos.uno.game.PartialGameState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.akos.uno.communication.action.DiscardCardAction;
+import com.akos.uno.communication.action.JoinAction;
+import com.akos.uno.game.Card;
+import com.akos.uno.game.CardColor;
+import com.akos.uno.game.CardSymbol;
+import com.akos.uno.game.PartialGameState;
+import com.akos.uno.game.Player;
 
 public class Client {
     public Client(ClientController controller, PartialGameState gameState) {
@@ -60,6 +66,16 @@ public class Client {
 
     public Socket getSocket() {
         return socket;
+    }
+
+    public static void main(String[] args) {
+        String name = args[0];
+        String address = args[1];
+        int port = Integer.parseInt(args[2]);
+
+        ClientController cc = new ClientController(new Player(name));
+        cc.startConnection(address, port);
+        cc.sendMessageToServer(new DiscardCardAction(name, new Card(CardColor.RED, CardSymbol.SEVEN)).getAsJson());
     }
 
     private Socket socket;

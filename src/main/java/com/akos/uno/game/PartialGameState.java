@@ -2,23 +2,25 @@ package com.akos.uno.game;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PartialGameState {
-    public PartialGameState(String playerName) {
-        player = new Player(playerName);
+    public PartialGameState(Player player) {
+        this.player = player;
         otherPlayerNames = null;
         otherPlayerHandSizes = null;
         topCard = null;
         gameStatus = GameStatus.INIT;
     }
 
-    public PartialGameState(Player player, List<String> otherPlayerNames, List<Integer> otherPlayerHandSizes, Card topCard, GameStatus gameStatus) {
+    public PartialGameState(Player player, FullGameState gameState) {
         this.player = player;
-        this.otherPlayerNames = otherPlayerNames;
-        this.otherPlayerHandSizes = otherPlayerHandSizes;
-        this.topCard = topCard;
-        this.gameStatus = gameStatus;
+        otherPlayerNames = gameState.getPlayers().keySet().stream().filter(name -> !name.equals(player.getPlayerName())).collect(Collectors.toList());
+        otherPlayerHandSizes = gameState.getPlayers().values().stream().filter(p -> !p.getPlayerName().equals(player.getPlayerName())).map(p -> p.getHand().size()).collect(Collectors.toList());
+        topCard = gameState.getDeck().getDiscardPile().top();
+        gameStatus = gameState.getGameStatus();
     }
 
     public static PartialGameState createFromJson(String json) {

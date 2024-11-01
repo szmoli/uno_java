@@ -1,35 +1,47 @@
 package com.akos.uno.game;
 
-import com.akos.uno.server.Server;
 import java.util.List;
 
-public class GameLogic {
-    public boolean addPlayer(Player player) {
+public class GameController {
+    public GameController(GameModel game) {
+        this.game = game;
+    }
+
+    public GameModel getGame() {
+        return game;
+    }
+
+    public void initGame() {
+        
+    }
+
+    public Player addPlayer(Player player) {
         FullGameState gameState = game.getGameState();
 
-        if (gameState.getPlayers().size() >= game.getRules().getMaxPlayerCount()) {
+        if (gameState.getPlayers().size() >= 10) {
             throw new IllegalStateException("Maximum player capacity reached.");
         }
 
-        return gameState.getPlayers().add(player);
+        return gameState.getPlayers().put(player.getPlayerName(), player);
     }
 
-    public boolean removePlayer(Player player) {
-        return game.getGameState().getPlayers().remove(player);
+    public Player removePlayer(Player player) {
+        return game.getGameState().getPlayers().remove(player.getPlayerName());
     }
 
     public Card getTopCard() {
         return game.getGameState().getDeck().getDiscardPile().top();
     }
 
-    public void addCardToDiscardPile(Card card) {
+    public boolean addCardToDiscardPile(Card card) {
         Card topCard = getTopCard();
 
-        if (!game.getRules().isValidMove(card, topCard)) {
-            throw new IllegalStateException("Illegal move.");
+        if (!game.getRules().isValidMove(card)) {
+            return false;
         }
 
         game.getGameState().getDeck().addCardToDiscardPile(card);
+        return true;
     }
 
     public List<Card> drawCards(int n) {
@@ -71,5 +83,4 @@ public class GameLogic {
     }
 
     private GameModel game;
-    private Server server;
 }
