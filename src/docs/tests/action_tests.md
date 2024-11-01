@@ -3,7 +3,7 @@
 - [ ] [ChallengePlayerAction](#ChallengePlayerAction)
 - [ ] [DiscardCardAction](#DiscardCardAction)
 - [ ] [DrawCardAction](#DrawCardAction)
-- [ ] [JoinAction](#JoinAction)
+- [*] [JoinAction](#JoinAction)
 - [ ] [QuitAction](#QuitAction)
 - [ ] [SayUnoAction](#SayUnoAction)
 - [ ] [StartAction](#StartAction)
@@ -113,22 +113,36 @@
 - The game isn't full (player count < 10)
 
 2. Act:
-- Player calls joinGame(address, port)
+- Player calls joinGame()
 
 3. Assert:
 - Player gets added to the players on the server
 - Client gets a PartialGameState response with the updated player list
 
-### Invalid join
+### Invalid join (full game)
 
 1. Arrange:
-- The game isn full (player count >= 10)
+- The game is full (player count >= 10)
 
 2. Act:
-- Player calls joinGame(address, port)
+- Player calls joinGame()
 
 3. Assert:
-- Client gets an INVALID_ACTION response
+- There are only 10 clients
+- There are only 10 players
+
+### Invalid join (player name taken)
+
+1. Arrange:
+- The game isn't full (player count >= 10)
+- The player has a name that's already taken
+
+2. Act:
+- Player calls joinGame()
+
+3. Assert:
+- Duplicate client has been rejected by the server
+- Duplicate player didn't get added to players
 
 ## QuitAction
 
