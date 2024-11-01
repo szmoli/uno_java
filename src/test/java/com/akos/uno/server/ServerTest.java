@@ -1,4 +1,5 @@
 package com.akos.uno.server;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,18 +31,29 @@ public class ServerTest {
         client3 = new ClientController("player3", "127.0.0.1", 12345, latch);
     }
 
+    @AfterEach
+    void closeServerAndClients() {
+        client1.stopConnection();
+        client2.stopConnection();
+        client3.stopConnection();
+        server.stopServer();
+    }
+
     @Test
-    void serverConnectionTest() {
+    void validJoinTest() {
         server.start();
         client1.start();
         client2.start();
         client3.start();
-        
+
+        client1.getPlayerController().joinGame();
+        client2.getPlayerController().joinGame();
+        client3.getPlayerController().joinGame();
+
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
-            logger.error(e.getMessage());
-        }       
+        }
 
         assertEquals(3, server.getClients().size());
         Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
@@ -64,11 +76,21 @@ public class ServerTest {
             .hasGameStatus(GameStatus.OPEN);
     }
 
-    @AfterEach
-    void closeServerAndClients() {
-        client1.stopConnection();
-        client2.stopConnection();
-        client3.stopConnection();
-        server.stopServer();
+    @Test
+    void invalidJoinTest1() {
+        server.start();
+        client1.start();
+        client1.getPlayerController().joinGame();
+        ClientController duplicateClient = new ClientController("player1", "127.0.0.1", 12345, latch);
+        duplicateClient.start();
+        duplicateClient.getPlayerController().joinGame();
+
+        assertEquals(1, server.getClients().size());
+        Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
+        PartialGameStateAssert.assertThat(client3.getClient().getGameState())
+            .hasPlayer(player1)
+            .hasOtherPlayerNames(new ArrayList<>())
+            .hasOtherPlayerHandSizes(new ArrayList<>())
+            .hasGameStatus(GameStatus.OPEN);
     }
 }

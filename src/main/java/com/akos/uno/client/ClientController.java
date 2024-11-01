@@ -15,6 +15,7 @@ public class ClientController extends Thread {
         this.view = new ClientView(this);
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
+        this.playerController = new PlayerController(client.getPlayer(), this);
     }
 
     @Override
@@ -25,6 +26,10 @@ public class ClientController extends Thread {
     public Client getClient() {
         return client;
     }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    } 
 
     public void startConnection() {
         try {
@@ -39,16 +44,8 @@ public class ClientController extends Thread {
         client.stopConnection();
     }
 
-    public void sendMessageToServer(String message) {
-        client.sendMessageToServer(message);
-    }
-
     public void setGameState(PartialGameState state) {
         client.setGameState(state);
-    }
-
-    public void processServerResponse(String response) {
-        logger.debug(response);
     }
 
     private CountDownLatch latch;
@@ -56,5 +53,6 @@ public class ClientController extends Thread {
     private int serverPort;
     private Client client;
     private ClientView view;
+    private PlayerController playerController;
     private static final Logger logger = LogManager.getLogger();
 }

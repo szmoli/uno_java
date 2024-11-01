@@ -16,8 +16,8 @@ import org.apache.logging.log4j.Logger;
 import com.akos.uno.communication.action.GameAction;
 import com.akos.uno.communication.action.GameActionType;
 import com.akos.uno.communication.response.InvalidMoveResponse;
+import com.akos.uno.communication.response.MessageResponse;
 import com.akos.uno.game.GameController;
-import com.akos.uno.game.PartialGameState;
 
 // sources:
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
@@ -58,6 +58,7 @@ public class Server extends Thread {
 
                 clients.put(playerName, new ClientHandler(clientSocket, this));
                 clients.get(playerName).start();
+                clients.get(playerName).sendMessageToClient(new MessageResponse(playerName + " connected").getAsJson());
             }
         } catch (IOException e) {
             logger.error("Error starting server: {}", e.getMessage());

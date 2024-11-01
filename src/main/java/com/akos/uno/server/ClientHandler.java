@@ -15,6 +15,21 @@ public class ClientHandler extends Thread {
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
+
+        try {
+            this.out = new PrintWriter(socket.getOutputStream(), true);
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException e) {
+            logger.error("Error starting client thread: {}", e.getMessage());
+            
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            } catch (IOException e2) {
+                logger.error("Error closing client: {}", e2.getMessage());
+            }            
+        }        
     }
 
     public void sendMessageToClient(String message) {
@@ -26,23 +41,20 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         try {
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
             String message;
             while ((message = in.readLine()) != null) {
                 server.processMessage(message, this);
             }
         } catch (IOException e) {
             logger.error("Error starting client thread: {}", e.getMessage());
-        } finally {
+            
             try {
                 in.close();
                 out.close();
                 socket.close();
-            } catch (IOException e) {
-                logger.error("Error closing client thread: {}", e.getMessage());
-            }
+            } catch (IOException e2) {
+                logger.error("Error closing client: {}", e2.getMessage());
+            }            
         }
     }
 

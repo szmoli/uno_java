@@ -24,6 +24,7 @@ public class ClientListener extends Thread {
 
                 if (serverResponse != null) {
                     processResponse(serverResponse);
+                    client.getConnectionLatch().countDown();
                 }
             }
         } catch (IOException e) {

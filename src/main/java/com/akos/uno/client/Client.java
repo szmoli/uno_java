@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akos.uno.communication.action.JoinAction;
 import com.akos.uno.game.PartialGameState;
 import com.akos.uno.game.Player;
 
@@ -29,8 +29,6 @@ public class Client {
             out.println(playerName);
 
             listener.start();
-            JoinAction joinAction = new JoinAction(gameState.getPlayer().getPlayerName());
-            sendMessageToServer(joinAction.getAsJson());
         } catch (IOException e) {
             clientLogger.error("Error initializing client socket: {}", e.getMessage());
         }
@@ -74,6 +72,10 @@ public class Client {
         return socket;
     }
 
+    public CountDownLatch getConnectionLatch() {
+        return connectionLatch;
+    }
+
     // public static void main(String[] args) {
     //     String name = args[0];
     //     String address = args[1];
@@ -91,4 +93,5 @@ public class Client {
     private ClientListener listener;
     private ClientController controller;
     private Logger clientLogger = LogManager.getLogger();
+    private final CountDownLatch connectionLatch = new CountDownLatch(1);
 }
