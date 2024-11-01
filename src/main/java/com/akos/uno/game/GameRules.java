@@ -1,17 +1,17 @@
 package com.akos.uno.game;
 
 public class GameRules {
-    public GameRules(GameModel game) {
+    public GameRules(Game game) {
         this.game = game;
     }
 
     public boolean isValidMove(Card card) {
-        Card topCard = game.getGameState().getDeck().getDiscardPile().top();
+        Card topCard = game.getState().getDeck().getDiscardPile().top();
         return card.getColor() == topCard.getColor() || card.getSymbol() == topCard.getSymbol() || card.getColor() == CardColor.BLACK;
     }
 
     public boolean isValidJumpIn(Card card) {
-        Card topCard = game.getGameState().getDeck().getDiscardPile().top();
+        Card topCard = game.getState().getDeck().getDiscardPile().top();
         return card.getColor() == topCard.getColor() && card.getSymbol() == topCard.getSymbol();
     }
 
@@ -45,5 +45,5 @@ public class GameRules {
         return true;
     }
 
-    private GameModel game;
+    private Game game;
 }

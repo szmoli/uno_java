@@ -1,9 +1,12 @@
 package com.akos.uno.server;
 
 import com.akos.uno.communication.action.DiscardCardAction;
-import com.akos.uno.communication.action.GameAction;
-import com.akos.uno.communication.action.GameActionType;
-import com.akos.uno.game.*;
+import com.akos.uno.game.Card;
+import com.akos.uno.game.FullGameState;
+import com.akos.uno.game.Game;
+import com.akos.uno.game.GameController;
+import com.akos.uno.game.GameRules;
+import com.akos.uno.game.Player;
 
 public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAction> {
     public DiscardCardActionHandler(GameController gameController, Server server) {
@@ -12,8 +15,8 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
     }
 
     public void handle(DiscardCardAction action) {
-        GameModel game = gameController.getGame();
-        FullGameState state = game.getGameState();
+        Game game = gameController.getGame();
+        FullGameState state = game.getState();
         GameRules rules = game.getRules();
         Card card = action.getCard();
         boolean isPlayersTurn = state.getPlayerNamesInOrder().get(state.getCurrentPlayerIndex()).equals(action.getPlayerName());
@@ -24,7 +27,7 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
             * 2. add card to discard pile
             */
 
-            Player player = game.getGameState().getPlayers().get(action.getPlayerName());
+            Player player = game.getState().getPlayers().get(action.getPlayerName());
             player.getHand().remove(card);
             rules.applyCardEffect(card);
         }

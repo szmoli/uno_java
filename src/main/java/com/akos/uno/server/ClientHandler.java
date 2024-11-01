@@ -1,12 +1,13 @@
 package com.akos.uno.server;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // sources:
 // - https://www.w3schools.com/java/java_threads.asp
@@ -22,6 +23,7 @@ public class ClientHandler extends Thread {
     }
 
     // creates a new thread for the client
+    @Override
     public void run() {
         try {
             out = new PrintWriter(socket.getOutputStream(), true);

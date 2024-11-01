@@ -9,11 +9,7 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akos.uno.communication.action.DiscardCardAction;
 import com.akos.uno.communication.action.JoinAction;
-import com.akos.uno.game.Card;
-import com.akos.uno.game.CardColor;
-import com.akos.uno.game.CardSymbol;
 import com.akos.uno.game.PartialGameState;
 import com.akos.uno.game.Player;
 
@@ -23,12 +19,14 @@ public class Client {
         this.gameState = gameState;
     }
 
-    public void startConnection(String address, int port) {
+    public void startConnection(String playerName, String address, int port) {
         try {
             socket = new Socket(address, port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             listener = new ClientListener(this, controller);
+
+            out.println(playerName);
 
             listener.start();
             JoinAction joinAction = new JoinAction(gameState.getPlayer().getPlayerName());
@@ -36,6 +34,10 @@ public class Client {
         } catch (IOException e) {
             clientLogger.error("Error initializing client socket: {}", e.getMessage());
         }
+    }
+
+    public Player getPlayer() {
+        return gameState.getPlayer();
     }
 
     public void stopConnection() {
@@ -68,15 +70,15 @@ public class Client {
         return socket;
     }
 
-    public static void main(String[] args) {
-        String name = args[0];
-        String address = args[1];
-        int port = Integer.parseInt(args[2]);
+    // public static void main(String[] args) {
+    //     String name = args[0];
+    //     String address = args[1];
+    //     int port = Integer.parseInt(args[2]);
 
-        ClientController cc = new ClientController(new Player(name));
-        cc.startConnection(address, port);
-        cc.sendMessageToServer(new DiscardCardAction(name, new Card(CardColor.RED, CardSymbol.SEVEN)).getAsJson());
-    }
+    //     ClientController cc = new ClientController(name);
+    //     cc.startConnection(address, port);
+    //     cc.sendMessageToServer(new DiscardCardAction(name, new Card(CardColor.RED, CardSymbol.SEVEN)).getAsJson());
+    // }
 
     private Socket socket;
     private PrintWriter out;

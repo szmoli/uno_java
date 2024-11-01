@@ -1,15 +1,16 @@
 package com.akos.uno.game;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class DeckTest {
     @Test
     void testDeckCreation() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(false);
 //        for (Card card : deck.getDrawPile()) {
 //            logger.debug(card.toString());
 //        }
@@ -20,7 +21,7 @@ public class DeckTest {
 
     @Test
     void testSingleDrawAndDiscard() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(false);
         Card singleCard = deck.drawCards(1).getFirst();
 
         assertEquals(107, deck.getDrawPile().size());
@@ -35,7 +36,7 @@ public class DeckTest {
 
     @Test
     void testMultipleDrawsAndDiscards() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(false);
         List<Card> twoCards = deck.drawCards(2);
 
         assertEquals(106, deck.getDrawPile().size());
@@ -50,7 +51,7 @@ public class DeckTest {
 
     @Test
     void testDrawCardRanOutOfCards() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(false);
         List<Card> cards = deck.drawCards(107);
 
         for (Card card : cards) {

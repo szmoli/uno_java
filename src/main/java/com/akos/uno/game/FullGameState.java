@@ -1,9 +1,7 @@
 package com.akos.uno.game;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FullGameState {
     public FullGameState(int currentPlayerIndex, HashMap<String, Player> players, Deck deck, int currentRound, boolean isOrderReversed, GameStatus gameStatus) {

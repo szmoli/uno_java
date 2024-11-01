@@ -32,7 +32,7 @@ public class Deck {
     }
 
     // create deck according to official UNO rules and shuffle it
-    public Deck() {
+    public Deck(boolean doShuffle) {
         drawPile = new CardPile();
         discardPile = new CardPile();
 
@@ -45,15 +45,17 @@ public class Deck {
         }
 
         addWildCards(); // adds 4 of each wild card
-        drawPile.shuffle();
-
-        Card card = drawCards(1).getFirst();
-        while (card.getColor() == CardColor.BLACK && (card.getSymbol() == CardSymbol.WILD_FOUR || card.getSymbol() == CardSymbol.WILD)) {
-            drawPile.pushCard(card);
-            card = drawCards(1).getFirst();
+        if (doShuffle) {
+            drawPile.shuffle();
         }
 
-        addCardToDiscardPile(card);
+        // Card card = drawCards(1).getFirst();
+        // while (card.getColor() == CardColor.BLACK && (card.getSymbol() == CardSymbol.WILD_FOUR || card.getSymbol() == CardSymbol.WILD)) {
+        //     drawPile.pushCard(card);
+        //     card = drawCards(1).getFirst();
+        // }
+
+        // addCardToDiscardPile(card);
     }
 
     public CardPile getDrawPile() {

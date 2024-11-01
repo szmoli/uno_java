@@ -1,10 +1,10 @@
 package com.akos.uno.game;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.google.gson.Gson;
 
 public class PartialGameState {
     public PartialGameState(Player player) {
@@ -19,7 +19,11 @@ public class PartialGameState {
         this.player = player;
         otherPlayerNames = gameState.getPlayers().keySet().stream().filter(name -> !name.equals(player.getPlayerName())).collect(Collectors.toList());
         otherPlayerHandSizes = gameState.getPlayers().values().stream().filter(p -> !p.getPlayerName().equals(player.getPlayerName())).map(p -> p.getHand().size()).collect(Collectors.toList());
-        topCard = gameState.getDeck().getDiscardPile().top();
+        try {
+            topCard = gameState.getDeck().getDiscardPile().top();
+        } catch (EmptyStackException e) {
+            topCard = null;
+        }
         gameStatus = gameState.getGameStatus();
     }
 

@@ -3,20 +3,16 @@ package com.akos.uno.game;
 import java.util.List;
 
 public class GameController {
-    public GameController(GameModel game) {
-        this.game = game;
+    public GameController() {
+        this.game = new Game();
     }
 
-    public GameModel getGame() {
+    public Game getGame() {
         return game;
     }
 
-    public void initGame() {
-        
-    }
-
     public Player addPlayer(Player player) {
-        FullGameState gameState = game.getGameState();
+        FullGameState gameState = game.getState();
 
         if (gameState.getPlayers().size() >= 10) {
             throw new IllegalStateException("Maximum player capacity reached.");
@@ -26,11 +22,11 @@ public class GameController {
     }
 
     public Player removePlayer(Player player) {
-        return game.getGameState().getPlayers().remove(player.getPlayerName());
+        return game.getState().getPlayers().remove(player.getPlayerName());
     }
 
     public Card getTopCard() {
-        return game.getGameState().getDeck().getDiscardPile().top();
+        return game.getState().getDeck().getDiscardPile().top();
     }
 
     public boolean addCardToDiscardPile(Card card) {
@@ -40,16 +36,16 @@ public class GameController {
             return false;
         }
 
-        game.getGameState().getDeck().addCardToDiscardPile(card);
+        game.getState().getDeck().addCardToDiscardPile(card);
         return true;
     }
 
     public List<Card> drawCards(int n) {
-        return game.getGameState().getDeck().drawCards(n);
+        return game.getState().getDeck().drawCards(n);
     }
 
     public void selectNextPlayer() {
-        FullGameState gameState = game.getGameState();
+        FullGameState gameState = game.getState();
 
         if (gameState.isOrderReversed()) {
             gameState.setCurrentPlayerIndex((gameState.getCurrentPlayerIndex() - 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
@@ -59,7 +55,7 @@ public class GameController {
     }
 
     public Player getPreviousPlayer() {
-        FullGameState gameState = game.getGameState();
+        FullGameState gameState = game.getState();
 
         if (gameState.isOrderReversed()) {
             return gameState.getPlayers().get((gameState.getCurrentPlayerIndex() + 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
@@ -69,7 +65,7 @@ public class GameController {
     }
 
     public void startGame() {
-        FullGameState gameState = game.getGameState();
+        FullGameState gameState = game.getState();
 
         gameState.setGameStatus(GameStatus.IN_PROGRESS);
 
@@ -82,5 +78,5 @@ public class GameController {
         }
     }
 
-    private GameModel game;
+    private Game game;
 }
