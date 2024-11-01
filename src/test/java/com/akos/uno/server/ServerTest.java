@@ -50,6 +50,18 @@ public class ServerTest {
             .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player1))
             .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player1))
             .hasGameStatus(GameStatus.OPEN);
+        Player player2 = server.getGameController().getGame().getState().getPlayers().get("player2");
+        PartialGameStateAssert.assertThat(client2.getClient().getGameState())
+                .hasPlayer(player2)
+                .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player2))
+                .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player2))
+                .hasGameStatus(GameStatus.OPEN);
+        Player player3 = server.getGameController().getGame().getState().getPlayers().get("player3");
+        PartialGameStateAssert.assertThat(client3.getClient().getGameState())
+            .hasPlayer(player3)
+            .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player3))
+            .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player3))
+            .hasGameStatus(GameStatus.OPEN);
     }
 
     @AfterEach

@@ -12,7 +12,7 @@ public abstract class Response {
         return type;
     }
 
-    public Response createFromJson(String responseJson) {
+    public static Response createFromJson(String responseJson) {
         return gson.fromJson(responseJson, Response.class);
     }
 

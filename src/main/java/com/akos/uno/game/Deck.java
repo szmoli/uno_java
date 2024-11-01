@@ -48,14 +48,6 @@ public class Deck {
         if (doShuffle) {
             drawPile.shuffle();
         }
-
-        // Card card = drawCards(1).getFirst();
-        // while (card.getColor() == CardColor.BLACK && (card.getSymbol() == CardSymbol.WILD_FOUR || card.getSymbol() == CardSymbol.WILD)) {
-        //     drawPile.pushCard(card);
-        //     card = drawCards(1).getFirst();
-        // }
-
-        // addCardToDiscardPile(card);
     }
 
     public CardPile getDrawPile() {

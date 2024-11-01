@@ -19,7 +19,7 @@ public class Client {
         this.gameState = gameState;
     }
 
-    public void startConnection(String playerName, String address, int port) {
+    public synchronized void startConnection(String playerName, String address, int port) {
         try {
             socket = new Socket(address, port);
             out = new PrintWriter(socket.getOutputStream(), true);
@@ -44,7 +44,7 @@ public class Client {
         return gameState.getPlayer();
     }
 
-    public void stopConnection() {
+    public synchronized void stopConnection() {
         try {
             out.close();
             in.close();
@@ -54,7 +54,7 @@ public class Client {
         }
     }
 
-    public void sendMessageToServer(String message) {
+    public synchronized void sendMessageToServer(String message) {
         if (out == null) {
             clientLogger.error("Error sending message to server.");
         }
@@ -66,7 +66,7 @@ public class Client {
         return in.readLine();
     }
 
-    public void setGameState(PartialGameState gameState) {
+    public synchronized void setGameState(PartialGameState gameState) {
         this.gameState = gameState;
     }
 
