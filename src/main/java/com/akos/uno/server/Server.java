@@ -24,8 +24,7 @@ import com.akos.uno.game.GameController;
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
 // - https://betterstack.com/community/guides/logging/how-to-start-logging-with-log4j/
 public class Server extends Thread {
-    public Server(int port, CountDownLatch latch) {
-        this.latch = latch;
+    public Server(int port) {
         this.port = port;
         this.gameController = new GameController();
         gameActionHandlers.put(GameActionType.CHALLENGE_PLAYER, (action) -> {});
@@ -47,29 +46,33 @@ public class Server extends Thread {
         try {
             serverSocket = new ServerSocket(port);
             logger.info("Server is listening on port: {}", serverSocket.getLocalPort());
-            latch.countDown();
+            readyLatch.countDown();
 
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
                 clientSocket.setKeepAlive(true); // keep alive connection because of the real-time nature of UNO
                 logger.info("New client connected");
 
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String playerName = in.readLine();
+
+                if (clients.size() >= 10) {
+                    out.println(new MessageResponse("server is full").getAsJson());
+                    clientSocket.close();
+                }
 
                 if (!clients.containsKey(playerName)) {
                     clients.put(playerName, new ClientHandler(clientSocket, this));
                     clients.get(playerName).start();
                     clients.get(playerName).sendMessageToClient(new MessageResponse(playerName + " connected").getAsJson());
                 } else {
-                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                     out.println(new MessageResponse("player name already taken").getAsJson());
                     clientSocket.close();
                 }  
             }
         } catch (IOException e) {
             logger.error("Error starting server: {}", e.getMessage());
-        } finally {
             stopServer();
         }
     }
@@ -102,6 +105,10 @@ public class Server extends Thread {
         return gameController;
     }
 
+    public synchronized CountDownLatch getReadyLatch() {
+        return readyLatch;
+    }
+
     public synchronized void processMessage(String message, ClientHandler clientHandler) {
         logger.debug("Processing message: {}", message);
         GameAction action = GameAction.createFromJson(message);
@@ -120,11 +127,11 @@ public class Server extends Thread {
     //     server.startServer(port);
     // }
 
-    private CountDownLatch latch;
     private int port;
     private ServerSocket serverSocket;
     private HashMap<String, ClientHandler> clients = new HashMap<>();
     private GameController gameController;
     private final Map<GameActionType, GameActionHandler<?>> gameActionHandlers = new EnumMap<>(GameActionType.class);
     private Logger logger = LogManager.getLogger();
+    private final CountDownLatch readyLatch = new CountDownLatch(1);
 }

@@ -9,8 +9,8 @@ import com.akos.uno.game.PartialGameState;
 import com.akos.uno.game.Player;
 
 public class ClientController extends Thread {
-    public ClientController(String playerName, String serverAddress, int serverPort, CountDownLatch latch) {
-        this.latch = latch;
+    public ClientController(String playerName, String serverAddress, int serverPort, CountDownLatch serverReadyLatch) {
+        this.serverReadyLatch = serverReadyLatch;
         this.client = new Client(this, new PartialGameState(new Player(playerName)));
         this.view = new ClientView(this);
         this.serverAddress = serverAddress;
@@ -33,7 +33,7 @@ public class ClientController extends Thread {
 
     public void startConnection() {
         try {
-            latch.await();
+            serverReadyLatch.await();
             client.startConnection(client.getPlayer().getPlayerName(), serverAddress, serverPort);
         } catch (InterruptedException e) {
             logger.error(e.getMessage());
@@ -48,7 +48,7 @@ public class ClientController extends Thread {
         client.setGameState(state);
     }
 
-    private CountDownLatch latch;
+    private CountDownLatch serverReadyLatch;
     private String serverAddress;
     private int serverPort;
     private Client client;
