@@ -3,6 +3,7 @@ package com.akos.uno.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.EnumMap;
@@ -56,9 +57,15 @@ public class Server extends Thread {
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String playerName = in.readLine();
 
-                clients.put(playerName, new ClientHandler(clientSocket, this));
-                clients.get(playerName).start();
-                clients.get(playerName).sendMessageToClient(new MessageResponse(playerName + " connected").getAsJson());
+                if (!clients.containsKey(playerName)) {
+                    clients.put(playerName, new ClientHandler(clientSocket, this));
+                    clients.get(playerName).start();
+                    clients.get(playerName).sendMessageToClient(new MessageResponse(playerName + " connected").getAsJson());
+                } else {
+                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                    out.println(new MessageResponse("player name already taken").getAsJson());
+                    clientSocket.close();
+                }  
             }
         } catch (IOException e) {
             logger.error("Error starting server: {}", e.getMessage());

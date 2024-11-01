@@ -3,6 +3,9 @@ package com.akos.uno.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Player {
     public Player(String playerName) {
         this.playerName = playerName;
@@ -46,6 +49,7 @@ public class Player {
         }
 
         if (other == null || getClass() != other.getClass()) {
+            logger.debug("halihó geci");
             return false;
         }
 
@@ -54,6 +58,7 @@ public class Player {
 
     private List<Card> hand;
     private String playerName;
-    boolean hasSaidUno;
-    boolean canDiscard;
+    private boolean hasSaidUno;
+    private boolean canDiscard;
+    private static final Logger logger = LogManager.getLogger(); 
 }

@@ -44,9 +44,17 @@ public class Client {
 
     public synchronized void stopConnection() {
         try {
-            out.close();
-            in.close();
-            socket.close();
+            if (out != null) {
+                out.close();
+            }
+
+            if (in != null) {
+                in.close();
+            }
+
+            if (socket != null) {
+                socket.close();
+            }
         } catch (IOException e) {
             clientLogger.error("Error closing connection: {}", e.getMessage());
         }

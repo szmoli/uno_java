@@ -85,9 +85,14 @@ public class ServerTest {
         duplicateClient.start();
         duplicateClient.getPlayerController().joinGame();
 
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
         assertEquals(1, server.getClients().size());
         Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
-        PartialGameStateAssert.assertThat(client3.getClient().getGameState())
+        PartialGameStateAssert.assertThat(client1.getClient().getGameState())
             .hasPlayer(player1)
             .hasOtherPlayerNames(new ArrayList<>())
             .hasOtherPlayerHandSizes(new ArrayList<>())

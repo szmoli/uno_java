@@ -21,15 +21,16 @@ public class JoinActionHandler implements GameActionHandler<JoinAction> {
         logger.debug("Handling join action: {}", action.getAsJson());
         Game game = gameController.getGame();
         String playerName = action.getPlayerName();
-        Player player = new Player(playerName);
-        game.getState().getPlayers().put(playerName, player);
 
-        for (Player p : game.getState().getPlayers().values()) {
-            String message = new PartialGameStateResponse(new PartialGameState(p, game.getState())).getAsJson();
-            server.getClients().get(p.getPlayerName()).sendMessageToClient(message);
-        }
-
-        // server.broadcastMessage(new PartialGameStateResponse(new PartialGameState(player, game.getState())).getAsJson());
+        if (!game.getState().getPlayers().containsKey(playerName)) {
+            Player player = new Player(playerName);
+            game.getState().getPlayers().put(playerName, player);
+    
+            for (Player p : game.getState().getPlayers().values()) {
+                String message = new PartialGameStateResponse(new PartialGameState(p, game.getState())).getAsJson();
+                server.getClients().get(p.getPlayerName()).sendMessageToClient(message);
+            }
+        }        
     }
 
     private GameController gameController;
