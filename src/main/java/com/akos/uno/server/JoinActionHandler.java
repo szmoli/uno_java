@@ -24,6 +24,12 @@ public class JoinActionHandler implements GameActionHandler<JoinAction> {
 
         if (!game.getState().getPlayers().containsKey(playerName)) {
             Player player = new Player(playerName);
+
+            if (gameController.getGame().getState().getHostPlayer() == null) {
+                logger.debug("{} {}", player, player.getPlayerName());
+                gameController.getGame().getState().setHostPlayer(player);
+            }
+
             game.getState().getPlayers().put(playerName, player);
     
             for (Player p : game.getState().getPlayers().values()) {

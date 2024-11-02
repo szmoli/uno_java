@@ -19,7 +19,6 @@ import com.akos.uno.communication.action.GameActionType;
 import com.akos.uno.communication.response.InvalidMoveResponse;
 import com.akos.uno.communication.response.MessageResponse;
 import com.akos.uno.game.GameController;
-import com.akos.uno.game.Player;
 
 // sources:
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
@@ -71,11 +70,6 @@ public class Server extends Thread {
                 if (!clients.containsKey(playerName)) {
                     clients.put(playerName, new ClientHandler(clientSocket, this));
                     clients.get(playerName).start();
-                    Player player = gameController.getGame().getState().getPlayers().get(playerName);
-                    if (gameController.getGame().getState().getHostPlayer() == null) {
-                        gameController.getGame().getState().setHostPlayer(player);
-                    }
-
                     clients.get(playerName).sendMessageToClient(new MessageResponse(playerName + " connected").getAsJson());
                 } else {
                     out.println(new MessageResponse("player name already taken").getAsJson());

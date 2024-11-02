@@ -41,10 +41,16 @@ public class ServerTest {
     void validJoinTest() {
         server.start();
         client1.start();
+        client1.getPlayerController().joinGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
         client2.start();
         client3.start();
 
-        client1.getPlayerController().joinGame();
         client2.getPlayerController().joinGame();
         client3.getPlayerController().joinGame();
 
@@ -55,6 +61,7 @@ public class ServerTest {
 
         assertEquals(3, server.getClients().size());
         Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
+        assertEquals(player1, server.getGameController().getGame().getState().getHostPlayer());
         PartialGameStateAssert.assertThat(client1.getClient().getGameState())
             .hasPlayer(player1)
             .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player1))
