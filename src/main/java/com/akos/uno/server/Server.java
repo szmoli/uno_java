@@ -62,6 +62,11 @@ public class Server extends Thread {
                     clientSocket.close();
                 }
 
+                if (playerName == null || playerName.equals("")) {
+                    out.println(new MessageResponse("player name empty").getAsJson());
+                    clientSocket.close();
+                }
+
                 if (!clients.containsKey(playerName)) {
                     clients.put(playerName, new ClientHandler(clientSocket, this));
                     clients.get(playerName).start();
@@ -119,13 +124,6 @@ public class Server extends Thread {
             clientHandler.sendMessageToClient(new InvalidMoveResponse().getAsJson());
         }
     }
-
-    // public static void main(String[] args) {
-    //     int port = Integer.parseInt(args[0]);
-
-    //     Server server = new Server();
-    //     server.startServer(port);
-    // }
 
     private int port;
     private ServerSocket serverSocket;
