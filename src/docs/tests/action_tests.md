@@ -6,7 +6,7 @@
 - [*] [JoinAction](#JoinAction)
 - [ ] [QuitAction](#QuitAction)
 - [ ] [SayUnoAction](#SayUnoAction)
-- [ ] [StartAction](#StartAction)
+- [*] [StartAction](#StartAction)
 
 # Test specifications
 
