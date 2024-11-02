@@ -49,7 +49,6 @@ public class Player {
         }
 
         if (other == null || getClass() != other.getClass()) {
-            logger.debug("halihó geci");
             return false;
         }
 

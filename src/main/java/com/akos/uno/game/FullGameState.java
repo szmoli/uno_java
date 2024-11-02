@@ -2,15 +2,17 @@ package com.akos.uno.game;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FullGameState {
-    public FullGameState(int currentPlayerIndex, HashMap<String, Player> players, Deck deck, int currentRound, boolean isOrderReversed, GameStatus gameStatus) {
+    public FullGameState(int currentPlayerIndex, Map<String, Player> players, Deck deck, int currentRound, boolean isOrderReversed, GameStatus gameStatus) {
         this.currentPlayerIndex = currentPlayerIndex;
-        this.players = players;
+        this.players = new HashMap<>(players);
         this.deck = deck;
         this.currentRound = currentRound;
         this.isOrderReversed = isOrderReversed;
         this.gameStatus = gameStatus;
+        this.hostPlayer = null;
     }
 
     public GameStatus getGameStatus() {
@@ -29,7 +31,7 @@ public class FullGameState {
         this.currentPlayerIndex = idx;
     }
 
-    public HashMap<String, Player> getPlayers() {
+    public Map<String, Player> getPlayers() {
         return players;
     }
 
@@ -57,10 +59,19 @@ public class FullGameState {
         isOrderReversed = !isOrderReversed;
     }
 
+    public void setHostPlayer(Player player) {
+        this.hostPlayer = player;
+    }
+
+    public Player getHostPlayer() {
+        return hostPlayer;
+    }
+
     private int currentPlayerIndex;
     private HashMap<String, Player> players; // this is a HashMap so we can get the player efficiently by its name
     private Deck deck;
     private int currentRound;
     private boolean isOrderReversed;
     private GameStatus gameStatus;
+    private Player hostPlayer;
 }
