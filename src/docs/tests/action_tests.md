@@ -116,6 +116,7 @@
 - Player calls joinGame()
 
 3. Assert:
+- First joined player gets assigned as host
 - Player gets added to the players on the server
 - Client gets a PartialGameState response with the updated player list
 
@@ -221,13 +222,12 @@
 - Player calls startGame()
 
 3. Assert:
-- A new deck is created
 - A card is added to the discard pile
 - 7 cards get dealt to all players
 - The dealt cards get removed from the draw pile
 - The clients get a PartialGameResponse
 
-### Inalid start action
+### Invalid start action
 
 1. Arrange:
 - The player isn't the host

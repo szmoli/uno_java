@@ -35,6 +35,10 @@ public class GameController {
         }
     }
 
+    public boolean isActionCard(Card card) {
+        return card.getSymbol() == CardSymbol.DRAW_TWO || card.getSymbol() == CardSymbol.REVERSE || card.getSymbol() == CardSymbol.SKIP || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR;
+    }
+
     public List<String> getOtherPlayerNames(Player excludedPlayer) {
         return getGame().getState().getPlayers().keySet().stream().filter(name -> !name.equals(excludedPlayer.getPlayerName())).collect(Collectors.toList());
     }
@@ -44,8 +48,6 @@ public class GameController {
     }
 
     public boolean addCardToDiscardPile(Card card) {
-        Card topCard = getTopCard();
-
         if (!game.getRules().isValidMove(card)) {
             return false;
         }
@@ -81,15 +83,24 @@ public class GameController {
     public void startGame() {
         FullGameState gameState = game.getState();
 
-        gameState.setGameStatus(GameStatus.IN_PROGRESS);
+        // Draw a valid starting card (it can't be an action card)
+        while (gameState.getDeck().getDiscardPile().top().equals(new Card(CardColor.NONE, CardSymbol.NONE)) || isActionCard(getTopCard())) {
+            // Remove action card or none card from the top of the discard pile, add it back into to draw pile and shuffle it again
+            Card oldCard = gameState.getDeck().getDiscardPile().popCard();
+            gameState.getDeck().getDrawPile().pushCard(oldCard);
+            gameState.getDeck().shuffle();
 
-        while (gameState.getGameStatus() != GameStatus.FINISHED) {
-            Player previousPlayer = getPreviousPlayer();
-            Player player = gameState.getPlayers().get(gameState.getCurrentPlayerIndex());
-//            player.playTurn(deck);
-//            game.getRules().enforceForgotToSayUNOPenalty(previousPlayer, gameState.getDeck());
-            selectNextPlayer();
+            // Draw a new card and add it to the top of the discard pile
+            Card newCard = gameState.getDeck().drawCards(1).getFirst();
+            addCardToDiscardPile(newCard);
         }
+
+        // Deal 7 cards to players
+        for (Player player : gameState.getPlayers().values()) {
+            player.getHand().addAll(gameState.getDeck().drawCards(7));
+        }
+
+        gameState.setGameStatus(GameStatus.IN_PROGRESS);
     }
 
     private Game game;

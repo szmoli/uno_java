@@ -15,12 +15,16 @@ public class Deck {
             while (!discardPile.isEmpty()) {
                 drawPile.pushCard(discardPile.popCard());
             }
-            drawPile.shuffle();
+            shuffle();
 
             discardPile.pushCard(topCard); // add the last discarded card back so the game can progress from where it was left before the shuffling
         }
 
         return drawPile.popCards(n);
+    }
+
+    public void shuffle() {
+        drawPile.shuffle();
     }
 
     public void addCardsToDiscardPile(List<Card> cards) {

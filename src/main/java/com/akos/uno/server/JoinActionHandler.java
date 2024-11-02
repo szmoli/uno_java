@@ -36,7 +36,7 @@ public class JoinActionHandler implements GameActionHandler<JoinAction> {
                 String message = new PartialGameStateResponse(new PartialGameState(p, game.getState())).getAsJson();
                 server.getClients().get(p.getPlayerName()).sendMessageToClient(message);
             }
-        }        
+        }
     }
 
     private GameController gameController;

@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.akos.uno.communication.action.GameAction;
 import com.akos.uno.communication.action.GameActionType;
-import com.akos.uno.communication.response.InvalidMoveResponse;
+import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.communication.response.MessageResponse;
 import com.akos.uno.game.GameController;
 
@@ -121,7 +121,7 @@ public class Server extends Thread {
         if (gameActionHandlers.containsKey(action.getType())) {
             gameActionHandlers.get(action.getType()).handleAction(action);
         } else {
-            clientHandler.sendMessageToClient(new InvalidMoveResponse().getAsJson());
+            clientHandler.sendMessageToClient(new InvalidActionResponse().getAsJson());
         }
     }
 
