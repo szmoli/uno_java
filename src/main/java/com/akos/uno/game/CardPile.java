@@ -46,7 +46,7 @@ public class CardPile implements Iterable<Card> {
     // removes and returns a single card from the top of the pile
     public Card popCard() {
         if (this.cards.isEmpty()) {
-            throw new IllegalStateException("CardPile is empty.");
+            return new Card(CardColor.NONE, CardSymbol.NONE);
         }
 
         return cards.pop();

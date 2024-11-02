@@ -92,7 +92,7 @@ public class GameController {
 
             // Draw a new card and add it to the top of the discard pile
             Card newCard = gameState.getDeck().drawCards(1).getFirst();
-            addCardToDiscardPile(newCard);
+            gameState.getDeck().addCardToDiscardPile(newCard);
         }
 
         // Deal 7 cards to players

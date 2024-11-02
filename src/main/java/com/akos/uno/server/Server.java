@@ -34,7 +34,7 @@ public class Server extends Thread {
         gameActionHandlers.put(GameActionType.JUMP_IN, (action) -> {});
         gameActionHandlers.put(GameActionType.QUIT, (action) -> {});
         gameActionHandlers.put(GameActionType.SAY_UNO, (action) -> {});
-        gameActionHandlers.put(GameActionType.START, (action) -> {});
+        gameActionHandlers.put(GameActionType.START, new StartActionHandler(gameController, this));
     }
 
     @Override

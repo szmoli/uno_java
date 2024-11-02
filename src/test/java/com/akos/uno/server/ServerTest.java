@@ -157,4 +157,90 @@ public class ServerTest {
                 .hasGameStatus(GameStatus.OPEN);
         }
     }
+
+    @Test
+    void invalidStartTest() {
+        server.start();
+        client1.start();
+        client1.getPlayerController().joinGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        client2.start();
+        client3.start();
+
+        client2.getPlayerController().joinGame();
+        client3.getPlayerController().joinGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        client2.getPlayerController().startGame();
+        
+        assertEquals(GameStatus.OPEN, server.getGameController().getGame().getState().getGameStatus());
+    }
+
+    @Test
+    void validStartTest() {
+        server.start();
+        client1.start();
+        client1.getPlayerController().joinGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        client2.start();
+        client3.start();
+
+        client2.getPlayerController().joinGame();
+        client3.getPlayerController().joinGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        client1.getPlayerController().startGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+        
+        assertEquals(GameStatus.IN_PROGRESS, server.getGameController().getGame().getState().getGameStatus());
+        // 3 * 7 + 1 = 22 cards should be missing from the draw pile
+        assertEquals(1, server.getGameController().getGame().getState().getDeck().getDiscardPile().size());
+        assertEquals(86, server.getGameController().getGame().getState().getDeck().getDrawPile().size());
+
+        Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
+        assertEquals(7, player1.getHand().size());
+        PartialGameStateAssert.assertThat(client1.getClient().getGameState())
+            .hasPlayer(player1)
+            .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player1))
+            .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player1))
+            .hasGameStatus(GameStatus.IN_PROGRESS);
+
+        Player player2 = server.getGameController().getGame().getState().getPlayers().get("player2");
+        assertEquals(7, player2.getHand().size());
+        PartialGameStateAssert.assertThat(client2.getClient().getGameState())
+                .hasPlayer(player2)
+                .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player2))
+                .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player2))
+                .hasGameStatus(GameStatus.IN_PROGRESS);
+
+        Player player3 = server.getGameController().getGame().getState().getPlayers().get("player3");
+        assertEquals(7, player3.getHand().size());
+        PartialGameStateAssert.assertThat(client3.getClient().getGameState())
+            .hasPlayer(player3)
+            .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player3))
+            .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player3))
+            .hasGameStatus(GameStatus.IN_PROGRESS);
+    }
 }
