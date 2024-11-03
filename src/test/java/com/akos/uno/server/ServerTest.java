@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import com.akos.uno.asserts.PartialGameStateAssert;
 import com.akos.uno.client.ClientController;
+import com.akos.uno.game.Card;
+import com.akos.uno.game.CardColor;
+import com.akos.uno.game.CardSymbol;
 import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.Player;
 
@@ -304,10 +307,105 @@ public class ServerTest {
     void invalidDiscardTest1() {
         joinPlayersAndStartGame();
 
-        Player player1OnClient = client1.getPlayerController().getPlayer();
-        Player player2OnClient = client2.getPlayerController().getPlayer();
-        Player player3OnClient = client3.getPlayerController().getPlayer();
+        Player player1 = client1.getPlayerController().getPlayer();
+        Player player2 = client2.getPlayerController().getPlayer();
+        Player player3 = client3.getPlayerController().getPlayer();
 
-        
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+
+        client2.getPlayerController().discardCard(0);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+    }
+
+    @Test
+    void invalidDiscardTest2() {
+        joinPlayersAndStartGame();
+
+        Player player1 = client1.getPlayerController().getPlayer();
+        Player player2 = client2.getPlayerController().getPlayer();
+        Player player3 = client3.getPlayerController().getPlayer();
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+
+        player1.getHand().clear();
+        client1.getPlayerController().discardCard(0);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+    }
+
+    @Test
+    void invalidDiscardTest3() {
+        joinPlayersAndStartGame();
+
+        Player player1 = client1.getPlayerController().getPlayer();
+        Player player2 = client2.getPlayerController().getPlayer();
+        Player player3 = client3.getPlayerController().getPlayer();
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+
+        Card playerCard = new Card(CardColor.BLUE, CardSymbol.FIVE);
+        Card topCard = new Card(CardColor.BLUE, CardSymbol.FOUR);
+        player1.getHand().clear();
+        player1.getHand().add(playerCard);
+        server.getGameController().addCardToDiscardPile(topCard);
+        client1.getPlayerController().discardCard(playerCard);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+    }
+
+    @Test
+    void validDiscardTest() {
+        joinPlayersAndStartGame();
+
+        Player player1 = client1.getPlayerController().getPlayer();
+        Player player2 = client2.getPlayerController().getPlayer();
+        Player player3 = client3.getPlayerController().getPlayer();
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+
+        Card card = new Card(CardColor.BLUE, CardSymbol.FIVE);
+        player1.getHand().clear();
+        player1.getHand().add(card);
+        server.getGameController().addCardToDiscardPile(card);
+        client1.getPlayerController().discardCard(card);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(player1));
+        assertTrue(server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
     }
 }

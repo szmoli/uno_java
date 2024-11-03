@@ -2,6 +2,7 @@ package com.akos.uno.client;
 
 import java.util.List;
 
+import com.akos.uno.communication.action.DiscardCardAction;
 import com.akos.uno.communication.action.DrawCardAction;
 import com.akos.uno.communication.action.JoinAction;
 import com.akos.uno.communication.action.StartAction;
@@ -35,6 +36,19 @@ public class PlayerController {
 
     public void drawCards(int n) {
         clientController.getClient().sendMessageToServer(new DrawCardAction(getPlayer().getPlayerName(), n).getAsJson());
+    }
+
+    public void discardCard(Card card) {
+        clientController.getClient().sendMessageToServer(new DiscardCardAction(getPlayer().getPlayerName(), card).getAsJson());
+    }
+
+    public void discardCard(int index) {
+        if (getPlayer().getHand().isEmpty()) {
+            return;
+        }
+
+        Card card = getPlayer().getHand().get(index);
+        clientController.getClient().sendMessageToServer(new DiscardCardAction(getPlayer().getPlayerName(), card).getAsJson());
     }
 
     private final ClientController clientController;

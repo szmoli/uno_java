@@ -18,7 +18,7 @@ public class StartActionHandler implements GameActionHandler<StartAction> {
     public void handle(StartAction action) {
         logger.debug("Handling start action");
 
-        Player player = gameController.getGame().getState().getPlayers().get(action.getPlayerName());
+        Player player = gameController.getPlayers().get(action.getPlayerName());
         ClientHandler clientHandler = server.getClients().get(action.getPlayerName());
 
         if (clientHandler == null) {
@@ -26,7 +26,7 @@ public class StartActionHandler implements GameActionHandler<StartAction> {
             return;
         }
 
-        if (player == null || !player.equals(gameController.getGame().getState().getHostPlayer())) {
+        if (player == null || !player.equals(gameController.getHostPlayer())) {
             clientHandler.sendMessageToClient(new InvalidActionResponse().getAsJson());
             return;
         }
