@@ -21,14 +21,21 @@ public class StartActionHandler implements GameActionHandler<StartAction> {
         logger.debug("Handling start action");
 
         Player player = gameController.getGame().getState().getPlayers().get(action.getPlayerName());
-        ClientHandler clientHandler = server.getClients().get(player.getPlayerName());
-        if (!player.equals(gameController.getGame().getState().getHostPlayer())) {
+        ClientHandler clientHandler = server.getClients().get(action.getPlayerName());
+
+        if (clientHandler == null) {
+            logger.error("Client handler not found for {}", action.getPlayerName());
+            return;
+        }
+
+        if (player == null || !player.equals(gameController.getGame().getState().getHostPlayer())) {
             clientHandler.sendMessageToClient(new InvalidActionResponse().getAsJson());
             return;
         }
 
         gameController.startGame();
 
+        // Update clients
         for (Player p : gameController.getGame().getState().getPlayers().values()) {
             String message = new PartialGameStateResponse(new PartialGameState(p, gameController.getGame().getState())).getAsJson();
             server.getClients().get(p.getPlayerName()).sendMessageToClient(message);

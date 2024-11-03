@@ -35,7 +35,7 @@ public class ClientListener extends Thread {
     private ClientController controller;
     private static final Logger logger = LogManager.getLogger();
 
-    private void processResponse(String responseJson) {
+    private synchronized void processResponse(String responseJson) {
         Response response = Response.createFromJson(responseJson);
 
         switch (response.getType()) {

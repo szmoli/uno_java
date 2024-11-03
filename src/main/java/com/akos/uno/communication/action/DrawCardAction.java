@@ -6,5 +6,9 @@ public class DrawCardAction extends GameAction {
         this.cardCount = cardCount;
     }
 
+    public int getCardCount() {
+        return cardCount;
+    }
+
     private int cardCount;
 }

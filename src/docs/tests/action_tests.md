@@ -2,7 +2,7 @@
 
 - [ ] [ChallengePlayerAction](#ChallengePlayerAction)
 - [ ] [DiscardCardAction](#DiscardCardAction)
-- [ ] [DrawCardAction](#DrawCardAction)
+- [*] [DrawCardAction](#DrawCardAction)
 - [*] [JoinAction](#JoinAction)
 - [ ] [QuitAction](#QuitAction)
 - [ ] [SayUnoAction](#SayUnoAction)

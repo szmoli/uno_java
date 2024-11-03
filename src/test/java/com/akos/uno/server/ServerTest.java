@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,35 @@ public class ServerTest {
         client1 = new ClientController("player1", "127.0.0.1", 12345, server.getReadyLatch());
         client2 = new ClientController("player2", "127.0.0.1", 12345, server.getReadyLatch());
         client3 = new ClientController("player3", "127.0.0.1", 12345, server.getReadyLatch());
+    }
+
+    void joinPlayersAndStartGame() {
+        server.start();
+        client1.start();
+        client1.getPlayerController().joinGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        client2.start();
+        client3.start();
+
+        client2.getPlayerController().joinGame();
+        client3.getPlayerController().joinGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        client1.getPlayerController().startGame();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
     }
 
     @AfterEach
@@ -187,32 +217,7 @@ public class ServerTest {
 
     @Test
     void validStartTest() {
-        server.start();
-        client1.start();
-        client1.getPlayerController().joinGame();
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-        }
-
-        client2.start();
-        client3.start();
-
-        client2.getPlayerController().joinGame();
-        client3.getPlayerController().joinGame();
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-        }
-
-        client1.getPlayerController().startGame();
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-        }
+        joinPlayersAndStartGame();
         
         assertEquals(GameStatus.IN_PROGRESS, server.getGameController().getGame().getState().getGameStatus());
         // 3 * 7 + 1 = 22 cards should be missing from the draw pile
@@ -242,5 +247,56 @@ public class ServerTest {
             .hasOtherPlayerNames(server.getGameController().getOtherPlayerNames(player3))
             .hasOtherPlayerHandSizes(server.getGameController().getOtherPlayerHandSizes(player3))
             .hasGameStatus(GameStatus.IN_PROGRESS);
+    }
+
+    @Test
+    void invalidDrawTest() {
+        joinPlayersAndStartGame();
+
+        Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
+        Player player2 = server.getGameController().getGame().getState().getPlayers().get("player2");
+        Player player3 = server.getGameController().getGame().getState().getPlayers().get("player3");
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+
+        client2.getPlayerController().drawCards(1);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+    }
+
+    @Test
+    void validDrawTest() {
+        joinPlayersAndStartGame();
+
+        Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
+        Player player2 = server.getGameController().getGame().getState().getPlayers().get("player2");
+        Player player3 = server.getGameController().getGame().getState().getPlayers().get("player3");
+
+        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(!server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+
+        client1.getPlayerController().drawCards(1);
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(player1));
+        assertTrue(server.getGameController().isPlayersTurn(player2));
+        assertTrue(!server.getGameController().isPlayersTurn(player3));
+
+        assertEquals(8, client1.getPlayerController().getHand().size());
+        assertEquals(8, server.getGameController().getPlayerWithDelta(-1).getHand().size());
     }
 }

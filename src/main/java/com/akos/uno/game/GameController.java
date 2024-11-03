@@ -60,24 +60,32 @@ public class GameController {
         return game.getState().getDeck().drawCards(n);
     }
 
-    public void selectNextPlayer() {
+    // Selects player at currentPlayerIndex + delta
+    public void selectPlayer(int delta) {
         FullGameState gameState = game.getState();
-
-        if (gameState.isOrderReversed()) {
-            gameState.setCurrentPlayerIndex((gameState.getCurrentPlayerIndex() - 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
+        int playerCount = gameState.getPlayers().size();
+        int currentIndex = gameState.getCurrentPlayerIndex();
+    
+        if (!gameState.isOrderReversed()) {
+            gameState.setCurrentPlayerIndex((currentIndex + delta) % playerCount);
         } else {
-            gameState.setCurrentPlayerIndex((gameState.getCurrentPlayerIndex() + 1) % gameState.getPlayers().size());
+            gameState.setCurrentPlayerIndex((currentIndex - delta + playerCount) % playerCount);
         }
     }
 
-    public Player getPreviousPlayer() {
+    public Player getPlayerWithDelta(int delta) {
         FullGameState gameState = game.getState();
-
-        if (gameState.isOrderReversed()) {
-            return gameState.getPlayers().get((gameState.getCurrentPlayerIndex() + 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
+        int playerCount = gameState.getPlayers().size();
+        int currentIndex = gameState.getCurrentPlayerIndex();
+        String playerName;
+    
+        if (!gameState.isOrderReversed()) {
+            playerName = gameState.getPlayerNamesInOrder().get((currentIndex + delta) % playerCount);
         } else {
-            return gameState.getPlayers().get((gameState.getCurrentPlayerIndex() - 1) % gameState.getPlayers().size()); // modulo to wrap around the list if the index goes out of range
+            playerName = gameState.getPlayerNamesInOrder().get((currentIndex - delta + playerCount) % playerCount);
         }
+
+        return gameState.getPlayers().get(playerName);
     }
 
     public void startGame() {
@@ -103,5 +111,18 @@ public class GameController {
         gameState.setGameStatus(GameStatus.IN_PROGRESS);
     }
 
-    private Game game;
+    public boolean isPlayersTurn(Player player) {
+        int currentPlayerIndex = game.getState().getCurrentPlayerIndex();
+        String currentPlayerName = game.getState().getPlayerNamesInOrder().get(currentPlayerIndex);
+        Player currentPlayer = game.getState().getPlayers().get(currentPlayerName);
+
+        return player.equals(currentPlayer);
+    }
+
+    public void nextRound() {
+        // todo: add logic that checks if previous player has forgotten to say uno
+        selectPlayer(1);
+    }
+
+    private final Game game;
 }

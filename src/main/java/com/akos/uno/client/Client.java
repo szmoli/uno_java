@@ -11,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akos.uno.game.PartialGameState;
-import com.akos.uno.game.Player;
 
 public class Client {
     public Client(ClientController controller, PartialGameState gameState) {
@@ -36,10 +35,6 @@ public class Client {
 
     public PartialGameState getGameState() {
         return gameState;
-    }
-
-    public Player getPlayer() {
-        return gameState.getPlayer();
     }
 
     public synchronized void stopConnection() {

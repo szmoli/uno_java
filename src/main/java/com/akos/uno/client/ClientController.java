@@ -15,7 +15,7 @@ public class ClientController extends Thread {
         this.view = new ClientView(this);
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
-        this.playerController = new PlayerController(client.getPlayer(), this);
+        this.playerController = new PlayerController(this);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ClientController extends Thread {
     public void startConnection() {
         try {
             serverReadyLatch.await();
-            client.startConnection(client.getPlayer().getPlayerName(), serverAddress, serverPort);
+            client.startConnection(client.getGameState().getPlayer().getPlayerName(), serverAddress, serverPort);
         } catch (InterruptedException e) {
             logger.error(e.getMessage());
         }
