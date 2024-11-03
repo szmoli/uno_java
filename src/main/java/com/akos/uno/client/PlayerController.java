@@ -13,6 +13,10 @@ public class PlayerController {
         this.clientController = clientController;
     }
 
+    public Player getPlayer() {
+        return clientController.getClient().getGameState().getPlayer();
+    }
+
     public List<Card> getHand() {
         return getPlayer().getHand();
     }
@@ -34,8 +38,4 @@ public class PlayerController {
     }
 
     private final ClientController clientController;
-
-    private Player getPlayer() {
-        return clientController.getClient().getGameState().getPlayer();
-    }
 }

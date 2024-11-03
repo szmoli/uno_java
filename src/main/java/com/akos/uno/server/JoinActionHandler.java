@@ -4,10 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akos.uno.communication.action.JoinAction;
-import com.akos.uno.communication.response.PartialGameStateResponse;
+import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.game.Game;
 import com.akos.uno.game.GameController;
-import com.akos.uno.game.PartialGameState;
 import com.akos.uno.game.Player;
 
 public class JoinActionHandler implements GameActionHandler<JoinAction> {
@@ -21,22 +20,26 @@ public class JoinActionHandler implements GameActionHandler<JoinAction> {
         logger.debug("Handling join action: {}", action.getAsJson());
         Game game = gameController.getGame();
         String playerName = action.getPlayerName();
+        ClientHandler clientHandler = server.getClients().get(action.getPlayerName());
 
-        if (!game.getState().getPlayers().containsKey(playerName)) {
-            Player player = new Player(playerName);
-
-            if (gameController.getGame().getState().getHostPlayer() == null) {
-                logger.debug("{} {}", player, player.getPlayerName());
-                gameController.getGame().getState().setHostPlayer(player);
-            }
-
-            game.getState().getPlayers().put(playerName, player);
-    
-            for (Player p : game.getState().getPlayers().values()) {
-                String message = new PartialGameStateResponse(new PartialGameState(p, game.getState())).getAsJson();
-                server.getClients().get(p.getPlayerName()).sendMessageToClient(message);
-            }
+        if (clientHandler == null) {
+            logger.error("Client handler not found for {}", action.getPlayerName());
+            return;
         }
+        
+        Player player = new Player(playerName);
+
+        // Try adding the player, if it fails then reject the action
+        if (!gameController.addPlayer(player)) {
+            clientHandler.sendMessageToClient(new InvalidActionResponse().getAsJson());
+            return;
+        }
+
+        if (gameController.getHostPlayer() == null) {
+            gameController.setHostPlayer(player);
+        }
+
+        server.updateClients();
     }
 
     private GameController gameController;

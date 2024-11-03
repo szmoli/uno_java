@@ -5,9 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.akos.uno.communication.action.StartAction;
 import com.akos.uno.communication.response.InvalidActionResponse;
-import com.akos.uno.communication.response.PartialGameStateResponse;
 import com.akos.uno.game.GameController;
-import com.akos.uno.game.PartialGameState;
 import com.akos.uno.game.Player;
 
 public class StartActionHandler implements GameActionHandler<StartAction> {
@@ -35,11 +33,7 @@ public class StartActionHandler implements GameActionHandler<StartAction> {
 
         gameController.startGame();
 
-        // Update clients
-        for (Player p : gameController.getGame().getState().getPlayers().values()) {
-            String message = new PartialGameStateResponse(new PartialGameState(p, gameController.getGame().getState())).getAsJson();
-            server.getClients().get(p.getPlayerName()).sendMessageToClient(message);
-        }
+        server.updateClients();
     }
     
     private GameController gameController;

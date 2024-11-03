@@ -277,13 +277,13 @@ public class ServerTest {
     void validDrawTest() {
         joinPlayersAndStartGame();
 
-        Player player1 = server.getGameController().getGame().getState().getPlayers().get("player1");
-        Player player2 = server.getGameController().getGame().getState().getPlayers().get("player2");
-        Player player3 = server.getGameController().getGame().getState().getPlayers().get("player3");
+        Player player1OnClient = client1.getPlayerController().getPlayer();
+        Player player2OnClient = client2.getPlayerController().getPlayer();
+        Player player3OnClient = client3.getPlayerController().getPlayer();
 
-        assertTrue(server.getGameController().isPlayersTurn(player1));
-        assertTrue(!server.getGameController().isPlayersTurn(player2));
-        assertTrue(!server.getGameController().isPlayersTurn(player3));
+        assertTrue(server.getGameController().isPlayersTurn(player1OnClient));
+        assertTrue(!server.getGameController().isPlayersTurn(player2OnClient));
+        assertTrue(!server.getGameController().isPlayersTurn(player3OnClient));
 
         client1.getPlayerController().drawCards(1);
 
@@ -292,11 +292,22 @@ public class ServerTest {
         } catch (InterruptedException e) {
         }
 
-        assertTrue(!server.getGameController().isPlayersTurn(player1));
-        assertTrue(server.getGameController().isPlayersTurn(player2));
-        assertTrue(!server.getGameController().isPlayersTurn(player3));
+        assertTrue(!server.getGameController().isPlayersTurn(player1OnClient));
+        assertTrue(server.getGameController().isPlayersTurn(player2OnClient));
+        assertTrue(!server.getGameController().isPlayersTurn(player3OnClient));
 
         assertEquals(8, client1.getPlayerController().getHand().size());
         assertEquals(8, server.getGameController().getPlayerWithDelta(-1).getHand().size());
+    }
+
+    @Test
+    void invalidDiscardTest1() {
+        joinPlayersAndStartGame();
+
+        Player player1OnClient = client1.getPlayerController().getPlayer();
+        Player player2OnClient = client2.getPlayerController().getPlayer();
+        Player player3OnClient = client3.getPlayerController().getPlayer();
+
+        
     }
 }

@@ -2,6 +2,7 @@ package com.akos.uno.game;
 
 import java.util.EmptyStackException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GameController {
@@ -9,18 +10,27 @@ public class GameController {
         this.game = new Game();
     }
 
+    public Player getHostPlayer() {
+        return game.getState().getHostPlayer();
+    }
+
     public Game getGame() {
         return game;
     }
 
-    public Player addPlayer(Player player) {
+    public Map<String, Player> getPlayers() {
+        return game.getState().getPlayers();
+    }
+
+    public boolean addPlayer(Player player) {
         FullGameState gameState = game.getState();
 
-        if (gameState.getPlayers().size() >= 10) {
-            throw new IllegalStateException("Maximum player capacity reached.");
+        if (gameState.getPlayers().size() >= 10 || gameState.getPlayers().containsKey(player.getPlayerName())) {
+            return false;
         }
 
-        return gameState.getPlayers().put(player.getPlayerName(), player);
+        gameState.getPlayers().put(player.getPlayerName(), player);
+        return true;
     }
 
     public Player removePlayer(Player player) {
@@ -122,6 +132,10 @@ public class GameController {
     public void nextRound() {
         // todo: add logic that checks if previous player has forgotten to say uno
         selectPlayer(1);
+    }
+
+    public void setHostPlayer(Player player) {
+        game.getState().setHostPlayer(player);
     }
 
     private final Game game;

@@ -18,7 +18,10 @@ import com.akos.uno.communication.action.GameAction;
 import com.akos.uno.communication.action.GameActionType;
 import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.communication.response.MessageResponse;
+import com.akos.uno.communication.response.PartialGameStateResponse;
 import com.akos.uno.game.GameController;
+import com.akos.uno.game.PartialGameState;
+import com.akos.uno.game.Player;
 
 // sources:
 // - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
@@ -96,9 +99,17 @@ public class Server extends Thread {
         clientHandler.sendMessageToClient(message);
     }
 
-    public synchronized void broadcastGameState(String message) {
+    public synchronized void broadcastMessage(String messageJson) {
         for (ClientHandler clientHandler : clients.values()) {
-            clientHandler.sendMessageToClient(message);
+            clientHandler.sendMessageToClient(messageJson);
+        }
+    }
+
+    public synchronized void updateClients() {
+        for (Player p : gameController.getPlayers().values()) {
+            String message = new PartialGameStateResponse(new PartialGameState(p, gameController.getGame().getState())).getAsJson();
+            
+            clients.get(p.getPlayerName()).sendMessageToClient(message);
         }
     }
 
