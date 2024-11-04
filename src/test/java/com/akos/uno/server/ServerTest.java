@@ -175,7 +175,7 @@ public class ServerTest {
         client11.getPlayerController().joinGame();
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
         }
 
@@ -356,19 +356,28 @@ public class ServerTest {
     void invalidDiscardTest3() {
         joinPlayersAndStartGame();
 
-        Player player1 = client1.getPlayerController().getPlayer();
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
         Player player2 = client2.getPlayerController().getPlayer();
         Player player3 = client3.getPlayerController().getPlayer();
 
-        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
         assertTrue(!server.getGameController().isPlayersTurn(player2));
         assertTrue(!server.getGameController().isPlayersTurn(player3));
 
-        Card playerCard = new Card(CardColor.BLUE, CardSymbol.FIVE);
+        Card playerCard = new Card(CardColor.RED, CardSymbol.FIVE);
         Card topCard = new Card(CardColor.BLUE, CardSymbol.FOUR);
-        player1.getHand().clear();
-        player1.getHand().add(playerCard);
-        server.getGameController().addCardToDiscardPile(topCard);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(playerCard);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(topCard);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertEquals(1, client1.getPlayerController().getPlayer().getHand().size());
+
         client1.getPlayerController().discardCard(playerCard);
 
         try {
@@ -376,7 +385,7 @@ public class ServerTest {
         } catch (InterruptedException e) {
         }
 
-        assertTrue(server.getGameController().isPlayersTurn(player1));
+        assertTrue(server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
         assertTrue(!server.getGameController().isPlayersTurn(player2));
         assertTrue(!server.getGameController().isPlayersTurn(player3));
     }
@@ -396,11 +405,11 @@ public class ServerTest {
         Card card = new Card(CardColor.BLUE, CardSymbol.FIVE);
         player1OnServer.getHand().clear();
         player1OnServer.getHand().add(card);
-        server.getGameController().addCardToDiscardPile(card);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(card);
         server.updateClients();
 
         try {
-            Thread.sleep(200);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
         }
 
@@ -409,7 +418,7 @@ public class ServerTest {
         client1.getPlayerController().discardCard(card);
 
         try {
-            Thread.sleep(200);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
         }
 
@@ -417,5 +426,10 @@ public class ServerTest {
         assertTrue(server.getGameController().isPlayersTurn(player2));
         assertTrue(!server.getGameController().isPlayersTurn(player3));
         assertEquals(0, client1.getPlayerController().getPlayer().getHand().size());
+    }
+
+    @Test
+    void skipTest() {
+
     }
 }

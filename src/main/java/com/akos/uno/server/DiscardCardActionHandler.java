@@ -33,11 +33,14 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
         }
 
         Player player = gameController.getPlayers().get(action.getPlayerName());
-        boolean invalidAction = 
-            player == null || // player doesn't exist
-            !gameController.isPlayersTurn(player) || // it's not the player's turn
-            !rules.isValidMove(card); // it's an invalid move
-        if (invalidAction) {
+        boolean playerExists = player != null;
+        boolean isPlayersTurn = gameController.isPlayersTurn(player);
+        boolean isValidMove = rules.isValidMove(card);
+        boolean validAction = 
+            playerExists && // player doesn't exist
+            isPlayersTurn && // it's not the player's turn
+            isValidMove; // it's an invalid move
+        if (!validAction) {
             clientHandler.sendMessageToClient(new InvalidActionResponse().getAsJson());
             return;
         }
@@ -61,10 +64,9 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
             logger.error("Could not add {} card to discard pile", card);
         }
 
-        // todo: apply action card effects
-
+        Player playerToApplyEffectsTo = gameController.getPlayerWithDelta(1);
+        gameController.applyCardEffects(card, playerToApplyEffectsTo); // apply action card effects
         gameController.selectPlayer(1); // select next player
-
         server.updateClients();
     }
 

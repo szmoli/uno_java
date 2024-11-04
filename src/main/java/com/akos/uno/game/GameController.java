@@ -145,22 +145,24 @@ public class GameController {
                 {
                     List<Card> drawnCards = drawCards(2);
                     player.drawCards(drawnCards);
+                    selectPlayer(1);
                     break;
                 }
             case CardSymbol.REVERSE:
                 game.getState().reverseOrder();
                 break;
             case CardSymbol.SKIP:
-                // todo
+                selectPlayer(1);
                 break;
             case CardSymbol.WILD:
-                // todo
+                // do nothing I guess?
+                // this card only changes it's color to the desired color by the player who played it
                 break;
             case CardSymbol.WILD_FOUR:
                 {
                     List<Card> drawnCards = drawCards(4);
                     player.drawCards(drawnCards);
-                    //todo
+                    selectPlayer(1);
                     break;
                 }
             default:
