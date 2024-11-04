@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import com.akos.uno.communication.action.DiscardCardAction;
 import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.game.Card;
+import com.akos.uno.game.CardColor;
 import com.akos.uno.game.FullGameState;
 import com.akos.uno.game.Game;
 import com.akos.uno.game.GameController;
@@ -25,6 +26,7 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
         FullGameState state = game.getState();
         GameRules rules = game.getRules();
         Card card = action.getCard();
+        CardColor desiredColor = action.getDesiredColor();
         
         ClientHandler clientHandler = server.getClients().get(action.getPlayerName());
         if (clientHandler == null) {
@@ -57,6 +59,11 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
         // log an error if player couldn't discard for some reason
         if (!player.discardCard(card)) {
             logger.error("{} could not discard the {} card", player.getPlayerName(), card);
+        }
+
+        // if a wild card was played change it's color to the desired color
+        if (gameController.isWildCard(card)) {
+            card = new Card(desiredColor, card.getSymbol());
         }
 
         // log an error if card couldn't be added for some reason

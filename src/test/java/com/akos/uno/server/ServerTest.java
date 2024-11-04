@@ -315,7 +315,7 @@ public class ServerTest {
         assertTrue(!server.getGameController().isPlayersTurn(player2));
         assertTrue(!server.getGameController().isPlayersTurn(player3));
 
-        client2.getPlayerController().discardCard(0);
+        client2.getPlayerController().discardCard(0, CardColor.NONE);
 
         try {
             Thread.sleep(100);
@@ -340,7 +340,7 @@ public class ServerTest {
         assertTrue(!server.getGameController().isPlayersTurn(player3));
 
         player1.getHand().clear();
-        client1.getPlayerController().discardCard(0);
+        client1.getPlayerController().discardCard(0, CardColor.NONE);
 
         try {
             Thread.sleep(100);
@@ -378,7 +378,7 @@ public class ServerTest {
 
         assertEquals(1, client1.getPlayerController().getPlayer().getHand().size());
 
-        client1.getPlayerController().discardCard(playerCard);
+        client1.getPlayerController().discardCard(playerCard, CardColor.NONE);
 
         try {
             Thread.sleep(100);
@@ -415,7 +415,7 @@ public class ServerTest {
 
         assertEquals(1, client1.getPlayerController().getPlayer().getHand().size());
 
-        client1.getPlayerController().discardCard(card);
+        client1.getPlayerController().discardCard(card, CardColor.NONE);
 
         try {
             Thread.sleep(500);
@@ -445,7 +445,7 @@ public class ServerTest {
         } catch (InterruptedException e) {
         }
 
-        client1.getPlayerController().discardCard(card);
+        client1.getPlayerController().discardCard(card, CardColor.NONE);
 
         try {
             Thread.sleep(500);
@@ -474,7 +474,7 @@ public class ServerTest {
         } catch (InterruptedException e) {
         }
 
-        client1.getPlayerController().discardCard(card);
+        client1.getPlayerController().discardCard(card, CardColor.NONE);
 
         try {
             Thread.sleep(500);
