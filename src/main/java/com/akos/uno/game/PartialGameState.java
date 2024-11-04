@@ -30,6 +30,10 @@ public class PartialGameState {
         return gson.fromJson(gameStateJson, PartialGameState.class);
     }
 
+    public String getAsJson() {
+        return gson.toJson(this);
+    }
+
     public Player getPlayer() {
         return player;
     }

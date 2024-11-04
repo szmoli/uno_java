@@ -45,8 +45,8 @@ public class GameController {
         }
     }
 
-    public boolean isActionCard(Card card) {
-        return card.getSymbol() == CardSymbol.DRAW_TWO || card.getSymbol() == CardSymbol.REVERSE || card.getSymbol() == CardSymbol.SKIP || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR;
+    public boolean isWildCard(Card card) {
+        return card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR;
     }
 
     public List<String> getOtherPlayerNames(Player excludedPlayer) {
@@ -102,14 +102,15 @@ public class GameController {
         FullGameState gameState = game.getState();
 
         // Draw a valid starting card (it can't be an action card)
-        while (gameState.getDeck().getDiscardPile().top().equals(new Card(CardColor.NONE, CardSymbol.NONE)) || isActionCard(getTopCard())) {
+        while (gameState.getDeck().getDiscardPile().top().equals(new Card(CardColor.NONE, CardSymbol.NONE)) || isWildCard(getTopCard())) {
             // Remove action card or none card from the top of the discard pile, add it back into to draw pile and shuffle it again
             Card oldCard = gameState.getDeck().getDiscardPile().popCard();
             gameState.getDeck().getDrawPile().pushCard(oldCard);
             gameState.getDeck().shuffle();
 
-            // Draw a new card and add it to the top of the discard pile
+            // Draw a new card and add it to the top of the discard pile and apply the effects to the first player
             Card newCard = gameState.getDeck().drawCards(1).getFirst();
+            // todo: apply effects to first player
             gameState.getDeck().addCardToDiscardPile(newCard);
         }
 
@@ -136,6 +137,35 @@ public class GameController {
 
     public void setHostPlayer(Player player) {
         game.getState().setHostPlayer(player);
+    }
+
+    public void applyCardEffects(Card card, Player player) {
+        switch (card.getSymbol()) {
+            case CardSymbol.DRAW_TWO:
+                {
+                    List<Card> drawnCards = drawCards(2);
+                    player.drawCards(drawnCards);
+                    break;
+                }
+            case CardSymbol.REVERSE:
+                game.getState().reverseOrder();
+                break;
+            case CardSymbol.SKIP:
+                // todo
+                break;
+            case CardSymbol.WILD:
+                // todo
+                break;
+            case CardSymbol.WILD_FOUR:
+                {
+                    List<Card> drawnCards = drawCards(4);
+                    player.drawCards(drawnCards);
+                    //todo
+                    break;
+                }
+            default:
+                break;
+        }
     }
 
     private final Game game;

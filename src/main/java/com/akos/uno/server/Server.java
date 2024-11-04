@@ -106,6 +106,8 @@ public class Server extends Thread {
     }
 
     public synchronized void updateClients() {
+        logger.debug("\nupdating clients");
+
         for (Player p : gameController.getPlayers().values()) {
             String message = new PartialGameStateResponse(new PartialGameState(p, gameController.getGame().getState())).getAsJson();
             

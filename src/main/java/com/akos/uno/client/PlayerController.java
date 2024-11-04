@@ -7,6 +7,8 @@ import com.akos.uno.communication.action.DrawCardAction;
 import com.akos.uno.communication.action.JoinAction;
 import com.akos.uno.communication.action.StartAction;
 import com.akos.uno.game.Card;
+import com.akos.uno.game.CardColor;
+import com.akos.uno.game.CardSymbol;
 import com.akos.uno.game.Player;
 
 public class PlayerController {
@@ -49,6 +51,18 @@ public class PlayerController {
 
         Card card = getPlayer().getHand().get(index);
         clientController.getClient().sendMessageToServer(new DiscardCardAction(getPlayer().getPlayerName(), card).getAsJson());
+    }
+
+    public void discardWildCard(Card card, CardColor desiredColor) {
+        if (card.getSymbol() != CardSymbol.WILD || card.getSymbol() != CardSymbol.WILD_FOUR) {
+            throw new IllegalStateException("discardWildCard() called on non-wild card");
+        }
+
+        
+    }
+
+    public void discardWildCard(int i, CardColor desiredColor) {
+        
     }
 
     private final ClientController clientController;
