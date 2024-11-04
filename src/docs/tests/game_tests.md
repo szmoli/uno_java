@@ -1,7 +1,7 @@
 # Action card tests
 
 - [ ] [Draw 2](#draw-2)
-- [ ] [Skip](#skip)
+- [*] [Skip](#skip)
 - [ ] [Reverse](#reverse)
 - [ ] [Wild](#wild)
 - [ ] [Wild draw 4](#wild-draw-4)

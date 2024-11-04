@@ -430,6 +430,30 @@ public class ServerTest {
 
     @Test
     void skipTest() {
+        joinPlayersAndStartGame();
 
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
+
+        Card card = new Card(CardColor.BLUE, CardSymbol.SKIP);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(card);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(card);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        client1.getPlayerController().discardCard(card);
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
     }
 }
