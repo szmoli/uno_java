@@ -110,7 +110,6 @@ public class GameController {
 
             // Draw a new card and add it to the top of the discard pile and apply the effects to the first player
             Card newCard = gameState.getDeck().drawCards(1).getFirst();
-            // todo: apply effects to first player
             gameState.getDeck().addCardToDiscardPile(newCard);
         }
 
@@ -119,6 +118,8 @@ public class GameController {
             player.getHand().addAll(gameState.getDeck().drawCards(7));
         }
 
+        applyCardEffects(getTopCard(), getPlayerWithDelta(0)); // apply effects to first player
+        
         gameState.setGameStatus(GameStatus.IN_PROGRESS);
     }
 

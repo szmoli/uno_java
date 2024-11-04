@@ -63,6 +63,11 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
 
         // if a wild card was played change it's color to the desired color
         if (gameController.isWildCard(card)) {
+            if (desiredColor == CardColor.NONE) {
+                desiredColor = CardColor.RED;
+                logger.error("desired color is none, defaulted to red");
+            }
+
             card = new Card(desiredColor, card.getSymbol());
         }
 

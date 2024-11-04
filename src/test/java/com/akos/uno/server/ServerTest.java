@@ -485,4 +485,97 @@ public class ServerTest {
         assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
         assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
     }
+
+    @Test
+    void draw2Test() {
+        joinPlayersAndStartGame();
+
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
+
+        Card card = new Card(CardColor.BLUE, CardSymbol.DRAW_TWO);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(card);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(card);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        client1.getPlayerController().discardCard(card, CardColor.NONE);
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertEquals(9, client2.getPlayerController().getPlayer().getHand().size());
+    }
+
+    @Test
+    void wildTest() {
+        joinPlayersAndStartGame();
+
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
+
+        Card card = new Card(CardColor.BLACK, CardSymbol.WILD);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(card);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(card);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        client1.getPlayerController().discardCard(card, CardColor.YELLOW);
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertEquals(CardColor.YELLOW, server.getGameController().getTopCard().getColor());
+        assertEquals(CardSymbol.WILD, server.getGameController().getTopCard().getSymbol());
+    }
+
+    @Test
+    void wild4Test() {
+        joinPlayersAndStartGame();
+
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
+
+        Card card = new Card(CardColor.BLACK, CardSymbol.WILD_FOUR);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(card);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(card);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        client1.getPlayerController().discardCard(card, CardColor.YELLOW);
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertEquals(CardColor.YELLOW, server.getGameController().getTopCard().getColor());
+        assertEquals(CardSymbol.WILD_FOUR, server.getGameController().getTopCard().getSymbol());
+        assertEquals(11, client2.getPlayerController().getPlayer().getHand().size());        
+    }
 }

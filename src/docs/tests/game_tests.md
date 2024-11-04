@@ -1,10 +1,10 @@
 # Action card tests
 
-- [ ] [Draw 2](#draw-2)
+- [*] [Draw 2](#draw-2)
 - [*] [Skip](#skip)
 - [*] [Reverse](#reverse)
-- [ ] [Wild](#wild)
-- [ ] [Wild draw 4](#wild-draw-4)
+- [*] [Wild](#wild)
+- [*] [Wild 4](#wild-4)
 
 ## Draw 2
 
@@ -56,7 +56,7 @@
 3. Assert:
 - the top cards color is the color specified by the player
 
-## Wild draw 4
+## Wild 4
 
 1. Arrange:
 - the player has a wild draw 4 card
