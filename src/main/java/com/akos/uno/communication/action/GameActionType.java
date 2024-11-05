@@ -6,7 +6,7 @@ public enum GameActionType {
     DRAW_CARD(DrawCardAction.class),
     SAY_UNO(SayUnoAction.class),
     CHALLENGE_PLAYER(ChallengePlayerAction.class),
-    JUMP_IN(JumpInAction.class),
+    // JUMP_IN(JumpInAction.class),
     QUIT(QuitAction.class),
     JOIN(JoinAction.class),
     START(StartAction.class);

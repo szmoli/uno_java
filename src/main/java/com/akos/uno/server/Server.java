@@ -34,7 +34,7 @@ public class Server extends Thread {
         gameActionHandlers.put(GameActionType.DISCARD_CARD, new DiscardCardActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.DRAW_CARD, new DrawCardActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.JOIN, new JoinActionHandler(gameController, this));
-        gameActionHandlers.put(GameActionType.JUMP_IN, (action) -> {});
+        //gameActionHandlers.put(GameActionType.JUMP_IN, (action) -> {});
         gameActionHandlers.put(GameActionType.QUIT, new QuitActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.SAY_UNO, new SayUnoActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.START, new StartActionHandler(gameController, this));

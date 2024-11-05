@@ -12,17 +12,49 @@
 
 ## ChallengePlayerAction
 
-### Valid challenge test
+### Valid challenge test (player1 wins)
 
 1. Arrange:
-- A player (player1) has played a card with the WILD_FOUR symbol
+- player1 has a wild four card
+- the card can be played
+- player1 has played their card
+- player1 didn't have other playable cards
 
 2. Act:
-- The next player (player2) calls challengePlayer(player1)
+- player2 (the player after player1) calls challengePlayer(...)
 
 3. Assert:
-- player1 loses the challenge if they have any other card they could have played (player1 draws 4)
-- player1 wins the challenge if they didn't have any other card they could have played (player2 draws 6)
+- player2 draws 4 cards
+- it's player3's turn
+
+### Valid challenge test (player1 loses)
+
+1. Arrange:
+- player1 has a wild four card
+- the card can be played
+- player1 has played their card
+- player1 had other playable cards
+
+2. Act:
+- player2 (the player after player1) calls challengePlayer(...)
+
+3. Assert:
+- player1 draws 6 cards
+- it's player2's turn
+
+### Invalid challenge test
+
+1. Arrange:
+- player1 has a wild four card
+- the card can be played
+- player1 has played their card
+
+2. Act:
+- another player that's not the next calls challengePlayer(...)
+
+3. Assert:
+- nothing happens
+- client gets an INVALID_ACTION message
 
 ## DiscardCardAction
 
