@@ -23,7 +23,7 @@ public class Client {
             socket = new Socket(address, port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            listener = new ClientListener(this, controller);
+            listener = new ClientListener(this);
 
             out.println(playerName);
 

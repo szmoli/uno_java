@@ -71,7 +71,7 @@ public class GameController {
     }
 
     // Selects player at currentPlayerIndex + delta
-    public void selectPlayer(int delta) {
+    public void selectPlayerWithDelta(int delta) {
         FullGameState gameState = game.getState();
         int playerCount = gameState.getPlayers().size();
         int currentIndex = gameState.getCurrentPlayerIndex();
@@ -88,6 +88,10 @@ public class GameController {
         int playerCount = gameState.getPlayers().size();
         int currentIndex = gameState.getCurrentPlayerIndex();
         String playerName;
+
+        if (delta < 0) {
+            delta = delta + playerCount;
+        }
     
         if (!gameState.isOrderReversed()) {
             playerName = gameState.getPlayerNamesInOrder().get((currentIndex + delta) % playerCount);
@@ -132,8 +136,13 @@ public class GameController {
     }
 
     public void nextRound() {
-        // todo: add logic that checks if previous player has forgotten to say uno
-        selectPlayer(1);
+        // check if previous player has forgotten to say uno and enforce the penalty
+        if (getPlayerWithDelta(-1).getHand().size() == 1 && !getPlayerWithDelta(-1).hasSaidUno()) {
+            getPlayerWithDelta(-1).drawCards(drawCards(2));
+        }
+        
+        selectPlayerWithDelta(1);
+        getPlayerWithDelta(0).setHasSaidUno(false); // todo: check if this works as intended
     }
 
     public void setHostPlayer(Player player) {
@@ -146,14 +155,14 @@ public class GameController {
                 {
                     List<Card> drawnCards = drawCards(2);
                     player.drawCards(drawnCards);
-                    selectPlayer(1);
+                    selectPlayerWithDelta(1);
                     break;
                 }
             case CardSymbol.REVERSE:
                 game.getState().reverseOrder();
                 break;
             case CardSymbol.SKIP:
-                selectPlayer(1);
+                selectPlayerWithDelta(1);
                 break;
             case CardSymbol.WILD:
                 // do nothing I guess?
@@ -163,7 +172,7 @@ public class GameController {
                 {
                     List<Card> drawnCards = drawCards(4);
                     player.drawCards(drawnCards);
-                    selectPlayer(1);
+                    selectPlayerWithDelta(1);
                     break;
                 }
             default:

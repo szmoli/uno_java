@@ -1,11 +1,11 @@
 # Actions to test:
 
 - [ ] [ChallengePlayerAction](#ChallengePlayerAction)
-- [ ] [DiscardCardAction](#DiscardCardAction)
+- [*] [DiscardCardAction](#DiscardCardAction)
 - [*] [DrawCardAction](#DrawCardAction)
 - [*] [JoinAction](#JoinAction)
 - [ ] [QuitAction](#QuitAction)
-- [ ] [SayUnoAction](#SayUnoAction)
+- [*] [SayUnoAction](#SayUnoAction)
 - [*] [StartAction](#StartAction)
 
 # Test specifications

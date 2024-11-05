@@ -9,9 +9,8 @@ import com.akos.uno.communication.response.Response;
 import com.akos.uno.game.PartialGameState;
 
 public class ClientListener extends Thread {
-    public ClientListener(Client client, ClientController controller) {
+    public ClientListener(Client client) {
         this.client = client;
-        this.controller = controller;
     }
 
     @Override
@@ -31,8 +30,7 @@ public class ClientListener extends Thread {
         }
     }
 
-    private Client client;
-    private ClientController controller;
+    private final Client client;
     private static final Logger logger = LogManager.getLogger();
 
     private synchronized void processResponse(String responseJson) {

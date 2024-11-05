@@ -525,7 +525,6 @@ public class ServerTest {
         Card card = new Card(CardColor.BLACK, CardSymbol.WILD);
         player1OnServer.getHand().clear();
         player1OnServer.getHand().add(card);
-        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(card);
         server.updateClients();
 
         try {
@@ -556,7 +555,6 @@ public class ServerTest {
         Card card = new Card(CardColor.BLACK, CardSymbol.WILD_FOUR);
         player1OnServer.getHand().clear();
         player1OnServer.getHand().add(card);
-        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(card);
         server.updateClients();
 
         try {
@@ -577,5 +575,112 @@ public class ServerTest {
         assertEquals(CardColor.YELLOW, server.getGameController().getTopCard().getColor());
         assertEquals(CardSymbol.WILD_FOUR, server.getGameController().getTopCard().getSymbol());
         assertEquals(11, client2.getPlayerController().getPlayer().getHand().size());        
+    }
+
+    @Test
+    void validSayUnoTest() {
+        joinPlayersAndStartGame();
+
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
+
+        Card card = new Card(CardColor.BLACK, CardSymbol.WILD);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(card);
+        server.getGameController().selectPlayerWithDelta(1);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client1.getPlayerController().sayUno();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertTrue(client1.getPlayerController().hasSaidUno());
+    }
+
+    @Test
+    void invalidSayUnoTest1() {
+        joinPlayersAndStartGame();
+
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
+
+        Card card = new Card(CardColor.BLACK, CardSymbol.WILD);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(card);
+        player1OnServer.getHand().add(card);
+        server.getGameController().selectPlayerWithDelta(1);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client1.getPlayerController().sayUno();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertTrue(!client1.getPlayerController().hasSaidUno());
+    }
+
+    @Test
+    void invalidSayUnoTest2() {
+        joinPlayersAndStartGame();
+
+        Player player1OnServer = server.getGameController().getGame().getState().getPlayers().get("player1");
+        Player player2OnServer = server.getGameController().getGame().getState().getPlayers().get("player2");
+
+        Card card = new Card(CardColor.BLACK, CardSymbol.WILD);
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(card);
+        player2OnServer.getHand().clear();
+        player2OnServer.getHand().add(card);
+        server.getGameController().selectPlayerWithDelta(1);
+        server.updateClients();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client2.getPlayerController().discardCard(card, CardColor.YELLOW);
+        client1.getPlayerController().sayUno();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertTrue(!client1.getPlayerController().hasSaidUno());
     }
 }

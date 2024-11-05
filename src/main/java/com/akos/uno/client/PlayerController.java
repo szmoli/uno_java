@@ -5,6 +5,7 @@ import java.util.List;
 import com.akos.uno.communication.action.DiscardCardAction;
 import com.akos.uno.communication.action.DrawCardAction;
 import com.akos.uno.communication.action.JoinAction;
+import com.akos.uno.communication.action.SayUnoAction;
 import com.akos.uno.communication.action.StartAction;
 import com.akos.uno.game.Card;
 import com.akos.uno.game.CardColor;
@@ -50,6 +51,14 @@ public class PlayerController {
 
         Card card = getPlayer().getHand().get(index);
         clientController.getClient().sendMessageToServer(new DiscardCardAction(getPlayer().getPlayerName(), card, desiredColor).getAsJson());
+    }
+
+    public void sayUno() {
+        clientController.getClient().sendMessageToServer(new SayUnoAction(getPlayer().getPlayerName()).getAsJson());
+    }
+
+    public boolean hasSaidUno() {
+        return getPlayer().hasSaidUno();
     }
 
     private final ClientController clientController;

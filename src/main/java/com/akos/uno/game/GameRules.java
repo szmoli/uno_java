@@ -7,7 +7,7 @@ public class GameRules {
 
     public boolean isValidMove(Card card) {
         Card topCard = game.getState().getDeck().getDiscardPile().top();
-        return card.getColor() == topCard.getColor() || card.getSymbol() == topCard.getSymbol() || card.getColor() == CardColor.BLACK;
+        return card.getColor() == topCard.getColor() || card.getSymbol() == topCard.getSymbol() || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR;
     }
 
     public boolean isValidJumpIn(Card card) {
@@ -15,35 +15,10 @@ public class GameRules {
         return card.getColor() == topCard.getColor() && card.getSymbol() == topCard.getSymbol();
     }
 
-    public void applyCardEffect(Card card) {
-        switch (card.getSymbol()) {
-            case DRAW_TWO:
-                break;
-            case WILD:
-                break;
-            case WILD_FOUR:
-                break;
-            case REVERSE:
-                break;
-            case SKIP:
-                break;
-            default:
-                break;
-        }
+    public boolean isValidSayUno(Player player) {
+        return player.getHand().size() == 1;
     }
 
-//    public boolean enforceForgotToSayUNOPenalty(Player player, Deck deck) {
-//        if (!player.hasSaidUno && player.getHand().size() == 1) {
-//            return player.drawCards(deck.drawCards(forgotToSayUNOPenaltyCardCount));
-//        }
-//
-//        return false;
-//    }
 
-    public boolean isValidJumpIn() {
-        // todo: implement logic
-        return true;
-    }
-
-    private Game game;
+    private final Game game;
 }

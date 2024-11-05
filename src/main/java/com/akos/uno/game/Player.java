@@ -11,7 +11,6 @@ public class Player {
         this.playerName = playerName;
         this.hand = new ArrayList<>();
         this.hasSaidUno = false;
-        this.canDiscard = false;
     }
 
     public boolean drawCards(List<Card> cards) {
@@ -30,16 +29,24 @@ public class Player {
         return hand;
     }
 
-    public boolean canDiscard() {
-        return canDiscard;
-    }
-
-    public void setCanDiscard(boolean state) {
-        canDiscard = state;
-    }
-
     public String getPlayerName() {
         return playerName;
+    }
+
+    public void sayUno() {
+        if (hand.size() != 1) {
+            return;
+        }
+
+        this.hasSaidUno = true;
+    }
+
+    public boolean hasSaidUno() {
+        return hasSaidUno;
+    }
+
+    public void setHasSaidUno(boolean b) {
+        hasSaidUno = b;
     }
 
     @Override
@@ -55,9 +62,8 @@ public class Player {
         return this.playerName.equals(((Player) other).playerName);
     }
 
-    private List<Card> hand;
-    private String playerName;
+    private final List<Card> hand;
+    private final String playerName;
     private boolean hasSaidUno;
-    private boolean canDiscard;
     private static final Logger logger = LogManager.getLogger(); 
 }
