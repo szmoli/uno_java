@@ -86,5 +86,13 @@ public class CardPile implements Iterable<Card> {
         return cards.peek();
     }
 
+    public Card getSecondCard() {
+        if (cards.isEmpty()) {
+            return new Card(CardColor.NONE, CardSymbol.NONE);
+        }
+
+        return cards.get(cards.size() - 2);
+    }
+
     private Stack<Card> cards;
 }

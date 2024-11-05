@@ -715,4 +715,138 @@ public class ServerTest {
         assertEquals(2, server.getGameController().getPlayers().size());
         assertEquals(2, server.getClients().size());
     }
+
+    // challengedPlayer loses
+    @Test
+    public void validChallengePlayerTest1() {
+        joinPlayersAndStartGame();
+
+        Card wildFourCard = new Card(CardColor.BLACK, CardSymbol.WILD_FOUR);
+        Card topCard = new Card(CardColor.BLUE, CardSymbol.FIVE);
+        Player player1OnServer = server.getGameController().getPlayers().get("player1");
+        player1OnServer.getHand().add(topCard);
+        player1OnServer.getHand().add(wildFourCard);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(topCard);
+        server.updateClients();
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client1.getPlayerController().discardCard(wildFourCard, CardColor.YELLOW);
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client2.getPlayerController().challengePlayer();
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertEquals(15, client1.getPlayerController().getHand().size());
+        assertEquals(7, client2.getPlayerController().getHand().size());
+    }
+
+    // challengedPlayer wins
+    @Test
+    public void validChallengePlayerTest2() {
+        joinPlayersAndStartGame();
+
+        Card wildFourCard = new Card(CardColor.BLACK, CardSymbol.WILD_FOUR);
+        Card topCard = new Card(CardColor.BLUE, CardSymbol.FIVE);
+        Player player1OnServer = server.getGameController().getPlayers().get("player1");
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(wildFourCard);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(topCard);
+        server.updateClients();
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client1.getPlayerController().discardCard(wildFourCard, CardColor.YELLOW);
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client2.getPlayerController().challengePlayer();
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+        assertEquals(0, client1.getPlayerController().getHand().size());
+        assertEquals(11, client2.getPlayerController().getHand().size());
+    }
+
+    @Test
+    public void invalidChallengePlayerTest() {
+        joinPlayersAndStartGame();
+
+        Card wildFourCard = new Card(CardColor.BLACK, CardSymbol.WILD_FOUR);
+        Card topCard = new Card(CardColor.BLUE, CardSymbol.FIVE);
+        Player player1OnServer = server.getGameController().getPlayers().get("player1");
+        player1OnServer.getHand().clear();
+        player1OnServer.getHand().add(wildFourCard);
+        server.getGameController().getGame().getState().getDeck().getDiscardPile().pushCard(topCard);
+        server.updateClients();
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client1.getPlayerController().discardCard(wildFourCard, CardColor.YELLOW);
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+
+        assertTrue(!server.getGameController().isPlayersTurn(client1.getPlayerController().getPlayer()));
+        assertTrue(!server.getGameController().isPlayersTurn(client2.getPlayerController().getPlayer()));
+        assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
+
+        client3.getPlayerController().challengePlayer();
+
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+    }
 }

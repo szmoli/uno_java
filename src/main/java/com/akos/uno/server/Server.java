@@ -30,7 +30,7 @@ public class Server extends Thread {
     public Server(int port) {
         this.port = port;
         this.gameController = new GameController();
-        gameActionHandlers.put(GameActionType.CHALLENGE_PLAYER, (action) -> {});
+        gameActionHandlers.put(GameActionType.CHALLENGE_PLAYER, new ChallengePlayerActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.DISCARD_CARD, new DiscardCardActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.DRAW_CARD, new DrawCardActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.JOIN, new JoinActionHandler(gameController, this));

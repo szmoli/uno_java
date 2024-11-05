@@ -41,7 +41,7 @@ public class GameController {
         try {
             return game.getState().getDeck().getDiscardPile().top();
         } catch (EmptyStackException e) {
-            return null;
+            return new Card(CardColor.NONE, CardSymbol.NONE);
         }
     }
 
@@ -182,6 +182,14 @@ public class GameController {
 
     public void shuffleDrawPile() {
         game.getState().getDeck().shuffle();
+    }
+
+    public Card getSecondCard() {
+        try {
+            return game.getState().getDeck().getDiscardPile().getSecondCard();
+        } catch (EmptyStackException e) {
+            return new Card(CardColor.NONE, CardSymbol.NONE);
+        }
     }
 
     private final Game game;

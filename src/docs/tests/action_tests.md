@@ -1,6 +1,6 @@
 # Actions to test:
 
-- [ ] [ChallengePlayerAction](#ChallengePlayerAction)
+- [*] [ChallengePlayerAction](#ChallengePlayerAction)
 - [*] [DiscardCardAction](#DiscardCardAction)
 - [*] [DrawCardAction](#DrawCardAction)
 - [*] [JoinAction](#JoinAction)

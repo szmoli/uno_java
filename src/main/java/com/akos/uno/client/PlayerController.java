@@ -2,6 +2,7 @@ package com.akos.uno.client;
 
 import java.util.List;
 
+import com.akos.uno.communication.action.ChallengePlayerAction;
 import com.akos.uno.communication.action.DiscardCardAction;
 import com.akos.uno.communication.action.DrawCardAction;
 import com.akos.uno.communication.action.JoinAction;
@@ -64,6 +65,10 @@ public class PlayerController {
 
     public void quitGame() {
         clientController.getClient().sendMessageToServer(new QuitAction(getPlayer().getPlayerName()).getAsJson());
+    }
+
+    public void challengePlayer() {
+        clientController.getClient().sendMessageToServer(new ChallengePlayerAction(getPlayer().getPlayerName()).getAsJson());
     }
 
     private final ClientController clientController;

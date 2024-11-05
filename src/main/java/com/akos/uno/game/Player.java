@@ -10,14 +10,19 @@ public class Player {
     public Player(String playerName) {
         this.playerName = playerName;
         this.hand = new ArrayList<>();
+        this.lastDrawnCards = new ArrayList<>();
         this.hasSaidUno = false;
     }
 
     public boolean drawCards(List<Card> cards) {
+        lastDrawnCards.clear();
+        lastDrawnCards.addAll(cards);
         return hand.addAll(cards);
     }
 
     public boolean drawCard(Card card) {
+        lastDrawnCards.clear();
+        lastDrawnCards.add(card);
         return hand.add(card);
     }
 
@@ -49,6 +54,10 @@ public class Player {
         hasSaidUno = b;
     }
 
+    public List<Card> getLastDrawnCards() {
+        return lastDrawnCards;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -65,5 +74,6 @@ public class Player {
     private final List<Card> hand;
     private final String playerName;
     private boolean hasSaidUno;
+    private final List<Card> lastDrawnCards;
     private static final Logger logger = LogManager.getLogger(); 
 }
