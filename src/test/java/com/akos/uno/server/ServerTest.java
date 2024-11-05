@@ -683,4 +683,36 @@ public class ServerTest {
         assertTrue(server.getGameController().isPlayersTurn(client3.getPlayerController().getPlayer()));
         assertTrue(!client1.getPlayerController().hasSaidUno());
     }
+
+    @Test
+    void invalidQuitTest() {
+        joinPlayersAndStartGame();
+
+        ClientController client4 = new ClientController("player4", "127.0.0.1", 12345, server.getReadyLatch());
+        client4.start();
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+        }
+
+        client4.getPlayerController().quitGame();
+    }
+
+    @Test
+    void validQuitTest() {
+        joinPlayersAndStartGame();
+
+        client1.getPlayerController().quitGame();
+
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+        }
+
+
+        assertEquals(93, server.getGameController().getGame().getState().getDeck().getDrawPile().size());
+        assertEquals(2, server.getGameController().getPlayers().size());
+        assertEquals(2, server.getClients().size());
+    }
 }

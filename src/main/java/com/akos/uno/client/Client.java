@@ -58,6 +58,7 @@ public class Client {
     public synchronized void sendMessageToServer(String message) {
         if (out == null) {
             clientLogger.error("Error sending message to server.");
+            return;
         }
 
         out.println(message);

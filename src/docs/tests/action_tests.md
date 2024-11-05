@@ -4,7 +4,7 @@
 - [*] [DiscardCardAction](#DiscardCardAction)
 - [*] [DrawCardAction](#DrawCardAction)
 - [*] [JoinAction](#JoinAction)
-- [ ] [QuitAction](#QuitAction)
+- [*] [QuitAction](#QuitAction)
 - [*] [SayUnoAction](#SayUnoAction)
 - [*] [StartAction](#StartAction)
 

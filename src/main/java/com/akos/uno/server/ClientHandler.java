@@ -58,6 +58,10 @@ public class ClientHandler extends Thread {
         }
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
+
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;

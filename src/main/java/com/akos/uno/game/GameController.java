@@ -180,5 +180,9 @@ public class GameController {
         }
     }
 
+    public void shuffleDrawPile() {
+        game.getState().getDeck().shuffle();
+    }
+
     private final Game game;
 }

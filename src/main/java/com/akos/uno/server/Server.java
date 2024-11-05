@@ -35,7 +35,7 @@ public class Server extends Thread {
         gameActionHandlers.put(GameActionType.DRAW_CARD, new DrawCardActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.JOIN, new JoinActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.JUMP_IN, (action) -> {});
-        gameActionHandlers.put(GameActionType.QUIT, (action) -> {});
+        gameActionHandlers.put(GameActionType.QUIT, new QuitActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.SAY_UNO, new SayUnoActionHandler(gameController, this));
         gameActionHandlers.put(GameActionType.START, new StartActionHandler(gameController, this));
     }
@@ -138,11 +138,37 @@ public class Server extends Thread {
         }
     }
 
-    private int port;
+    public synchronized void disconnectClient(String playerName) {
+        if (playerName == null) {
+            logger.error("player name was null");
+            return;
+        }
+
+        ClientHandler clientHandler = clients.get(playerName);
+
+        if (clientHandler == null) {
+            logger.error("client handler not found for {}", playerName);
+            return;
+        }
+
+        if (clientHandler.getSocket() == null || clientHandler.getSocket().isClosed()) {
+            logger.error("socket was null or is already closed for {}", playerName);
+            return;
+        }
+
+        try {
+            clientHandler.getSocket().close();
+            clients.remove(playerName);
+        } catch (IOException e) {
+            logger.error("error disconnecting client: {}", e.getMessage());
+        }
+    }
+
+    private final int port;
     private ServerSocket serverSocket;
-    private HashMap<String, ClientHandler> clients = new HashMap<>();
-    private GameController gameController;
+    private final HashMap<String, ClientHandler> clients = new HashMap<>();
+    private final GameController gameController;
     private final Map<GameActionType, GameActionHandler<?>> gameActionHandlers = new EnumMap<>(GameActionType.class);
-    private Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
     private final CountDownLatch readyLatch = new CountDownLatch(1);
 }
