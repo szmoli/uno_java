@@ -62,8 +62,8 @@ public class Deck {
         return discardPile;
     }
 
-    private CardPile drawPile;
-    private CardPile discardPile;
+    private final CardPile drawPile;
+    private final CardPile discardPile;
 
     // adds specified number of cards of each regular color
     private void addColoredCards(CardSymbol symbol, int count) {

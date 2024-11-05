@@ -16,6 +16,6 @@ public class Game {
         return state;
     }
 
-    private GameRules rules;
-    private FullGameState state;
+    private final GameRules rules;
+    private final FullGameState state;
 }

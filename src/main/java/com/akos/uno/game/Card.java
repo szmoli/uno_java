@@ -33,6 +33,6 @@ public class Card {
         return this.getColor() == otherCard.getColor() && this.getSymbol() == otherCard.getSymbol();
     }
 
-    private CardColor color;
-    private CardSymbol symbol;
+    private final CardColor color;
+    private final CardSymbol symbol;
 }

@@ -54,10 +54,10 @@ public class PartialGameState {
         return gameStatus;
     }
 
-    private Player player;
-    private List<String> otherPlayerNames;
-    private List<Integer> otherPlayerHandSizes;
-    private Card topCard;
-    private GameStatus gameStatus;
+    private final Player player;
+    private final List<String> otherPlayerNames;
+    private final List<Integer> otherPlayerHandSizes;
+    private final Card topCard;
+    private final GameStatus gameStatus;
     private static final Gson gson = new Gson();
 }

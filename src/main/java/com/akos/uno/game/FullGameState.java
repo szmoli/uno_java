@@ -68,8 +68,8 @@ public class FullGameState {
     }
 
     private int currentPlayerIndex;
-    private HashMap<String, Player> players; // this is a HashMap so we can get the player efficiently by its name
-    private Deck deck;
+    private final Map<String, Player> players; // this is a HashMap so we can get the player efficiently by its name
+    private final Deck deck;
     private int currentRound;
     private boolean isOrderReversed;
     private GameStatus gameStatus;

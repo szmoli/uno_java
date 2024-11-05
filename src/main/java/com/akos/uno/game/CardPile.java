@@ -74,6 +74,7 @@ public class CardPile implements Iterable<Card> {
         cards.clear();
     }
 
+    @Override
     public Iterator<Card> iterator() {
         return cards.iterator();
     }
@@ -94,5 +95,5 @@ public class CardPile implements Iterable<Card> {
         return cards.get(cards.size() - 2);
     }
 
-    private Stack<Card> cards;
+    private final Stack<Card> cards;
 }

@@ -5,7 +5,7 @@ public enum ResponseType {
     PARTIAL_GAME_STATE(PartialGameStateResponse.class),
     MESSAGE(MessageResponse.class);
 
-    private Class<? extends Response> responseClass;
+    private final Class<? extends Response> responseClass;
 
     ResponseType(Class<? extends Response> responseClass) {
         this.responseClass = responseClass;

@@ -11,7 +11,7 @@ public enum GameActionType {
     JOIN(JoinAction.class),
     START(StartAction.class);
 
-    private Class<? extends GameAction> actionClass;
+    private final Class<? extends GameAction> actionClass;
 
     GameActionType(Class<? extends GameAction> actionClass) {
         this.actionClass = actionClass;

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public abstract class Response {
-    public Response(ResponseType type) {
+    protected Response(ResponseType type) {
         this.type = type;
     }
 
@@ -20,7 +20,7 @@ public abstract class Response {
         return gson.toJson(this, this.getClass());
     }
 
-    private ResponseType type;
+    private final ResponseType type;
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Response.class, new ResponseSerializer())
             .registerTypeAdapter(Response.class, new ResponseDeserializer())

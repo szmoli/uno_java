@@ -7,7 +7,6 @@ import com.akos.uno.communication.action.DiscardCardAction;
 import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.game.Card;
 import com.akos.uno.game.CardColor;
-import com.akos.uno.game.FullGameState;
 import com.akos.uno.game.Game;
 import com.akos.uno.game.GameController;
 import com.akos.uno.game.GameRules;
@@ -19,11 +18,11 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
         this.server = server;
     }
 
+    @Override
     public void handle(DiscardCardAction action) {
         logger.debug("Handling discard card action");
 
         Game game = gameController.getGame();
-        FullGameState state = game.getState();
         GameRules rules = game.getRules();
         Card card = action.getCard();
         CardColor desiredColor = action.getDesiredColor();

@@ -11,8 +11,8 @@ import com.akos.uno.game.Player;
 public class ClientController extends Thread {
     public ClientController(String playerName, String serverAddress, int serverPort, CountDownLatch serverReadyLatch) {
         this.serverReadyLatch = serverReadyLatch;
-        this.client = new Client(this, new PartialGameState(new Player(playerName)));
-        this.view = new ClientView(this);
+        this.client = new Client(new PartialGameState(new Player(playerName)));
+        this.view = new ClientView(this.client);
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.playerController = new PlayerController(this);
@@ -37,6 +37,7 @@ public class ClientController extends Thread {
             client.startConnection(client.getGameState().getPlayer().getPlayerName(), serverAddress, serverPort);
         } catch (InterruptedException e) {
             logger.error(e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -48,11 +49,11 @@ public class ClientController extends Thread {
         client.setGameState(state);
     }
 
-    private CountDownLatch serverReadyLatch;
-    private String serverAddress;
-    private int serverPort;
-    private Client client;
-    private ClientView view;
-    private PlayerController playerController;
+    private final CountDownLatch serverReadyLatch;
+    private final String serverAddress;
+    private final int serverPort;
+    private final Client client;
+    private final ClientView view;
+    private final PlayerController playerController;
     private static final Logger logger = LogManager.getLogger();
 }

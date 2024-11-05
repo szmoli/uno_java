@@ -13,9 +13,9 @@ import org.apache.logging.log4j.Logger;
 import com.akos.uno.game.PartialGameState;
 
 public class Client {
-    public Client(ClientController controller, PartialGameState gameState) {
-        this.controller = controller;
+    public Client(PartialGameState gameState) {
         this.gameState = gameState;
+        this.listener = new ClientListener(this);
     }
 
     public synchronized void startConnection(String playerName, String address, int port) {
@@ -23,7 +23,6 @@ public class Client {
             socket = new Socket(address, port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            listener = new ClientListener(this);
 
             out.println(playerName);
 
@@ -33,7 +32,7 @@ public class Client {
         }
     }
 
-    public PartialGameState getGameState() {
+    public synchronized PartialGameState getGameState() {
         return gameState;
     }
 
@@ -80,22 +79,11 @@ public class Client {
         return connectionLatch;
     }
 
-    // public static void main(String[] args) {
-    //     String name = args[0];
-    //     String address = args[1];
-    //     int port = Integer.parseInt(args[2]);
-
-    //     ClientController cc = new ClientController(name);
-    //     cc.startConnection(address, port);
-    //     cc.sendMessageToServer(new DiscardCardAction(name, new Card(CardColor.RED, CardSymbol.SEVEN)).getAsJson());
-    // }
-
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private PartialGameState gameState;
-    private ClientListener listener;
-    private ClientController controller;
-    private Logger clientLogger = LogManager.getLogger();
+    private final ClientListener listener;
+    private final Logger clientLogger = LogManager.getLogger();
     private final CountDownLatch connectionLatch = new CountDownLatch(1);
 }

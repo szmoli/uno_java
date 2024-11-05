@@ -10,5 +10,5 @@ public class DrawCardAction extends GameAction {
         return cardCount;
     }
 
-    private int cardCount;
+    private final int cardCount;
 }

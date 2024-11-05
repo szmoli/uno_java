@@ -10,5 +10,5 @@ public class MessageResponse extends Response {
         return message;
     }
 
-    String message;
+    private final String message;
 }

@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.akos.uno.communication.action.JoinAction;
 import com.akos.uno.communication.response.InvalidActionResponse;
-import com.akos.uno.game.Game;
 import com.akos.uno.game.GameController;
 import com.akos.uno.game.Player;
 
@@ -18,7 +17,6 @@ public class JoinActionHandler implements GameActionHandler<JoinAction> {
     @Override
     public void handle(JoinAction action) {
         logger.debug("Handling join action: {}", action.getAsJson());
-        Game game = gameController.getGame();
         String playerName = action.getPlayerName();
         ClientHandler clientHandler = server.getClients().get(action.getPlayerName());
 
@@ -42,7 +40,7 @@ public class JoinActionHandler implements GameActionHandler<JoinAction> {
         server.updateClients();
     }
 
-    private GameController gameController;
-    private Server server;
+    private final GameController gameController;
+    private final Server server;
     private static final Logger logger = LogManager.getLogger();
 }

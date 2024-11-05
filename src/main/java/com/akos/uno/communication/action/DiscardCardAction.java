@@ -18,6 +18,6 @@ public class DiscardCardAction extends GameAction {
         return desiredColor;
     }
 
-    private Card card;
-    private CardColor desiredColor;
+    private final Card card;
+    private final CardColor desiredColor;
 }
