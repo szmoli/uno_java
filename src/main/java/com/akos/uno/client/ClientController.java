@@ -1,44 +1,59 @@
 package com.akos.uno.client;
 
-import com.akos.uno.communication.response.PartialGameStateResponse;
-import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
-import com.akos.uno.game.PartialGameState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ClientController {
-    public ClientController(String playerName) {
-        this.client = new Client(this, new PartialGameState(playerName));
-        this.view = new ClientView(this);
+import com.akos.uno.game.PartialGameState;
+import com.akos.uno.game.Player;
+
+public class ClientController extends Thread {
+    public ClientController(String playerName, String serverAddress, int serverPort, CountDownLatch serverReadyLatch) {
+        this.serverReadyLatch = serverReadyLatch;
+        this.client = new Client(new PartialGameState(new Player(playerName)));
+        this.view = new ClientView(this.client);
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+        this.playerController = new PlayerController(this);
     }
 
-    public void startConnection(String address, int port) {
-        client.startConnection(address, port);
+    @Override
+    public void run() {
+        startConnection();
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    } 
+
+    public void startConnection() {
+        try {
+            serverReadyLatch.await();
+            client.startConnection(client.getGameState().getPlayer().getPlayerName(), serverAddress, serverPort);
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage());
+            Thread.currentThread().interrupt();
+        }
     }
 
     public void stopConnection() {
         client.stopConnection();
     }
 
-    public void sendMessageToServer(String message) {
-        client.sendMessageToServer(message);
+    public void setGameState(PartialGameState state) {
+        client.setGameState(state);
     }
 
-    public void updateGameState(PartialGameStateResponse state) {
-        try {
-            String gameStateJson = client.getResponseFromServer();
-            client.setGameState(PartialGameState.createFromJson(gameStateJson));
-        } catch (IOException e) {
-            logger.error("Error getting response from server: {}", e.getMessage());
-        }
-    }
-
-    public void processServerResponse(String response) {
-        logger.debug(response);
-    }
-
-    private Client client;
-    private ClientView view;
+    private final CountDownLatch serverReadyLatch;
+    private final String serverAddress;
+    private final int serverPort;
+    private final Client client;
+    private final ClientView view;
+    private final PlayerController playerController;
     private static final Logger logger = LogManager.getLogger();
 }

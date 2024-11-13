@@ -19,6 +19,20 @@ public class Card {
         return "Card{" + color.name() + " " + symbol.name() + "}";
     }
 
-    private CardColor color;
-    private CardSymbol symbol;
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || this.getClass() != other.getClass()) {
+            return false;
+        } 
+
+        Card otherCard = (Card) other;
+        return this.getColor() == otherCard.getColor() && this.getSymbol() == otherCard.getSymbol();
+    }
+
+    private final CardColor color;
+    private final CardSymbol symbol;
 }

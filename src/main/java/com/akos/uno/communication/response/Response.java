@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public abstract class Response {
-    public Response(ResponseType type) {
+    protected Response(ResponseType type) {
         this.type = type;
     }
 
@@ -12,17 +12,17 @@ public abstract class Response {
         return type;
     }
 
-    public Response createFromJson(String responseJson) {
+    public static Response createFromJson(String responseJson) {
         return gson.fromJson(responseJson, Response.class);
     }
 
     public String getAsJson() {
-        return gson.toJson(this, Response.class);
+        return gson.toJson(this, this.getClass());
     }
 
-    private ResponseType type;
+    private final ResponseType type;
     private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(ResponseSerializer.class, new ResponseSerializer())
-            .registerTypeAdapter(ResponseDeserializer.class, new ResponseDeserializer())
+            .registerTypeAdapter(Response.class, new ResponseSerializer())
+            .registerTypeAdapter(Response.class, new ResponseDeserializer())
             .create();
 }

@@ -8,12 +8,12 @@ public abstract class GameAction {
         return playerName;
     }
 
-    public GameAction(String playerName, GameActionType type) {
+    protected GameAction(String playerName, GameActionType type) {
         this.playerName = playerName;
         this.type = type;
     }
 
-    public GameActionType getActionType() {
+    public GameActionType getType() {
         return type;
     }
 

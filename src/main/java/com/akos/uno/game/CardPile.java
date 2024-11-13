@@ -1,6 +1,11 @@
 package com.akos.uno.game;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
 
 // sources:
 // - https://www.geeksforgeeks.org/stack-class-in-java/
@@ -33,13 +38,15 @@ public class CardPile implements Iterable<Card> {
 
     // adds a single card to the top of the pile
     public void pushCard(Card card) {
-        cards.push(card);
+        if (card.getColor() != CardColor.NONE && card.getSymbol() != CardSymbol.NONE) {
+            cards.push(card);
+        }
     }
 
     // removes and returns a single card from the top of the pile
     public Card popCard() {
         if (this.cards.isEmpty()) {
-            throw new IllegalStateException("CardPile is empty.");
+            return new Card(CardColor.NONE, CardSymbol.NONE);
         }
 
         return cards.pop();
@@ -67,13 +74,26 @@ public class CardPile implements Iterable<Card> {
         cards.clear();
     }
 
+    @Override
     public Iterator<Card> iterator() {
         return cards.iterator();
     }
 
     public Card top() {
+        if (cards.isEmpty()) {
+            return new Card(CardColor.NONE, CardSymbol.NONE);
+        }
+
         return cards.peek();
     }
 
-    private Stack<Card> cards;
+    public Card getSecondCard() {
+        if (cards.isEmpty()) {
+            return new Card(CardColor.NONE, CardSymbol.NONE);
+        }
+
+        return cards.get(cards.size() - 2);
+    }
+
+    private final Stack<Card> cards;
 }

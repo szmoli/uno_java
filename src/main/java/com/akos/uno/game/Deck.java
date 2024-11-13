@@ -15,12 +15,16 @@ public class Deck {
             while (!discardPile.isEmpty()) {
                 drawPile.pushCard(discardPile.popCard());
             }
-            drawPile.shuffle();
+            shuffle();
 
             discardPile.pushCard(topCard); // add the last discarded card back so the game can progress from where it was left before the shuffling
         }
 
         return drawPile.popCards(n);
+    }
+
+    public void shuffle() {
+        drawPile.shuffle();
     }
 
     public void addCardsToDiscardPile(List<Card> cards) {
@@ -32,7 +36,7 @@ public class Deck {
     }
 
     // create deck according to official UNO rules and shuffle it
-    public Deck() {
+    public Deck(boolean doShuffle) {
         drawPile = new CardPile();
         discardPile = new CardPile();
 
@@ -45,7 +49,9 @@ public class Deck {
         }
 
         addWildCards(); // adds 4 of each wild card
-        drawPile.shuffle();
+        if (doShuffle) {
+            drawPile.shuffle();
+        }
     }
 
     public CardPile getDrawPile() {
@@ -56,8 +62,8 @@ public class Deck {
         return discardPile;
     }
 
-    private CardPile drawPile;
-    private CardPile discardPile;
+    private final CardPile drawPile;
+    private final CardPile discardPile;
 
     // adds specified number of cards of each regular color
     private void addColoredCards(CardSymbol symbol, int count) {

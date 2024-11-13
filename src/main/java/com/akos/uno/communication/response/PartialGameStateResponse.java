@@ -12,5 +12,5 @@ public class PartialGameStateResponse extends Response {
         return gameState;
     }
 
-    private PartialGameState gameState;
+    private final PartialGameState gameState;
 }

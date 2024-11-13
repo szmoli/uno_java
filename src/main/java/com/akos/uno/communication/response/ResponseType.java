@@ -1,13 +1,11 @@
 package com.akos.uno.communication.response;
 
-import com.akos.uno.communication.action.*;
-
 public enum ResponseType {
-    INVALID_MOVE(InvalidMoveResponse.class),
+    INVALID_ACTION(InvalidActionResponse.class),
     PARTIAL_GAME_STATE(PartialGameStateResponse.class),
     MESSAGE(MessageResponse.class);
 
-    private Class<? extends Response> responseClass;
+    private final Class<? extends Response> responseClass;
 
     ResponseType(Class<? extends Response> responseClass) {
         this.responseClass = responseClass;

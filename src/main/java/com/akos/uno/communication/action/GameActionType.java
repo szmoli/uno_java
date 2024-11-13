@@ -6,12 +6,12 @@ public enum GameActionType {
     DRAW_CARD(DrawCardAction.class),
     SAY_UNO(SayUnoAction.class),
     CHALLENGE_PLAYER(ChallengePlayerAction.class),
-    JUMP_IN(JumpInAction.class),
+    // JUMP_IN(JumpInAction.class),
     QUIT(QuitAction.class),
     JOIN(JoinAction.class),
     START(StartAction.class);
 
-    private Class<? extends GameAction> actionClass;
+    private final Class<? extends GameAction> actionClass;
 
     GameActionType(Class<? extends GameAction> actionClass) {
         this.actionClass = actionClass;
