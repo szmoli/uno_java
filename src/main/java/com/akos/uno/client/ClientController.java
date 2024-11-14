@@ -7,12 +7,22 @@ import org.apache.logging.log4j.Logger;
 
 import com.akos.uno.game.PartialGameState;
 import com.akos.uno.game.Player;
+import com.akos.uno.gui.GamePanel;
 
 public class ClientController extends Thread {
-    public ClientController(String playerName, String serverAddress, int serverPort, CountDownLatch serverReadyLatch) {
+    public ClientController(String playerName, String serverAddress, int serverPort, CountDownLatch serverReadyLatch, GamePanel gamePanel) {
         this.serverReadyLatch = serverReadyLatch;
-        this.client = new Client(new PartialGameState(new Player(playerName)));
-        this.view = new ClientView(this.client);
+        this.client = new Client(new PartialGameState(new Player(playerName)), this);
+        this.view = new ClientView(gamePanel);
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+        this.playerController = new PlayerController(this);
+    }
+
+    public ClientController(String playerName, String serverAddress, int serverPort, GamePanel gamePanel) {
+        this.serverReadyLatch = new CountDownLatch(0);
+        this.client = new Client(new PartialGameState(new Player(playerName)), this);
+        this.view = new ClientView(gamePanel);
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.playerController = new PlayerController(this);
@@ -47,6 +57,10 @@ public class ClientController extends Thread {
 
     public void setGameState(PartialGameState state) {
         client.setGameState(state);
+    }
+
+    public void updateView(PartialGameState state) {
+        view.updateView(state);
     }
 
     private final CountDownLatch serverReadyLatch;

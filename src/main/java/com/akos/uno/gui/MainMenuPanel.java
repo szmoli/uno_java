@@ -1,9 +1,12 @@
 package com.akos.uno.gui;
 
-import com.sun.tools.javac.Main;
+import java.util.List;
 
-import javax.swing.*;
-import java.util.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 // source: https://stackoverflow.com/questions/15867148/why-do-we-need-to-extend-jframe-in-a-swing-application
 public class MainMenuPanel extends WindowContentPanel {
@@ -21,14 +24,9 @@ public class MainMenuPanel extends WindowContentPanel {
             frame.pack();
         });
 
-        rulesetEditorButton = new JButton("Ruleset Editor");
-        rulesetEditorButton.addActionListener(actionEvent -> {
-
-        });
-
         super.getPanel().setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        super.getPanelComponents().addAll(List.of(joinGameButton, hostGameButton, rulesetEditorButton));
+        super.getPanelComponents().addAll(List.of(joinGameButton, hostGameButton));
         for (JComponent component : super.getPanelComponents()) {
             super.getPanel().add(component);
         }
@@ -40,5 +38,4 @@ public class MainMenuPanel extends WindowContentPanel {
 
     private JButton joinGameButton;
     private JButton hostGameButton;
-    private JButton rulesetEditorButton;
 }

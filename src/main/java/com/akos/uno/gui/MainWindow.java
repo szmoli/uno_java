@@ -1,6 +1,8 @@
 package com.akos.uno.gui;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 public class MainWindow {
     public JFrame getFrame() {
@@ -13,7 +15,7 @@ public class MainWindow {
             public void run() {
                 frame = new JFrame("Card Game");
 
-                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
                 frame.setContentPane(new MainMenuPanel(frame).getPanel());
                 frame.pack();
                 frame.setLocationByPlatform(true);

@@ -13,9 +13,9 @@ import org.apache.logging.log4j.Logger;
 import com.akos.uno.game.PartialGameState;
 
 public class Client {
-    public Client(PartialGameState gameState) {
+    public Client(PartialGameState gameState, ClientController clientController) {
         this.gameState = gameState;
-        this.listener = new ClientListener(this);
+        this.listener = new ClientListener(clientController);
     }
 
     public synchronized void startConnection(String playerName, String address, int port) {

@@ -9,12 +9,14 @@ import com.akos.uno.communication.response.Response;
 import com.akos.uno.game.PartialGameState;
 
 public class ClientListener extends Thread {
-    public ClientListener(Client client) {
-        this.client = client;
+    public ClientListener(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     @Override
     public void run() {
+        Client client = clientController.getClient();
+
         try {
             // Continuously listen for messages from the server
             while (!client.getSocket().isClosed()) {
@@ -30,7 +32,7 @@ public class ClientListener extends Thread {
         }
     }
 
-    private final Client client;
+    private final ClientController clientController;
     private static final Logger logger = LogManager.getLogger();
 
     private synchronized void processResponse(String responseJson) {
@@ -40,7 +42,8 @@ public class ClientListener extends Thread {
             case PARTIAL_GAME_STATE:
                 PartialGameState gameState = PartialGameState.createFromJson(responseJson);
                 logger.debug("deserialized json:\n{}", gameState.getAsJson());
-                client.setGameState(gameState);
+                clientController.setGameState(gameState);
+                clientController.updateView(gameState);
                 break;
             default:
                 logger.debug(response);
