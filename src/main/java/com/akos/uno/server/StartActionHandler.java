@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import com.akos.uno.communication.action.StartAction;
 import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.game.GameController;
+import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.Player;
 
 public class StartActionHandler implements GameActionHandler<StartAction> {
@@ -26,7 +27,7 @@ public class StartActionHandler implements GameActionHandler<StartAction> {
             return;
         }
 
-        if (player == null || !player.equals(gameController.getHostPlayer())) {
+        if (player == null || !player.equals(gameController.getHostPlayer()) || gameController.getGame().getState().getGameStatus() == GameStatus.IN_PROGRESS) {
             clientHandler.sendMessageToClient(new InvalidActionResponse().getAsJson());
             return;
         }
