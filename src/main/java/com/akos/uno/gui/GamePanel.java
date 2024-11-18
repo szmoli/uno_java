@@ -1,21 +1,32 @@
 package com.akos.uno.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.akos.uno.game.Card;
+import com.akos.uno.game.CardSymbol;
 
 public class GamePanel extends WindowContentPanel {
     public GamePanel(JFrame frame) {
         super(new JPanel(new BorderLayout()), frame);
+        frame.setSize(1600, 1000);
         
         handPanel = new JPanel();
         tablePanel = new JPanel();
@@ -63,7 +74,32 @@ public class GamePanel extends WindowContentPanel {
         handPanel.removeAll();
         for (Card card : cards) {
             System.out.println(card.getColor() + " " + card.getSymbol());
-            handPanel.add(new JLabel(card.getColor() + " " + card.getSymbol()));
+
+            String symbol = card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR ? "" : card.getColor().toString().toLowerCase() + "_";
+            String fileName = symbol + card.getSymbol().toString().toLowerCase() + ".png";
+            System.out.println(fileName);
+            
+            BufferedImage originalImage = null;
+            try {
+                originalImage = ImageIO.read(MainWindow.class.getResource("/imgs/" + fileName));
+            } catch (IOException ex) {
+                logger.error(ex);
+            }
+            
+            
+            Image resizedImage = null;
+            int width = 0;
+            int height = 0;
+            if (originalImage != null) {
+                width = (int) Math.round(originalImage.getWidth() * 0.4);
+                height = (int) Math.round(originalImage.getHeight() * 0.4);
+                resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_FAST);
+            }
+            Icon icon = new ImageIcon(resizedImage);
+            JButton cardButton = new JButton(icon);
+
+            cardButton.setSize(width, height);
+            handPanel.add(cardButton);
         }
         handPanel.revalidate();
         handPanel.repaint();
@@ -74,4 +110,5 @@ public class GamePanel extends WindowContentPanel {
     private final JPanel tablePanel;
     private final JPanel bottomPanel;
     private final JPanel controlPanel;
+    private static final Logger logger = LogManager.getLogger();
 }

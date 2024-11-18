@@ -34,7 +34,6 @@ public class JoinGameMenuPanel extends WindowContentPanel {
             clientController.getPlayerController().joinGame();
             frame.setContentPane(gamePanel.getPanel());
             frame.addWindowListener(new CloseAdapter(clientController, frame));
-            frame.pack();
         });
 
         cancelButton = new JButton("Cancel");
