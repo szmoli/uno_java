@@ -1,13 +1,27 @@
 package com.akos.uno.gui;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.akos.uno.client.ClientController;
 
 public abstract class WindowContentPanel {
     public WindowContentPanel(JPanel panel, JFrame frame) {
         this.panel = panel;
         this.frame = frame;
+        this.clientController = null;
+    }
+
+    public void setClientController(ClientController clientController) {
+        this.clientController = clientController;
+    }
+
+    public ClientController getClientController() {
+        return clientController;
     }
 
     public JPanel getPanel() {
@@ -18,7 +32,8 @@ public abstract class WindowContentPanel {
         return panelComponents;
     }
 
-    private JPanel panel;
-    private JFrame frame;
-    private List<JComponent> panelComponents = new ArrayList<>();
+    private final JPanel panel;
+    private final JFrame frame;
+    private ClientController clientController;
+    private final List<JComponent> panelComponents = new ArrayList<>();
 }

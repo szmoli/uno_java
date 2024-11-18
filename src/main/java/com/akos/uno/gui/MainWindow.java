@@ -15,7 +15,7 @@ public class MainWindow {
             public void run() {
                 frame = new JFrame("Card Game");
 
-                frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 frame.setContentPane(new MainMenuPanel(frame).getPanel());
                 frame.pack();
                 frame.setLocationByPlatform(true);

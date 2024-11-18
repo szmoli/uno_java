@@ -29,6 +29,7 @@ public class JoinGameMenuPanel extends WindowContentPanel {
             String[] splitAddress = serverAddressInput.getText().split(":");
             GamePanel gamePanel = new GamePanel(frame);
             ClientController clientController = new ClientController(playerName, splitAddress[0], Integer.parseInt(splitAddress[1]), gamePanel);
+            gamePanel.setClientController(clientController);
             clientController.start();
             clientController.getPlayerController().joinGame();
             frame.setContentPane(gamePanel.getPanel());
