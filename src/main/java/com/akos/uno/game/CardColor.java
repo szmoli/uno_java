@@ -1,5 +1,5 @@
 package com.akos.uno.game;
 
 public enum CardColor {
-    RED, YELLOW, GREEN, BLUE, BLACK, NONE
+    RED, YELLOW, GREEN, BLUE, WILD, NONE
 }

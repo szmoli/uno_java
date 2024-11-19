@@ -25,6 +25,8 @@ public class ClientView {
 
         gamePanel.drawOtherPlayers(otherPlayers);
         gamePanel.drawPlayerHand((state.getPlayer().getHand()));
+        gamePanel.drawTopCard(state.getTopCard());
+        gamePanel.drawDrawCard();
     }
 
     private final GamePanel gamePanel;

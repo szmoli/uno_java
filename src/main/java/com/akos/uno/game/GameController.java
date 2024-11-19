@@ -138,6 +138,7 @@ public class GameController {
     public void nextRound() {
         // check if previous player has forgotten to say uno and enforce the penalty
         if (getPlayerWithDelta(-1).getHand().size() == 1 && !getPlayerWithDelta(-1).hasSaidUno()) {
+            System.out.println("forgot to say uno");
             getPlayerWithDelta(-1).drawCards(drawCards(2));
         }
         
@@ -152,6 +153,7 @@ public class GameController {
     public void applyCardEffects(Card card, Player player) {
         switch (card.getSymbol()) {
             case CardSymbol.DRAW_TWO:
+                System.out.println("apply card effects draw two");
                 {
                     List<Card> drawnCards = drawCards(2);
                     player.drawCards(drawnCards);
@@ -159,9 +161,11 @@ public class GameController {
                     break;
                 }
             case CardSymbol.REVERSE:
+                System.out.println("apply card effects reverse");
                 game.getState().reverseOrder();
                 break;
             case CardSymbol.SKIP:
+                System.out.println("apply card effects skip");
                 selectPlayerWithDelta(1);
                 break;
             case CardSymbol.WILD:
@@ -169,6 +173,7 @@ public class GameController {
                 // this card only changes it's color to the desired color by the player who played it
                 break;
             case CardSymbol.WILD_FOUR:
+                System.out.println("apply card effects wild four");
                 {
                     List<Card> drawnCards = drawCards(4);
                     player.drawCards(drawnCards);
@@ -176,6 +181,7 @@ public class GameController {
                     break;
                 }
             default:
+                System.out.println("apply card effects none applied");
                 break;
         }
     }

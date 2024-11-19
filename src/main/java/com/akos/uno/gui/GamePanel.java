@@ -1,7 +1,10 @@
 package com.akos.uno.gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +16,8 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +25,9 @@ import javax.swing.JPanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akos.uno.client.ClientController;
 import com.akos.uno.game.Card;
+import com.akos.uno.game.CardColor;
 import com.akos.uno.game.CardSymbol;
 
 public class GamePanel extends WindowContentPanel {
@@ -33,15 +40,21 @@ public class GamePanel extends WindowContentPanel {
         bottomPanel = new JPanel();
         controlPanel = new JPanel();
         otherPlayersPanel = new JPanel();
+        discardButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
+        drawButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
 
         otherPlayersPanel.setLayout(new BoxLayout(otherPlayersPanel, BoxLayout.PAGE_AXIS));
         handPanel.setLayout(new BoxLayout(handPanel, BoxLayout.LINE_AXIS));
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
         tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.LINE_AXIS));
 
+        tablePanel.add(discardButton);
+        tablePanel.add(drawButton);
+
         JButton startGameButton = new JButton("Start");
         startGameButton.addActionListener(l -> {
-            super.getClientController().getPlayerController().startGame();
+            
+            getClientController().getPlayerController().startGame();
         });
         controlPanel.add(startGameButton);
         
@@ -56,6 +69,20 @@ public class GamePanel extends WindowContentPanel {
         super.getPanel().add(otherPlayersPanel, BorderLayout.LINE_START);
         super.getPanel().add(tablePanel, BorderLayout.CENTER);
         super.getPanel().add(bottomPanel, BorderLayout.PAGE_END);
+    }
+
+    public void drawTopCard(Card card) {
+        discardButton.setIcon(getCardIcon(card));
+        discardButton.revalidate();
+        discardButton.repaint();
+    }
+
+    public void drawDrawCard() {
+        for (ActionListener al : drawButton.getActionListeners()) {
+            drawButton.removeActionListener(al);
+        }
+
+        drawButton.addActionListener(new DrawCardListener(getClientController()));
     }
 
     public void drawOtherPlayers(Map<String, Integer> otherPlayers) {
@@ -73,33 +100,7 @@ public class GamePanel extends WindowContentPanel {
     public void drawPlayerHand(List<Card> cards) {
         handPanel.removeAll();
         for (Card card : cards) {
-            System.out.println(card.getColor() + " " + card.getSymbol());
-
-            String symbol = card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR ? "" : card.getColor().toString().toLowerCase() + "_";
-            String fileName = symbol + card.getSymbol().toString().toLowerCase() + ".png";
-            System.out.println(fileName);
-            
-            BufferedImage originalImage = null;
-            try {
-                originalImage = ImageIO.read(MainWindow.class.getResource("/imgs/" + fileName));
-            } catch (IOException ex) {
-                logger.error(ex);
-            }
-            
-            
-            Image resizedImage = null;
-            int width = 0;
-            int height = 0;
-            if (originalImage != null) {
-                width = (int) Math.round(originalImage.getWidth() * 0.4);
-                height = (int) Math.round(originalImage.getHeight() * 0.4);
-                resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_FAST);
-            }
-            Icon icon = new ImageIcon(resizedImage);
-            JButton cardButton = new JButton(icon);
-
-            cardButton.setSize(width, height);
-            handPanel.add(cardButton);
+            handPanel.add(createCardButton(card, new DiscardCardListener(card, getClientController(), getFrame())));
         }
         handPanel.revalidate();
         handPanel.repaint();
@@ -110,5 +111,104 @@ public class GamePanel extends WindowContentPanel {
     private final JPanel tablePanel;
     private final JPanel bottomPanel;
     private final JPanel controlPanel;
+    private JButton discardButton;
+    private final JButton drawButton;
     private static final Logger logger = LogManager.getLogger();
+
+    private Icon getCardIcon(Card card) {
+        String symbol = card.getColor() == CardColor.NONE || card.getColor() == CardColor.WILD || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR ? "" : card.getColor().toString().toLowerCase() + "_";
+        String fileName = symbol + card.getSymbol().toString().toLowerCase() + ".png";
+        
+        BufferedImage originalImage = null;
+        try {
+            originalImage = ImageIO.read(MainWindow.class.getResource("/imgs/" + fileName));
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+    
+        Image resizedImage = null;
+        int width = 0;
+        int height = 0;
+        if (originalImage != null) {
+            width = (int) Math.round(originalImage.getWidth() * 0.4);
+            height = (int) Math.round(originalImage.getHeight() * 0.4);
+            resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_FAST);
+        }
+
+        return new ImageIcon(resizedImage);
+    }
+
+    private JButton createCardButton(Card card, ActionListener actionListener) {
+        JButton cardButton = new JButton(getCardIcon(card));
+        cardButton.addActionListener(actionListener);
+        cardButton.setSize(cardButton.getIcon().getIconWidth(), cardButton.getIcon().getIconHeight());
+        cardButton.setBorderPainted(false);
+        cardButton.setContentAreaFilled(false);
+        cardButton.setFocusPainted(false);
+        cardButton.setOpaque(false);
+        return cardButton;
+    }
+
+    private class DrawCardListener implements ActionListener {
+        public DrawCardListener(ClientController clientController) {
+            this.clientController = clientController;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            clientController.getPlayerController().drawCards(1);
+        }
+
+        private final ClientController clientController;
+    }
+
+    private class DiscardCardListener implements ActionListener {
+        public DiscardCardListener(Card card, ClientController clientController, JFrame frame) {
+            this.card = card;
+            this.clientController = clientController;
+            this.frame = frame;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            CardColor desiredColor = CardColor.NONE;
+
+            if (card.getColor() == CardColor.WILD) {
+                desiredColor = showColorSelectionDialog(frame);
+            }
+
+            clientController.getPlayerController().discardCard(new Card(card.getColor(), card.getSymbol()), desiredColor);
+            System.out.println(desiredColor);
+        }
+
+        private final Card card;
+        private final ClientController clientController;
+        private final JFrame frame;
+
+        private CardColor showColorSelectionDialog(JFrame frame) {
+            JDialog dialog = new JDialog(frame, "Select a color!", true);
+            dialog.setLayout(new FlowLayout());
+            dialog.setSize(250, 150);
+            dialog.add(new JLabel("Select a color:"));
+    
+            JComboBox<CardColor> colorsBox = new JComboBox<>(new CardColor[]{CardColor.RED, CardColor.YELLOW, CardColor.GREEN, CardColor.BLUE});
+            dialog.add(colorsBox);
+            
+            JButton okButton = new JButton("Select");
+            final CardColor[] selectedColor = { null };
+    
+            okButton.addActionListener(l -> {
+                selectedColor[0] = (CardColor) colorsBox.getSelectedItem();
+                dialog.dispose();
+            });
+    
+            dialog.add(okButton);
+            dialog.setLocationRelativeTo(frame);
+            dialog.setVisible(true);
+
+            System.out.println(selectedColor[0].toString());
+    
+            return selectedColor[0];
+        }
+    }
 }

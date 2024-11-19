@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import com.akos.uno.client.ClientController;
 
 public abstract class WindowContentPanel {
-    public WindowContentPanel(JPanel panel, JFrame frame) {
+    protected WindowContentPanel(JPanel panel, JFrame frame) {
         this.panel = panel;
         this.frame = frame;
         this.clientController = null;
@@ -30,6 +30,10 @@ public abstract class WindowContentPanel {
 
     public List<JComponent> getPanelComponents() {
         return panelComponents;
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     private final JPanel panel;

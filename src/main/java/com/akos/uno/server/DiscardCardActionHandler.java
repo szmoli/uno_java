@@ -10,6 +10,7 @@ import com.akos.uno.game.CardColor;
 import com.akos.uno.game.Game;
 import com.akos.uno.game.GameController;
 import com.akos.uno.game.GameRules;
+import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.Player;
 
 public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAction> {
@@ -26,6 +27,8 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
         GameRules rules = game.getRules();
         Card card = action.getCard();
         CardColor desiredColor = action.getDesiredColor();
+
+        logger.debug("Got card: {} {}, got desired color: {}", card.getColor(), card.getSymbol(), desiredColor);
         
         ClientHandler clientHandler = server.getClients().get(action.getPlayerName());
         if (clientHandler == null) {
@@ -34,10 +37,12 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
         }
 
         Player player = gameController.getPlayers().get(action.getPlayerName());
+        boolean isGameInProgress = gameController.getGame().getState().getGameStatus() == GameStatus.IN_PROGRESS;
         boolean playerExists = player != null;
         boolean isPlayersTurn = gameController.isPlayersTurn(player);
         boolean isValidMove = rules.isValidMove(card);
         boolean validAction = 
+            isGameInProgress &&
             playerExists && // player doesn't exist
             isPlayersTurn && // it's not the player's turn
             isValidMove; // it's an invalid move
@@ -68,6 +73,7 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
             }
 
             card = new Card(desiredColor, card.getSymbol());
+            logger.debug("{} {}", card.getColor(), card.getSymbol());
         }
 
         // log an error if card couldn't be added for some reason

@@ -38,9 +38,16 @@ public class CardPile implements Iterable<Card> {
 
     // adds a single card to the top of the pile
     public void pushCard(Card card) {
-        if (card.getColor() != CardColor.NONE && card.getSymbol() != CardSymbol.NONE) {
-            cards.push(card);
+        if (card.getColor() == CardColor.NONE || card.getSymbol() == CardSymbol.NONE) {
+            return;
         }
+
+        // make the used up wild card wild again
+        // if (card.getColor() != CardColor.WILD && (card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR)) {
+        //     card = new Card(CardColor.WILD, card.getSymbol());
+        // }
+
+        cards.push(card);
     }
 
     // removes and returns a single card from the top of the pile

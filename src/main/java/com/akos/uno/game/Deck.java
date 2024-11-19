@@ -68,7 +68,7 @@ public class Deck {
     // adds specified number of cards of each regular color
     private void addColoredCards(CardSymbol symbol, int count) {
         for (CardColor color : CardColor.values()) {
-            if (color != CardColor.BLACK) {
+            if (color != CardColor.WILD) {
                 for (int i = 0; i < count; i++) {
                     drawPile.pushCard(new Card(color, symbol));
                 }
@@ -79,8 +79,8 @@ public class Deck {
     // adds 4 of each wild card
     private void addWildCards() {
         for (int i = 0; i < 4; i++) {
-            drawPile.pushCard(new Card(CardColor.BLACK, CardSymbol.WILD));
-            drawPile.pushCard(new Card(CardColor.BLACK, CardSymbol.WILD_FOUR));
+            drawPile.pushCard(new Card(CardColor.WILD, CardSymbol.WILD));
+            drawPile.pushCard(new Card(CardColor.WILD, CardSymbol.WILD_FOUR));
         }
     }
 }
