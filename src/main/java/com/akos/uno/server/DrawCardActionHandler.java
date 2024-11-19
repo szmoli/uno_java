@@ -10,6 +10,7 @@ import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.game.Card;
 import com.akos.uno.game.Game;
 import com.akos.uno.game.GameController;
+import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.Player;
 
 public class DrawCardActionHandler implements GameActionHandler<DrawCardAction> {
@@ -32,7 +33,7 @@ public class DrawCardActionHandler implements GameActionHandler<DrawCardAction> 
         }
 
         // If there is no player with the playerName or it's not their turn invalidate the action
-        if (player == null || !gameController.isPlayersTurn(player)) {
+        if (player == null || !gameController.isPlayersTurn(player) || gameController.getGame().getState().getGameStatus() != GameStatus.IN_PROGRESS) {
             clientHandler.sendMessageToClient(new InvalidActionResponse().getAsJson());
             return;
         }

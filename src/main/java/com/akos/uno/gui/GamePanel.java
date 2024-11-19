@@ -1,7 +1,9 @@
 package com.akos.uno.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,42 +36,112 @@ import com.akos.uno.game.CardSymbol;
 public class GamePanel extends WindowContentPanel {
     public GamePanel(JFrame frame) {
         super(new JPanel(new BorderLayout()), frame);
-        frame.setSize(1600, 1000);
         
-        handPanel = new JPanel();
-        tablePanel = new JPanel();
-        bottomPanel = new JPanel();
-        controlPanel = new JPanel();
+        // handPanel = new JPanel();
+        // tablePanel = new JPanel();
+        // JPanel yourTurnPanel = new JPanel();
+        // bottomPanel = new JPanel();
+        // controlPanel = new JPanel();
+        // otherPlayersPanel = new JPanel();
+        // discardButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
+        // drawButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
+
+        // otherPlayersPanel.setLayout(new BoxLayout(otherPlayersPanel, BoxLayout.PAGE_AXIS));
+        // handPanel.setLayout(new BoxLayout(handPanel, BoxLayout.LINE_AXIS));
+        // controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
+        // tablePanel.setLayout(new GridLayout(2, 2));
+
+        // yourTurnLabel = new JLabel("It's your turn!");
+        // // yourTurnLabel.setVisible(false);
+
+        // yourTurnPanel.add(yourTurnLabel);
+        // tablePanel.add(discardButton);
+        // tablePanel.add(drawButton);
+        // JLabel discardLabel = new JLabel("Discard", SwingConstants.CENTER);
+        // JLabel drawLabel = new JLabel("Draw", SwingConstants.CENTER);
+        // tablePanel.add(discardLabel);
+        // tablePanel.add(drawLabel);
+
+        // JButton startGameButton = new JButton("Start");
+        // startGameButton.addActionListener(l -> {
+        //     getClientController().getPlayerController().startGame();
+        // });
+        // controlPanel.add(startGameButton);
+        
+        // JButton sayUnoButton = new JButton("UNO!");
+        // JButton challengeButton = new JButton("Challenge");
+        // controlPanel.add(sayUnoButton);
+        // controlPanel.add(challengeButton);
+
+        // bottomPanel.add(handPanel);
+        // bottomPanel.add(controlPanel);
+        
+        // super.getPanel().add(otherPlayersPanel, BorderLayout.LINE_START);
+        // super.getPanel().add(tablePanel, BorderLayout.CENTER);
+        // super.getPanel().add(bottomPanel, BorderLayout.PAGE_END);
+
+        // Frame
+        getFrame().setSize(1200, 800);
+
+        // Content panel
+        getPanel().setLayout(new BorderLayout());
+        getPanel().setPreferredSize(new Dimension(1200, 800));
+
+        // Your turn label
+        yourTurnLabel = new JLabel("It's your turn!");
+
+        // Top panel: turn indicator
+        JPanel topPanel = new JPanel();
+        topPanel.setPreferredSize(new Dimension(1200, 50));
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        topPanel.add(yourTurnLabel);
+        getPanel().add(topPanel, BorderLayout.NORTH);
+
+        // Left panel: other players
         otherPlayersPanel = new JPanel();
+        otherPlayersPanel.setPreferredSize(new Dimension(150, 800));
+        otherPlayersPanel.setLayout(new BoxLayout(otherPlayersPanel, BoxLayout.Y_AXIS));
+        getPanel().add(otherPlayersPanel, BorderLayout.WEST);
+
+        // Center panel: card piles
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(2, 1, 10, 10));
         discardButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
+        discardButton.setText("Discard");
         drawButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
+        drawButton.setText("Draw");
+        centerPanel.add(discardButton);
+        centerPanel.add(drawButton);
+        getPanel().add(centerPanel, BorderLayout.CENTER);
 
-        otherPlayersPanel.setLayout(new BoxLayout(otherPlayersPanel, BoxLayout.PAGE_AXIS));
-        handPanel.setLayout(new BoxLayout(handPanel, BoxLayout.LINE_AXIS));
-        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
-        tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.LINE_AXIS));
+        // Bottom panel: player hand, control buttons
+        bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BorderLayout());
 
-        tablePanel.add(discardButton);
-        tablePanel.add(drawButton);
+        // Hand panel
+        JScrollPane handScrollPane = new JScrollPane();
+        handPanel = new JPanel();
+        handPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        handScrollPane.setViewportView(handPanel);
+        handScrollPane.setPreferredSize(new Dimension(1000, 200));
+        bottomPanel.add(handScrollPane, BorderLayout.CENTER);
 
-        JButton startGameButton = new JButton("Start");
-        startGameButton.addActionListener(l -> {
-            
-            getClientController().getPlayerController().startGame();
-        });
-        controlPanel.add(startGameButton);
-        
-        JButton sayUnoButton = new JButton("UNO!");
+        // Control panel
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+        controlPanel.setPreferredSize(new Dimension(200, 200));
+        JButton startButton = new JButton("Start");
+        startButton.addActionListener(l -> getClientController().getPlayerController().startGame());
         JButton challengeButton = new JButton("Challenge");
-        controlPanel.add(sayUnoButton);
+        challengeButton.addActionListener(l -> getClientController().getPlayerController().challengePlayer());
+        JButton unoButton = new JButton("UNO");
+        unoButton.addActionListener(l -> getClientController().getPlayerController().sayUno());
+        controlPanel.add(startButton);
+        controlPanel.add(unoButton);
         controlPanel.add(challengeButton);
+        bottomPanel.add(controlPanel, BorderLayout.EAST);
 
-        bottomPanel.add(handPanel);
-        bottomPanel.add(controlPanel);
-        
-        super.getPanel().add(otherPlayersPanel, BorderLayout.LINE_START);
-        super.getPanel().add(tablePanel, BorderLayout.CENTER);
-        super.getPanel().add(bottomPanel, BorderLayout.PAGE_END);
+        getPanel().add(bottomPanel, BorderLayout.SOUTH);
     }
 
     public void drawTopCard(Card card) {
@@ -108,11 +181,11 @@ public class GamePanel extends WindowContentPanel {
 
     private final JPanel otherPlayersPanel;
     private final JPanel handPanel;
-    private final JPanel tablePanel;
     private final JPanel bottomPanel;
     private final JPanel controlPanel;
     private JButton discardButton;
     private final JButton drawButton;
+    private final JLabel yourTurnLabel;
     private static final Logger logger = LogManager.getLogger();
 
     private Icon getCardIcon(Card card) {

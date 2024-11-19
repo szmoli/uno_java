@@ -164,7 +164,7 @@ public class Server extends Thread {
     }
 
     public static void main(String[] args) {
-        Server server = new Server(12345);
+        Server server = new Server(11111);
         server.startServer();
     }
 
