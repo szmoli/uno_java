@@ -1,9 +1,10 @@
 package com.akos.uno.game;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class CardPileTest {
     @Test
@@ -43,7 +44,8 @@ public class CardPileTest {
         assertEquals(0, pile.size());
         assertEquals(card, popped);
 
-        Exception exception = assertThrows(IllegalStateException.class, pile::popCard);
+        popped = pile.popCard();
+        assertEquals(new Card(CardColor.NONE, CardSymbol.NONE), popped);
     }
 
     @Test
