@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 public class PartialGameState {
     public PartialGameState(Player player) {
         this.player = player;
+        currentPlayerName = null;
         otherPlayerNames = null;
         otherPlayerHandSizes = null;
         topCard = null;
@@ -22,6 +23,7 @@ public class PartialGameState {
         otherPlayerHandSizes = gameState.getPlayers().values().stream().filter(p -> !p.getPlayerName().equals(player.getPlayerName())).map(p -> p.getHand().size()).collect(Collectors.toList());
         topCard = gameState.getDeck().getDiscardPile().top();
         gameStatus = gameState.getGameStatus();
+        currentPlayerName = gameState.getPlayerNamesInOrder().get(gameState.getCurrentPlayerIndex());
     }
 
     public static PartialGameState createFromJson(String json) {
@@ -54,10 +56,15 @@ public class PartialGameState {
         return gameStatus;
     }
 
+    public String getCurrentPlayerName() {
+        return currentPlayerName;
+    }
+
     private final Player player;
     private final List<String> otherPlayerNames;
     private final List<Integer> otherPlayerHandSizes;
     private final Card topCard;
     private final GameStatus gameStatus;
+    private final String currentPlayerName;
     private static final Gson gson = new Gson();
 }

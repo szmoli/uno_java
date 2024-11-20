@@ -23,10 +23,11 @@ public class ClientView {
             logger.debug(state.getOtherPlayerHandSizes().get(i));
         }
 
-        gamePanel.drawOtherPlayers(otherPlayers);
+        gamePanel.drawOtherPlayers(otherPlayers, state.getCurrentPlayerName());
         gamePanel.drawPlayerHand((state.getPlayer().getHand()));
         gamePanel.drawTopCard(state.getTopCard());
         gamePanel.drawDrawCard();
+        gamePanel.drawTurnIndicator(state.getPlayer().getPlayerName(), state.getCurrentPlayerName());
     }
 
     private final GamePanel gamePanel;

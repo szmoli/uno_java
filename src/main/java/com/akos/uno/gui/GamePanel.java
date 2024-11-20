@@ -1,6 +1,7 @@
 package com.akos.uno.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -32,6 +33,7 @@ import com.akos.uno.client.ClientController;
 import com.akos.uno.game.Card;
 import com.akos.uno.game.CardColor;
 import com.akos.uno.game.CardSymbol;
+import com.akos.uno.game.GameStatus;
 
 public class GamePanel extends WindowContentPanel {
     public GamePanel(JFrame frame) {
@@ -158,16 +160,23 @@ public class GamePanel extends WindowContentPanel {
         drawButton.addActionListener(new DrawCardListener(getClientController()));
     }
 
-    public void drawOtherPlayers(Map<String, Integer> otherPlayers) {
+    public void drawOtherPlayers(Map<String, Integer> otherPlayers, String currentPlayerName, GameStatus status) {
         otherPlayersPanel.removeAll();
         for (Entry<String, Integer> playerEntry : otherPlayers.entrySet()) {
-            JPanel playerPanel = new JPanel();
-            playerPanel.add(new JLabel(playerEntry.getKey() + ":"));
-            playerPanel.add(new JLabel(Integer.toString(playerEntry.getValue()) + " cards"));
-            otherPlayersPanel.add(playerPanel);
+            JLabel playerLabel = new JLabel(playerEntry.getKey() + ": " + Integer.toString(playerEntry.getValue()) + " cards");
+            
+            if (playerEntry.getKey().equals(currentPlayerName) && status == GameStatus.IN_PROGRESS) {
+                playerLabel.setForeground(new Color(255, 0, 0));
+            }
+
+            otherPlayersPanel.add(playerLabel);
         }
         otherPlayersPanel.revalidate();
         otherPlayersPanel.repaint();
+    }
+
+    public void drawTurnIndicator(String playerName, String currentPlayerName, GameStatus status) {
+        yourTurnLabel.setVisible(playerName.equals(currentPlayerName) && status == GameStatus.IN_PROGRESS);
     }
 
     public void drawPlayerHand(List<Card> cards) {
