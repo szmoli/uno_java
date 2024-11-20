@@ -24,6 +24,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -56,7 +57,7 @@ public class GamePanel extends WindowContentPanel {
         topPanel.setPreferredSize(new Dimension(1200, 50));
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         yourTurnLabel.setForeground(new Color(255, 0, 0));
-        yourTurnLabel.setFont(new Font("Serif", Font.PLAIN, 24));
+        yourTurnLabel.setFont(new Font(yourTurnLabel.getFont().getFontName(), Font.BOLD, 24));
         topPanel.add(yourTurnLabel);
         getPanel().add(topPanel, BorderLayout.NORTH);
 
@@ -144,21 +145,16 @@ public class GamePanel extends WindowContentPanel {
         if (status != GameStatus.FINISHED || winnerName == null || hasDisplayedWinnerDialog) {
             return;
         }
-
-        JDialog winnerDialog = new JDialog(getFrame(), "Winner", true);
-        winnerDialog.setSize(250, 150);
-        winnerDialog.setLayout(new FlowLayout());
-        winnerDialog.add(new JLabel(winnerName + " has won the game!"));
-
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(l -> 
-            winnerDialog.dispose()
+        
+        JOptionPane.showConfirmDialog(
+            getFrame(), 
+            winnerName + " has won the game!", 
+            "Winner", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.INFORMATION_MESSAGE
         );
-
-        winnerDialog.add(okButton);
-        winnerDialog.setLocationRelativeTo(getFrame());
-        winnerDialog.setVisible(true);
-        hasDisplayedWinnerDialog = true;
+        
+        System.exit(0);
     }
 
     public void drawTurnIndicator(String playerName, String currentPlayerName, String winnerName, GameStatus status) {        

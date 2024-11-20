@@ -173,7 +173,7 @@ public class GameController {
                 break;
             case CardSymbol.SKIP:
                 System.out.println("apply card effects skip");
-                selectPlayerWithDelta(1);
+                nextRound();
                 break;
             case CardSymbol.WILD:
                 // do nothing I guess?

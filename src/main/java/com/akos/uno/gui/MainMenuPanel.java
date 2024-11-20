@@ -7,11 +7,13 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 // source: https://stackoverflow.com/questions/15867148/why-do-we-need-to-extend-jframe-in-a-swing-application
 public class MainMenuPanel extends WindowContentPanel {
     public MainMenuPanel(JFrame frame) {
         super(new JPanel(), frame);
+        getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         joinGameButton = new JButton("Join Game");
         joinGameButton.addActionListener(actionEvent -> {
             frame.setContentPane(new JoinGameMenuPanel(frame).getPanel());
