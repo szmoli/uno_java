@@ -11,6 +11,7 @@ public class PartialGameState {
     public PartialGameState(Player player) {
         this.player = player;
         currentPlayerName = null;
+        winnerName = null;
         otherPlayerNames = null;
         otherPlayerHandSizes = null;
         topCard = null;
@@ -24,6 +25,7 @@ public class PartialGameState {
         topCard = gameState.getDeck().getDiscardPile().top();
         gameStatus = gameState.getGameStatus();
         currentPlayerName = gameState.getPlayerNamesInOrder().get(gameState.getCurrentPlayerIndex());
+        winnerName = gameState.getWinner() == null ? null : gameState.getWinner().getPlayerName();
     }
 
     public static PartialGameState createFromJson(String json) {
@@ -60,11 +62,16 @@ public class PartialGameState {
         return currentPlayerName;
     }
 
+    public String getWinnerName() {
+        return winnerName;
+    }
+
     private final Player player;
     private final List<String> otherPlayerNames;
     private final List<Integer> otherPlayerHandSizes;
     private final Card topCard;
     private final GameStatus gameStatus;
     private final String currentPlayerName;
+    private final String winnerName;
     private static final Gson gson = new Gson();
 }

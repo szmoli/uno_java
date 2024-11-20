@@ -13,6 +13,7 @@ public class FullGameState {
         this.isOrderReversed = isOrderReversed;
         this.gameStatus = gameStatus;
         this.hostPlayer = null;
+        this.winner = null;
     }
 
     public GameStatus getGameStatus() {
@@ -67,6 +68,14 @@ public class FullGameState {
         return hostPlayer;
     }
 
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
     private int currentPlayerIndex;
     private final Map<String, Player> players; // this is a HashMap so we can get the player efficiently by its name
     private final Deck deck;
@@ -74,4 +83,5 @@ public class FullGameState {
     private boolean isOrderReversed;
     private GameStatus gameStatus;
     private Player hostPlayer;
+    private Player winner;
 }

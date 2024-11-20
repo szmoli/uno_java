@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -38,50 +39,8 @@ import com.akos.uno.game.GameStatus;
 public class GamePanel extends WindowContentPanel {
     public GamePanel(JFrame frame) {
         super(new JPanel(new BorderLayout()), frame);
+        this.hasDisplayedWinnerDialog = false;
         
-        // handPanel = new JPanel();
-        // tablePanel = new JPanel();
-        // JPanel yourTurnPanel = new JPanel();
-        // bottomPanel = new JPanel();
-        // controlPanel = new JPanel();
-        // otherPlayersPanel = new JPanel();
-        // discardButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
-        // drawButton = createCardButton(new Card(CardColor.NONE, CardSymbol.NONE), null);
-
-        // otherPlayersPanel.setLayout(new BoxLayout(otherPlayersPanel, BoxLayout.PAGE_AXIS));
-        // handPanel.setLayout(new BoxLayout(handPanel, BoxLayout.LINE_AXIS));
-        // controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
-        // tablePanel.setLayout(new GridLayout(2, 2));
-
-        // yourTurnLabel = new JLabel("It's your turn!");
-        // // yourTurnLabel.setVisible(false);
-
-        // yourTurnPanel.add(yourTurnLabel);
-        // tablePanel.add(discardButton);
-        // tablePanel.add(drawButton);
-        // JLabel discardLabel = new JLabel("Discard", SwingConstants.CENTER);
-        // JLabel drawLabel = new JLabel("Draw", SwingConstants.CENTER);
-        // tablePanel.add(discardLabel);
-        // tablePanel.add(drawLabel);
-
-        // JButton startGameButton = new JButton("Start");
-        // startGameButton.addActionListener(l -> {
-        //     getClientController().getPlayerController().startGame();
-        // });
-        // controlPanel.add(startGameButton);
-        
-        // JButton sayUnoButton = new JButton("UNO!");
-        // JButton challengeButton = new JButton("Challenge");
-        // controlPanel.add(sayUnoButton);
-        // controlPanel.add(challengeButton);
-
-        // bottomPanel.add(handPanel);
-        // bottomPanel.add(controlPanel);
-        
-        // super.getPanel().add(otherPlayersPanel, BorderLayout.LINE_START);
-        // super.getPanel().add(tablePanel, BorderLayout.CENTER);
-        // super.getPanel().add(bottomPanel, BorderLayout.PAGE_END);
-
         // Frame
         getFrame().setSize(1200, 800);
 
@@ -96,6 +55,8 @@ public class GamePanel extends WindowContentPanel {
         JPanel topPanel = new JPanel();
         topPanel.setPreferredSize(new Dimension(1200, 50));
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        yourTurnLabel.setForeground(new Color(255, 0, 0));
+        yourTurnLabel.setFont(new Font("Serif", Font.PLAIN, 24));
         topPanel.add(yourTurnLabel);
         getPanel().add(topPanel, BorderLayout.NORTH);
 
@@ -160,7 +121,7 @@ public class GamePanel extends WindowContentPanel {
         drawButton.addActionListener(new DrawCardListener(getClientController()));
     }
 
-    public void drawOtherPlayers(Map<String, Integer> otherPlayers, String currentPlayerName, GameStatus status) {
+    public void drawOtherPlayers(Map<String, Integer> otherPlayers, String currentPlayerName, String winnerName, GameStatus status) {
         otherPlayersPanel.removeAll();
         for (Entry<String, Integer> playerEntry : otherPlayers.entrySet()) {
             JLabel playerLabel = new JLabel(playerEntry.getKey() + ": " + Integer.toString(playerEntry.getValue()) + " cards");
@@ -169,14 +130,44 @@ public class GamePanel extends WindowContentPanel {
                 playerLabel.setForeground(new Color(255, 0, 0));
             }
 
+            if (playerEntry.getKey().equals(winnerName) && status == GameStatus.FINISHED) {
+                playerLabel.setForeground(new Color(0, 255, 0));
+            }
+
             otherPlayersPanel.add(playerLabel);
         }
         otherPlayersPanel.revalidate();
         otherPlayersPanel.repaint();
     }
 
-    public void drawTurnIndicator(String playerName, String currentPlayerName, GameStatus status) {
-        yourTurnLabel.setVisible(playerName.equals(currentPlayerName) && status == GameStatus.IN_PROGRESS);
+    public void drawWinner(String winnerName, GameStatus status) {
+        if (status != GameStatus.FINISHED || winnerName == null || hasDisplayedWinnerDialog) {
+            return;
+        }
+
+        JDialog winnerDialog = new JDialog(getFrame(), "Winner", true);
+        winnerDialog.setSize(250, 150);
+        winnerDialog.setLayout(new FlowLayout());
+        winnerDialog.add(new JLabel(winnerName + " has won the game!"));
+
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(l -> 
+            winnerDialog.dispose()
+        );
+
+        winnerDialog.add(okButton);
+        winnerDialog.setLocationRelativeTo(getFrame());
+        winnerDialog.setVisible(true);
+        hasDisplayedWinnerDialog = true;
+    }
+
+    public void drawTurnIndicator(String playerName, String currentPlayerName, String winnerName, GameStatus status) {        
+        if (playerName.equals(winnerName) && status == GameStatus.FINISHED) {
+            yourTurnLabel.setText("You won!");
+            yourTurnLabel.setForeground(new Color(0, 255, 0));
+        }
+
+        yourTurnLabel.setVisible((playerName.equals(currentPlayerName) && status == GameStatus.IN_PROGRESS) || status == GameStatus.FINISHED);
     }
 
     public void drawPlayerHand(List<Card> cards) {
@@ -196,6 +187,7 @@ public class GamePanel extends WindowContentPanel {
     private final JButton drawButton;
     private final JLabel yourTurnLabel;
     private static final Logger logger = LogManager.getLogger();
+    private boolean hasDisplayedWinnerDialog;
 
     private Icon getCardIcon(Card card) {
         String symbol = card.getColor() == CardColor.NONE || card.getColor() == CardColor.WILD || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR ? "" : card.getColor().toString().toLowerCase() + "_";
@@ -268,7 +260,7 @@ public class GamePanel extends WindowContentPanel {
         private final JFrame frame;
 
         private CardColor showColorSelectionDialog(JFrame frame) {
-            JDialog dialog = new JDialog(frame, "Select a color!", true);
+            JDialog dialog = new JDialog(getFrame(), "Select a color!", true);
             dialog.setLayout(new FlowLayout());
             dialog.setSize(250, 150);
             dialog.add(new JLabel("Select a color:"));

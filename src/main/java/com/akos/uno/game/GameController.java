@@ -136,6 +136,13 @@ public class GameController {
     }
 
     public void nextRound() {
+        // player wins game
+        if (getPlayerWithDelta(0).getHand().isEmpty()) {
+            System.out.println("winner: " + getPlayerWithDelta(0).getPlayerName());
+            getGame().getState().setWinner(getPlayerWithDelta(0));
+            getGame().getState().setGameStatus(GameStatus.FINISHED);
+        }
+
         // check if previous player has forgotten to say uno and enforce the penalty
         if (getPlayerWithDelta(-1).getHand().size() == 1 && !getPlayerWithDelta(-1).hasSaidUno()) {
             System.out.println("forgot to say uno");

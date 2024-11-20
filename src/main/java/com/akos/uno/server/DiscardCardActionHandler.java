@@ -83,7 +83,7 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
 
         Player playerToApplyEffectsTo = gameController.getPlayerWithDelta(1);
         gameController.applyCardEffects(card, playerToApplyEffectsTo); // apply action card effects
-        gameController.selectPlayerWithDelta(1); // select next player
+        gameController.nextRound();
         server.updateClients();
     }
 
