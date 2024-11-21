@@ -1,8 +1,7 @@
 @startuml
 
-!theme plain
-top to bottom direction
-skinparam linetype ortho
+scale 0.5
+skinparam dpi 300
 
 class Card {
   + Card(CardColor, CardSymbol):
