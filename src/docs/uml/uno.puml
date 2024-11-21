@@ -5,198 +5,221 @@ top to bottom direction
 skinparam linetype ortho
 
 class Card {
-  - symbol: CardSymbol
+  + Card(CardColor, CardSymbol):
   - color: CardColor
+  - symbol: CardSymbol
   + getSymbol(): CardSymbol
+  + getColor(): CardColor
   + toString(): String
   + equals(Object): boolean
-  + getColor(): CardColor
 }
 enum CardColor << enumeration >> {
-  + YELLOW:
+  + CardColor():
   + BLUE:
   + WILD:
-  + NONE:
+  + YELLOW:
   + RED:
+  + NONE:
   + GREEN:
-  + valueOf(String): CardColor
   + values(): CardColor[]
+  + valueOf(String): CardColor
 }
 class CardPile {
-  - cards: Stack<Card>
-  + popCards(int): List<Card>
-  + shuffle(): void
-  + iterator(): Iterator<Card>
-  + top(): Card
-  + pushCards(Collection<Card>): void
-  + pushCard(Card): void
+  + CardPile():
+  - cards: Deque<Card>
   + size(): int
+  + popCard(): Card
   + clear(): void
   + getSecondCard(): Card
-  + popCard(): Card
+  + pushCard(Card): void
+  + top(): Card
+  + pushCards(Collection<Card>): void
+  + iterator(): Iterator<Card>
+  + popCards(int): List<Card>
+  + shuffle(): void
   + isEmpty(): boolean
 }
 enum CardSymbol << enumeration >> {
+  + CardSymbol():
   + ZERO:
-  + ONE:
-  + FIVE:
-  + TWO:
-  + SKIP:
-  + THREE:
-  + REVERSE:
-  + DRAW_TWO:
-  + WILD:
-  + NONE:
-  + EIGHT:
-  + WILD_FOUR:
-  + NINE:
-  + FOUR:
   + SEVEN:
+  + DRAW_TWO:
+  + WILD_FOUR:
+  + NONE:
+  + FOUR:
+  + SKIP:
+  + TWO:
+  + WILD:
+  + THREE:
+  + ONE:
+  + NINE:
+  + EIGHT:
+  + FIVE:
   + SIX:
-  + values(): CardSymbol[]
+  + REVERSE:
   + valueOf(String): CardSymbol
+  + values(): CardSymbol[]
 }
-class ChallengePlayerAction
+class ChallengePlayerAction {
+  + ChallengePlayerAction(String):
+}
 class ChallengePlayerActionHandler {
+  + ChallengePlayerActionHandler(GameController, Server):
   - gameController: GameController
-  - server: Server
   - logger: Logger
+  - server: Server
   + handle(ChallengePlayerAction): void
 }
 class Client {
-  - connectionLatch: CountDownLatch
+  + Client(PartialGameState, ClientController):
   - gameState: PartialGameState
+  - clientLogger: Logger
   - socket: Socket
   - out: PrintWriter
-  - listener: ClientListener
   - in: BufferedReader
-  - clientLogger: Logger
-  + stopConnection(): void
-  + getConnectionLatch(): CountDownLatch
+  - connectionLatch: CountDownLatch
+  - listener: ClientListener
   + sendMessageToServer(String): void
-  + setGameState(PartialGameState): void
-  + getSocket(): Socket
-  + getGameState(): PartialGameState
+  + stopConnection(): void
   + startConnection(String, String, int): void
+  + getConnectionLatch(): CountDownLatch
+  + getGameState(): PartialGameState
+  + getSocket(): Socket
+  + setGameState(PartialGameState): void
   + getResponseFromServer(): String
 }
 class ClientController {
-  - serverAddress: String
-  - logger: Logger
-  - serverReadyLatch: CountDownLatch
+  + ClientController(String, String, int, CountDownLatch, GamePanel):
+  + ClientController(String, String, int, GamePanel):
+  - serverPort: int
   - playerController: PlayerController
+  - serverReadyLatch: CountDownLatch
+  - serverAddress: String
   - client: Client
   - view: ClientView
-  - serverPort: int
+  - logger: Logger
   + getPlayerController(): PlayerController
-  + getClient(): Client
-  + run(): void
   + updateView(PartialGameState): void
-  + setGameState(PartialGameState): void
   + startConnection(): void
+  + run(): void
   + stopConnection(): void
+  + getClient(): Client
+  + setGameState(PartialGameState): void
 }
 class ClientHandler {
-  - out: PrintWriter
+  + ClientHandler(Socket, Server):
   - socket: Socket
-  - in: BufferedReader
   - logger: Logger
+  - in: BufferedReader
   - server: Server
-  + getSocket(): Socket
+  - out: PrintWriter
   + sendMessageToClient(String): void
   + run(): void
+  + getSocket(): Socket
 }
 class ClientListener {
+  + ClientListener(ClientController):
   - clientController: ClientController
   - logger: Logger
-  - processResponse(String): void
   + run(): void
+  - processResponse(String): void
 }
 class ClientView {
-  - gamePanel: GamePanel
+  + ClientView(GamePanel):
   - logger: Logger
+  - gamePanel: GamePanel
   + updateView(PartialGameState): void
 }
 class CloseAdapter {
+  + CloseAdapter(ClientController, JFrame):
   - clientController: ClientController
   - frame: JFrame
   + windowClosing(WindowEvent): void
 }
 class Deck {
-  - drawPile: CardPile
+  + Deck(boolean):
   - discardPile: CardPile
-  + addCardsToDiscardPile(List<Card>): void
-  + addCardToDiscardPile(Card): void
-  + getDiscardPile(): CardPile
-  + shuffle(): void
-  + drawCards(int): List<Card>
+  - drawPile: CardPile
   - addWildCards(): void
-  + getDrawPile(): CardPile
+  + shuffle(): void
+  + getDiscardPile(): CardPile
+  + drawCards(int): List<Card>
+  + addCardsToDiscardPile(List<Card>): void
   - addColoredCards(CardSymbol, int): void
+  + getDrawPile(): CardPile
+  + addCardToDiscardPile(Card): void
 }
 class DiscardCardAction {
-  - card: Card
+  + DiscardCardAction(String, Card, CardColor):
   - desiredColor: CardColor
-  + getCard(): Card
+  - card: Card
   + getDesiredColor(): CardColor
+  + getCard(): Card
 }
 class DiscardCardActionHandler {
+  + DiscardCardActionHandler(GameController, Server):
   - server: Server
   - logger: Logger
   - gameController: GameController
   + handle(DiscardCardAction): void
 }
 class DrawCardAction {
+  + DrawCardAction(String, int):
   - cardCount: int
   + getCardCount(): int
 }
 class DrawCardActionHandler {
+  + DrawCardActionHandler(GameController, Server):
   - server: Server
-  - gameController: GameController
   - logger: Logger
+  - gameController: GameController
   + handle(DrawCardAction): void
 }
 class FullGameState {
+  + FullGameState(int, Map<String, Player>, Deck, int, boolean, GameStatus):
   - hostPlayer: Player
-  - winner: Player
-  - gameStatus: GameStatus
-  - isOrderReversed: boolean
-  - currentRound: int
   - players: Map<String, Player>
+  - currentRound: int
+  - gameStatus: GameStatus
   - deck: Deck
+  - winner: Player
+  - isOrderReversed: boolean
   - currentPlayerIndex: int
-  + getHostPlayer(): Player
-  + getDeck(): Deck
-  + setCurrentPlayerIndex(int): void
-  + isOrderReversed(): boolean
   + getGameStatus(): GameStatus
-  + reverseOrder(): void
-  + getCurrentPlayerIndex(): int
-  + getCurrentRound(): int
-  + setCurrentRound(int): void
-  + setHostPlayer(Player): void
-  + setWinner(Player): void
-  + getWinner(): Player
-  + setGameStatus(GameStatus): void
-  + getPlayerNamesInOrder(): List<String>
+  + setCurrentPlayerIndex(int): void
   + getPlayers(): Map<String, Player>
+  + setCurrentRound(int): void
+  + setGameStatus(GameStatus): void
+  + isOrderReversed(): boolean
+  + setWinner(Player): void
+  + getDeck(): Deck
+  + getPlayerNamesInOrder(): List<String>
+  + getHostPlayer(): Player
+  + getCurrentPlayerIndex(): int
+  + getWinner(): Player
+  + reverseOrder(): void
+  + setHostPlayer(Player): void
+  + getCurrentRound(): int
 }
 class Game {
+  + Game():
   - state: FullGameState
   - rules: GameRules
-  + getState(): FullGameState
   + getRules(): GameRules
+  + getState(): FullGameState
 }
 class GameAction {
-  - gson: Gson
+  # GameAction(String, GameActionType):
   - playerName: String
   - type: GameActionType
-  + getType(): GameActionType
+  - gson: Gson
   + getPlayerName(): String
   + createFromJson(String): GameAction
+  + getType(): GameActionType
   + getAsJson(): String
 }
 class GameActionDeserializer {
+  + GameActionDeserializer():
   + deserialize(JsonElement, Type, JsonDeserializationContext): GameAction
 }
 interface GameActionHandler<T> << interface >> {
@@ -204,277 +227,430 @@ interface GameActionHandler<T> << interface >> {
   + handleAction(GameAction): void
 }
 class GameActionSerializer {
+  + GameActionSerializer():
   + serialize(GameAction, Type, JsonSerializationContext): JsonElement
 }
 enum GameActionType << enumeration >> {
+  - GameActionType(Class<GameAction>):
+  + JOIN:
+  + CHALLENGE_PLAYER:
+  + QUIT:
   + DISCARD_CARD:
   + SAY_UNO:
   + DRAW_CARD:
   + START:
-  + CHALLENGE_PLAYER:
-  + QUIT:
   - actionClass: Class<GameAction>
-  + JOIN:
   + valueOf(String): GameActionType
-  + values(): GameActionType[]
   + getActionClass(): Class<GameAction>
+  + values(): GameActionType[]
 }
 class GameController {
+  + GameController():
   - game: Game
-  + isPlayersTurn(Player): boolean
-  + getPlayers(): Map<String, Player>
+  - logger: Logger
+  + getOtherPlayerNames(Player): List<String>
   + getOtherPlayerHandSizes(Player): List<Integer>
+  + setHostPlayer(Player): void
+  + reverseOrder(): void
+  + getHostPlayer(): Player
   + getSecondCard(): Card
-  + applyCardEffects(Card, Player): void
-  + startGame(): void
+  + selectPlayerWithDelta(int): void
   + shuffleDrawPile(): void
   + removePlayer(Player): Player
-  + addCardToDiscardPile(Card): boolean
-  + selectPlayerWithDelta(int): void
   + getPlayerWithDelta(int): Player
+  + applyCardEffects(Card, Player): void
+  + getGame(): Game
+  + isWildCard(Card): boolean
   + getTopCard(): Card
   + drawCards(int): List<Card>
-  + nextRound(): void
-  + getHostPlayer(): Player
+  + isEffectCard(Card): boolean
   + addPlayer(Player): boolean
-  + setHostPlayer(Player): void
-  + isWildCard(Card): boolean
-  + getOtherPlayerNames(Player): List<String>
-  + getGame(): Game
+  + nextRound(): void
+  + isPlayersTurn(Player): boolean
+  + startGame(): void
+  + getPlayers(): Map<String, Player>
+  + addCardToDiscardPile(Card): boolean
 }
 class GamePanel {
-  - hasDisplayedWinnerDialog: boolean
-  - drawButton: JButton
-  - handPanel: JPanel
-  - discardButton: JButton
-  - yourTurnLabel: JLabel
+  + GamePanel(JFrame):
   - controlPanel: JPanel
+  - yourTurnLabel: JLabel
+  - drawButton: JButton
   - logger: Logger
+  - handPanel: JPanel
   - otherPlayersPanel: JPanel
   - bottomPanel: JPanel
+  - discardButton: JButton
+  - hasDisplayedWinnerDialog: boolean
   - getCardIcon(Card): Icon
-  + drawOtherPlayers(Map<String, Integer>, String, String, GameStatus): void
-  + drawDrawCard(): void
-  + drawTurnIndicator(String, String, String, GameStatus): void
-  + drawTopCard(Card): void
   + drawWinner(String, GameStatus): void
+  + drawTopCard(Card): void
+  + drawTurnIndicator(String, String, String, GameStatus): void
+  + drawDrawCard(): void
   - createCardButton(Card, ActionListener): JButton
+  + drawOtherPlayers(Map<String, Integer>, String, String, GameStatus): void
   + drawPlayerHand(List<Card>): void
 }
 class GameRules {
+  + GameRules(Game):
   - game: Game
-  + isValidMove(Card): boolean
-  + hasMatchingColorCard(Player): boolean
+  + hasMatchingColorCard(Player, Card): boolean
   + isValidSayUno(Player): boolean
-  + isValidJumpIn(Card): boolean
+  + isValidMove(Card, Card): boolean
 }
 enum GameStatus << enumeration >> {
+  + GameStatus():
+  + INIT:
   + OPEN:
   + IN_PROGRESS:
-  + INIT:
-  + CLOSED:
   + FINISHED:
-  + valueOf(String): GameStatus
+  + CLOSED:
   + values(): GameStatus[]
+  + valueOf(String): GameStatus
 }
 class HostGameMenuPanel {
+  + HostGameMenuPanel(JFrame):
+  - serverPortInput: JTextField
   - playerNameInput: JTextField
   - hostButton: JButton
-  - serverPortInput: JTextField
   - cancelButton: JButton
-  + getPanel(): JPanel
 }
 class IPInputVerifier {
+  + IPInputVerifier():
   + verify(JComponent): boolean
 }
 class InputFieldListener {
+  + InputFieldListener(Runnable):
   - callback: Runnable
-  + removeUpdate(DocumentEvent): void
-  + insertUpdate(DocumentEvent): void
   + changedUpdate(DocumentEvent): void
+  + insertUpdate(DocumentEvent): void
+  + removeUpdate(DocumentEvent): void
 }
-class InvalidActionResponse
-class JoinAction
+class InvalidActionResponse {
+  + InvalidActionResponse():
+}
+class JoinAction {
+  + JoinAction(String):
+}
 class JoinActionHandler {
+  + JoinActionHandler(GameController, Server):
   - logger: Logger
-  - gameController: GameController
   - server: Server
+  - gameController: GameController
   + handle(JoinAction): void
 }
 class JoinGameMenuPanel {
+  + JoinGameMenuPanel(JFrame):
   - playerNameLabel: JLabel
   - joinButton: JButton
+  - cancelButton: JButton
   - serverAddressInput: JTextField
   - playerNameInput: JTextField
-  - cancelButton: JButton
-  + getPanel(): JPanel
 }
 class MainMenuPanel {
+  + MainMenuPanel(JFrame):
   - joinGameButton: JButton
   - hostGameButton: JButton
-  + getPanel(): JPanel
 }
 class MainWindow {
+  + MainWindow():
   - frame: JFrame
   + getFrame(): JFrame
   + main(String[]): void
 }
 class MessageResponse {
+  + MessageResponse(String):
   - message: String
   + getMessage(): String
 }
 class PartialGameState {
-  - topCard: Card
-  - gson: Gson
-  - winnerName: String
-  - player: Player
+  + PartialGameState(Player):
+  + PartialGameState(Player, FullGameState):
   - otherPlayerHandSizes: List<Integer>
-  - otherPlayerNames: List<String>
-  - currentPlayerName: String
   - gameStatus: GameStatus
-  + getOtherPlayerHandSizes(): List<Integer>
-  + getGameStatus(): GameStatus
-  + getAsJson(): String
-  + getPlayer(): Player
-  + createFromJson(String): PartialGameState
-  + getCurrentPlayerName(): String
+  - gson: Gson
+  - player: Player
+  - otherPlayerNames: List<String>
+  - topCard: Card
+  - winnerName: String
+  - currentPlayerName: String
   + getTopCard(): Card
   + getWinnerName(): String
   + getOtherPlayerNames(): List<String>
+  + getPlayer(): Player
+  + getCurrentPlayerName(): String
+  + getGameStatus(): GameStatus
+  + createFromJson(String): PartialGameState
+  + getAsJson(): String
+  + getOtherPlayerHandSizes(): List<Integer>
 }
 class PartialGameStateResponse {
+  + PartialGameStateResponse(PartialGameState):
   - gameState: PartialGameState
   + getGameState(): PartialGameState
 }
 class Player {
-  - hand: List<Card>
+  + Player(String):
   - lastDrawnCards: List<Card>
-  - logger: Logger
-  - hasSaidUno: boolean
   - playerName: String
-  + sayUno(): void
-  + getHand(): List<Card>
-  + getPlayerName(): String
-  + hasSaidUno(): boolean
-  + setHasSaidUno(boolean): void
-  + drawCard(Card): boolean
-  + getLastDrawnCards(): List<Card>
-  + drawCards(List<Card>): boolean
+  - hasSaidUno: boolean
+  - hand: List<Card>
   + discardCard(Card): boolean
+  + setHasSaidUno(boolean): void
+  + getLastDrawnCards(): List<Card>
+  + hasSaidUno(): boolean
+  + sayUno(): void
   + equals(Object): boolean
+  + drawCard(Card): boolean
+  + drawCards(List<Card>): boolean
+  + getPlayerName(): String
+  + getHand(): List<Card>
 }
 class PlayerController {
+  + PlayerController(ClientController):
   - clientController: ClientController
-  + getHand(): List<Card>
+  - logger: Logger
+  + startGame(): void
+  + discardCard(int, CardColor): void
+  + drawCards(int): void
+  + sayUno(): void
   + getPlayer(): Player
   + quitGame(): void
   + discardCard(Card, CardColor): void
-  + discardCard(int, CardColor): void
+  + getHand(): List<Card>
   + challengePlayer(): void
-  + hasSaidUno(): boolean
   + joinGame(): void
-  + sayUno(): void
-  + startGame(): void
-  + drawCards(int): void
+  + hasSaidUno(): boolean
 }
 class PlayerNameVerifier {
+  + PlayerNameVerifier():
   + verify(JComponent): boolean
 }
-class QuitAction
+class QuitAction {
+  + QuitAction(String):
+}
 class QuitActionHandler {
+  + QuitActionHandler(GameController, Server):
   - server: Server
   - gameController: GameController
   - logger: Logger
   + handle(QuitAction): void
 }
 class Response {
-  - type: ResponseType
+  # Response(ResponseType):
   - gson: Gson
+  - type: ResponseType
   + createFromJson(String): Response
-  + getAsJson(): String
   + getType(): ResponseType
+  + getAsJson(): String
 }
 class ResponseDeserializer {
+  + ResponseDeserializer():
   + deserialize(JsonElement, Type, JsonDeserializationContext): Response
 }
 class ResponseSerializer {
+  + ResponseSerializer():
   + serialize(Response, Type, JsonSerializationContext): JsonElement
 }
 enum ResponseType << enumeration >> {
+  - ResponseType(Class<Response>):
+  + INVALID_ACTION:
   - responseClass: Class<Response>
   + MESSAGE:
   + PARTIAL_GAME_STATE:
-  + INVALID_ACTION:
-  + valueOf(String): ResponseType
   + values(): ResponseType[]
+  + valueOf(String): ResponseType
   + getResponseClass(): Class<Response>
 }
-class SayUnoAction
+class SayUnoAction {
+  + SayUnoAction(String):
+}
 class SayUnoActionHandler {
+  + SayUnoActionHandler(GameController, Server):
   - logger: Logger
-  - server: Server
   - gameController: GameController
+  - server: Server
   + handle(SayUnoAction): void
 }
 class Server {
-  - port: int
-  - serverSocket: ServerSocket
-  - gameController: GameController
-  - gameActionHandlers: Map<GameActionType, GameActionHandler<?>>
+  + Server(int):
+  - logger: Logger
   - readyLatch: CountDownLatch
-  - logger: Logger
+  - gameActionHandlers: Map<GameActionType, GameActionHandler<?>>
+  - serverSocket: ServerSocket
   - clients: HashMap<String, ClientHandler>
-  + broadcastMessage(String): void
-  + disconnectClient(String): void
-  + sendMessageToClient(ClientHandler, String): void
-  + getReadyLatch(): CountDownLatch
-  + processMessage(String, ClientHandler): void
+  - gameController: GameController
+  - port: int
   + getClients(): Map<String, ClientHandler>
-  + run(): void
-  + getGameController(): GameController
-  + stopServer(): void
-  + updateClients(): void
+  + disconnectClient(String): void
   + startServer(): void
+  + updateClients(): void
+  + run(): void
+  + sendMessageToClient(ClientHandler, String): void
+  + stopServer(): void
+  + processMessage(String, ClientHandler): void
+  + broadcastMessage(String): void
+  + getGameController(): GameController
+  + getReadyLatch(): CountDownLatch
 }
-class StartAction
+class StartAction {
+  + StartAction(String):
+}
 class StartActionHandler {
+  + StartActionHandler(GameController, Server):
+  - server: Server
   - gameController: GameController
   - logger: Logger
-  - server: Server
   + handle(StartAction): void
 }
 class WindowContentPanel {
-  - clientController: ClientController
+  # WindowContentPanel(JPanel, JFrame):
   - frame: JFrame
   - panel: JPanel
   - panelComponents: List<JComponent>
-  + getPanel(): JPanel
+  - clientController: ClientController
   + setClientController(ClientController): void
+  + getPanel(): JPanel
+  + getPanelComponents(): List<JComponent>
   + getClientController(): ClientController
   + getFrame(): JFrame
-  + getPanelComponents(): List<JComponent>
 }
 
+Card                         "1" *-[#595959,plain]-> "color\n1" CardColor
+Card                         "1" *-[#595959,plain]-> "symbol\n1" CardSymbol
+CardPile                      -[#595959,dashed]->  Card                         : "«create»"
+CardPile                     "1" *-[#595959,plain]-> "cards\n*" Card
 ChallengePlayerAction         -[#000082,plain]-^  GameAction
 ChallengePlayerActionHandler  -[#008200,dashed]-^  GameActionHandler
+ChallengePlayerActionHandler "1" *-[#595959,plain]-> "gameController\n1" GameController
+ChallengePlayerActionHandler  -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+ChallengePlayerActionHandler "1" *-[#595959,plain]-> "server\n1" Server
+Client                        -[#595959,dashed]->  ClientListener               : "«create»"
+Client                       "1" *-[#595959,plain]-> "listener\n1" ClientListener
+Client                       "1" *-[#595959,plain]-> "gameState\n1" PartialGameState
+ClientController             "1" *-[#595959,plain]-> "client\n1" Client
+ClientController              -[#595959,dashed]->  Client                       : "«create»"
+ClientController              -[#595959,dashed]->  ClientView                   : "«create»"
+ClientController             "1" *-[#595959,plain]-> "view\n1" ClientView
+ClientController              -[#595959,dashed]->  PartialGameState             : "«create»"
+ClientController              -[#595959,dashed]->  Player                       : "«create»"
+ClientController              -[#595959,dashed]->  PlayerController             : "«create»"
+ClientController             "1" *-[#595959,plain]-> "playerController\n1" PlayerController
+ClientHandler                "1" *-[#595959,plain]-> "server\n1" Server
+ClientListener               "1" *-[#595959,plain]-> "clientController\n1" ClientController
+ClientView                   "1" *-[#595959,plain]-> "gamePanel\n1" GamePanel
+CloseAdapter                 "1" *-[#595959,plain]-> "clientController\n1" ClientController
+Deck                          -[#595959,dashed]->  Card                         : "«create»"
+Deck                          -[#595959,dashed]->  CardPile                     : "«create»"
+Deck                         "1" *-[#595959,plain]-> "drawPile\n1" CardPile
+DiscardCardAction            "1" *-[#595959,plain]-> "card\n1" Card
+DiscardCardAction            "1" *-[#595959,plain]-> "desiredColor\n1" CardColor
 DiscardCardAction             -[#000082,plain]-^  GameAction
+DiscardCardActionHandler      -[#595959,dashed]->  Card                         : "«create»"
 DiscardCardActionHandler      -[#008200,dashed]-^  GameActionHandler
+DiscardCardActionHandler     "1" *-[#595959,plain]-> "gameController\n1" GameController
+DiscardCardActionHandler      -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+DiscardCardActionHandler     "1" *-[#595959,plain]-> "server\n1" Server
 DrawCardAction                -[#000082,plain]-^  GameAction
 DrawCardActionHandler         -[#008200,dashed]-^  GameActionHandler
+DrawCardActionHandler        "1" *-[#595959,plain]-> "gameController\n1" GameController
+DrawCardActionHandler         -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+DrawCardActionHandler        "1" *-[#595959,plain]-> "server\n1" Server
+FullGameState                "1" *-[#595959,plain]-> "deck\n1" Deck
+FullGameState                "1" *-[#595959,plain]-> "gameStatus\n1" GameStatus
+FullGameState                "1" *-[#595959,plain]-> "players\n*" Player
+Game                          -[#595959,dashed]->  Deck                         : "«create»"
+Game                         "1" *-[#595959,plain]-> "state\n1" FullGameState
+Game                          -[#595959,dashed]->  FullGameState                : "«create»"
+Game                         "1" *-[#595959,plain]-> "rules\n1" GameRules
+Game                          -[#595959,dashed]->  GameRules                    : "«create»"
+GameAction                    -[#595959,dashed]->  GameActionDeserializer       : "«create»"
+GameAction                    -[#595959,dashed]->  GameActionSerializer         : "«create»"
+GameAction                   "1" *-[#595959,plain]-> "type\n1" GameActionType
 GameActionHandler             -[#595959,dashed]->  GameAction
+GameController                -[#595959,dashed]->  Card                         : "«create»"
+GameController               "1" *-[#595959,plain]-> "game\n1" Game
+GameController                -[#595959,dashed]->  Game                         : "«create»"
+GamePanel                     -[#595959,dashed]->  Card                         : "«create»"
 GamePanel                     -[#000082,plain]-^  WindowContentPanel
+GameRules                    "1" *-[#595959,plain]-> "game\n1" Game
+HostGameMenuPanel             -[#595959,dashed]->  ClientController             : "«create»"
+HostGameMenuPanel             -[#595959,dashed]->  CloseAdapter                 : "«create»"
+HostGameMenuPanel             -[#595959,dashed]->  GamePanel                    : "«create»"
+HostGameMenuPanel             -[#595959,dashed]->  InputFieldListener           : "«create»"
+HostGameMenuPanel             -[#595959,dashed]->  JoinGameMenuPanel            : "«create»"
+HostGameMenuPanel             -[#595959,dashed]->  MainMenuPanel                : "«create»"
+HostGameMenuPanel             -[#595959,dashed]->  PlayerNameVerifier           : "«create»"
+HostGameMenuPanel             -[#595959,dashed]->  Server                       : "«create»"
 HostGameMenuPanel             -[#000082,plain]-^  WindowContentPanel
 InvalidActionResponse         -[#000082,plain]-^  Response
 JoinAction                    -[#000082,plain]-^  GameAction
 JoinActionHandler             -[#008200,dashed]-^  GameActionHandler
+JoinActionHandler            "1" *-[#595959,plain]-> "gameController\n1" GameController
+JoinActionHandler             -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+JoinActionHandler             -[#595959,dashed]->  Player                       : "«create»"
+JoinActionHandler            "1" *-[#595959,plain]-> "server\n1" Server
+JoinGameMenuPanel             -[#595959,dashed]->  ClientController             : "«create»"
+JoinGameMenuPanel             -[#595959,dashed]->  CloseAdapter                 : "«create»"
+JoinGameMenuPanel             -[#595959,dashed]->  GamePanel                    : "«create»"
+JoinGameMenuPanel             -[#595959,dashed]->  IPInputVerifier              : "«create»"
+JoinGameMenuPanel             -[#595959,dashed]->  InputFieldListener           : "«create»"
+JoinGameMenuPanel             -[#595959,dashed]->  MainMenuPanel                : "«create»"
+JoinGameMenuPanel             -[#595959,dashed]->  PlayerNameVerifier           : "«create»"
 JoinGameMenuPanel             -[#000082,plain]-^  WindowContentPanel
+MainMenuPanel                 -[#595959,dashed]->  HostGameMenuPanel            : "«create»"
+MainMenuPanel                 -[#595959,dashed]->  JoinGameMenuPanel            : "«create»"
 MainMenuPanel                 -[#000082,plain]-^  WindowContentPanel
+MainWindow                    -[#595959,dashed]->  MainMenuPanel                : "«create»"
 MessageResponse               -[#000082,plain]-^  Response
+PartialGameState             "1" *-[#595959,plain]-> "topCard\n1" Card
+PartialGameState             "1" *-[#595959,plain]-> "gameStatus\n1" GameStatus
+PartialGameState             "1" *-[#595959,plain]-> "player\n1" Player
+PartialGameStateResponse     "1" *-[#595959,plain]-> "gameState\n1" PartialGameState
 PartialGameStateResponse      -[#000082,plain]-^  Response
+Player                       "1" *-[#595959,plain]-> "hand\n*" Card
+PlayerController              -[#595959,dashed]->  ChallengePlayerAction        : "«create»"
+PlayerController             "1" *-[#595959,plain]-> "clientController\n1" ClientController
+PlayerController              -[#595959,dashed]->  DiscardCardAction            : "«create»"
+PlayerController              -[#595959,dashed]->  DrawCardAction               : "«create»"
+PlayerController              -[#595959,dashed]->  JoinAction                   : "«create»"
+PlayerController              -[#595959,dashed]->  QuitAction                   : "«create»"
+PlayerController              -[#595959,dashed]->  SayUnoAction                 : "«create»"
+PlayerController              -[#595959,dashed]->  StartAction                  : "«create»"
 QuitAction                    -[#000082,plain]-^  GameAction
 QuitActionHandler             -[#008200,dashed]-^  GameActionHandler
+QuitActionHandler            "1" *-[#595959,plain]-> "gameController\n1" GameController
+QuitActionHandler             -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+QuitActionHandler            "1" *-[#595959,plain]-> "server\n1" Server
+Response                      -[#595959,dashed]->  ResponseDeserializer         : "«create»"
+Response                      -[#595959,dashed]->  ResponseSerializer           : "«create»"
+Response                     "1" *-[#595959,plain]-> "type\n1" ResponseType
 SayUnoAction                  -[#000082,plain]-^  GameAction
 SayUnoActionHandler           -[#008200,dashed]-^  GameActionHandler
+SayUnoActionHandler          "1" *-[#595959,plain]-> "gameController\n1" GameController
+SayUnoActionHandler           -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+SayUnoActionHandler          "1" *-[#595959,plain]-> "server\n1" Server
+Server                        -[#595959,dashed]->  ChallengePlayerActionHandler : "«create»"
+Server                       "1" *-[#595959,plain]-> "clients\n*" ClientHandler
+Server                        -[#595959,dashed]->  ClientHandler                : "«create»"
+Server                        -[#595959,dashed]->  DiscardCardActionHandler     : "«create»"
+Server                        -[#595959,dashed]->  DrawCardActionHandler        : "«create»"
+Server                       "1" *-[#595959,plain]-> "gameActionHandlers\n*" GameActionHandler
+Server                       "1" *-[#595959,plain]-> "gameActionHandlers\n*" GameActionType
+Server                        -[#595959,dashed]->  GameController               : "«create»"
+Server                       "1" *-[#595959,plain]-> "gameController\n1" GameController
+Server                        -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+Server                        -[#595959,dashed]->  JoinActionHandler            : "«create»"
+Server                        -[#595959,dashed]->  MessageResponse              : "«create»"
+Server                        -[#595959,dashed]->  PartialGameState             : "«create»"
+Server                        -[#595959,dashed]->  PartialGameStateResponse     : "«create»"
+Server                        -[#595959,dashed]->  QuitActionHandler            : "«create»"
+Server                        -[#595959,dashed]->  SayUnoActionHandler          : "«create»"
+Server                        -[#595959,dashed]->  StartActionHandler           : "«create»"
 StartAction                   -[#000082,plain]-^  GameAction
 StartActionHandler            -[#008200,dashed]-^  GameActionHandler
+StartActionHandler           "1" *-[#595959,plain]-> "gameController\n1" GameController
+StartActionHandler            -[#595959,dashed]->  InvalidActionResponse        : "«create»"
+StartActionHandler           "1" *-[#595959,plain]-> "server\n1" Server
+WindowContentPanel           "1" *-[#595959,plain]-> "clientController\n1" ClientController
 @enduml
