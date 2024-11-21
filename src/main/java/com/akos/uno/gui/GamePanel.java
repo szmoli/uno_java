@@ -37,7 +37,20 @@ import com.akos.uno.game.CardColor;
 import com.akos.uno.game.CardSymbol;
 import com.akos.uno.game.GameStatus;
 
+/**
+ * GamePanel for the UNO game.
+ * Displays the game state.
+ * Allows the player to draw, discard, challenge, and say UNO.
+ * Displays the other players, the player hand, and the top card of the discard pile.
+ * Displays the winner of the game.
+ * Exits the application on window close.
+ * Disconnects from the server on window close.
+ */
 public class GamePanel extends WindowContentPanel {
+    /**
+     * Constructor
+     * @param frame The frame to display the panel in.
+     */
     public GamePanel(JFrame frame) {
         super(new JPanel(new BorderLayout()), frame);
         this.hasDisplayedWinnerDialog = false;
@@ -108,12 +121,19 @@ public class GamePanel extends WindowContentPanel {
         getPanel().add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Draws the top card of the discard pile.
+     * @param card The card to draw.
+     */
     public void drawTopCard(Card card) {
         discardButton.setIcon(getCardIcon(card));
         discardButton.revalidate();
         discardButton.repaint();
     }
 
+    /**
+     * Draws the draw card button.
+     */
     public void drawDrawCard() {
         for (ActionListener al : drawButton.getActionListeners()) {
             drawButton.removeActionListener(al);
@@ -122,6 +142,13 @@ public class GamePanel extends WindowContentPanel {
         drawButton.addActionListener(new DrawCardListener(getClientController()));
     }
 
+    /**
+     * Draws the other players.
+     * @param otherPlayers The other players to draw.
+     * @param currentPlayerName The name of the current player.
+     * @param winnerName The name of the winner.
+     * @param status The game status.
+     */
     public void drawOtherPlayers(Map<String, Integer> otherPlayers, String currentPlayerName, String winnerName, GameStatus status) {
         otherPlayersPanel.removeAll();
         for (Entry<String, Integer> playerEntry : otherPlayers.entrySet()) {
@@ -141,6 +168,11 @@ public class GamePanel extends WindowContentPanel {
         otherPlayersPanel.repaint();
     }
 
+    /**
+     * Draws the winner of the game.
+     * @param winnerName The name of the winner.
+     * @param status The game status.
+     */
     public void drawWinner(String winnerName, GameStatus status) {
         if (status != GameStatus.FINISHED || winnerName == null || hasDisplayedWinnerDialog) {
             return;
@@ -159,6 +191,13 @@ public class GamePanel extends WindowContentPanel {
         System.exit(0);
     }
 
+    /**
+     * Draws the turn indicator.
+     * @param playerName The name of the player.
+     * @param currentPlayerName The name of the current player.
+     * @param winnerName The name of the winner.
+     * @param status The game status.
+     */
     public void drawTurnIndicator(String playerName, String currentPlayerName, String winnerName, GameStatus status) {        
         if (playerName.equals(winnerName) && status == GameStatus.FINISHED) {
             yourTurnLabel.setText("You won!");
@@ -168,6 +207,10 @@ public class GamePanel extends WindowContentPanel {
         yourTurnLabel.setVisible((playerName.equals(currentPlayerName) && status == GameStatus.IN_PROGRESS) || (playerName.equals(winnerName) && status == GameStatus.FINISHED));
     }
 
+    /**
+     * Draws the player hand.
+     * @param cards The cards to draw.
+     */
     public void drawPlayerHand(List<Card> cards) {
         handPanel.removeAll();
         for (Card card : cards) {
@@ -187,6 +230,11 @@ public class GamePanel extends WindowContentPanel {
     private static final Logger logger = LogManager.getLogger();
     private boolean hasDisplayedWinnerDialog;
 
+    /**
+     * Gets the icon for a card.
+     * @param card The card to get the icon for.
+     * @return The icon for the card.
+     */
     private Icon getCardIcon(Card card) {
         String symbol = card.getColor() == CardColor.NONE || card.getColor() == CardColor.WILD || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR ? "" : card.getColor().toString().toLowerCase() + "_";
         String fileName = symbol + card.getSymbol().toString().toLowerCase() + ".png";
@@ -210,6 +258,12 @@ public class GamePanel extends WindowContentPanel {
         return new ImageIcon(resizedImage);
     }
 
+    /**
+     * Creates a card button.
+     * @param card The card to create the button for.
+     * @param actionListener The action listener for the button.
+     * @return The created button.
+     */
     private JButton createCardButton(Card card, ActionListener actionListener) {
         JButton cardButton = new JButton(getCardIcon(card));
         cardButton.addActionListener(actionListener);
@@ -221,11 +275,21 @@ public class GamePanel extends WindowContentPanel {
         return cardButton;
     }
 
+    /**
+     * ActionListener for drawing a card.
+     */
     private class DrawCardListener implements ActionListener {
+        /**
+         * Constructor
+         * @param clientController The client controller.
+         */
         public DrawCardListener(ClientController clientController) {
             this.clientController = clientController;
         }
 
+        /**
+         * Draws a card.
+         */
         @Override
         public void actionPerformed(ActionEvent ae) {
             clientController.getPlayerController().drawCards(1);
@@ -234,13 +298,25 @@ public class GamePanel extends WindowContentPanel {
         private final ClientController clientController;
     }
 
+    /**
+     * ActionListener for discarding a card.
+     */
     private class DiscardCardListener implements ActionListener {
+        /**
+         * Constructor
+         * @param card The card to discard.
+         * @param clientController The client controller.
+         * @param frame The frame.
+         */
         public DiscardCardListener(Card card, ClientController clientController, JFrame frame) {
             this.card = card;
             this.clientController = clientController;
             this.frame = frame;
         }
 
+        /**
+         * Discards a card.
+         */
         @Override
         public void actionPerformed(ActionEvent ae) {
             CardColor desiredColor = CardColor.NONE;
@@ -256,6 +332,11 @@ public class GamePanel extends WindowContentPanel {
         private final ClientController clientController;
         private final JFrame frame;
 
+        /**
+         * Shows a color selection dialog.
+         * @param frame The frame to display the dialog in.
+         * @return The selected color.
+         */
         private CardColor showColorSelectionDialog(JFrame frame) {
             JDialog dialog = new JDialog(getFrame(), "Select a color!", true);
             dialog.setLayout(new FlowLayout());

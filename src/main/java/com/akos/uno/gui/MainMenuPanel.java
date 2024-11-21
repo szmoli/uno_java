@@ -9,7 +9,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-// source: https://stackoverflow.com/questions/15867148/why-do-we-need-to-extend-jframe-in-a-swing-application
+/**
+ * MainMenuPanel
+ * Panel for the main menu.
+ * Allows the user to join or host a game.
+ * Switches to the join game or host game panel on button press.
+ * Exits the application on window close.
+ * Source: https://stackoverflow.com/questions/15867148/why-do-we-need-to-extend-jframe-in-a-swing-application
+ */
 public class MainMenuPanel extends WindowContentPanel {
     public MainMenuPanel(JFrame frame) {
         super(new JPanel(), frame);

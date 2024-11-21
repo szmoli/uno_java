@@ -13,12 +13,23 @@ import com.akos.uno.game.GameRules;
 import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.Player;
 
+/**
+ * Handles the discard card action.
+ */
 public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAction> {
+    /**
+     * Constructor.
+     * @param gameController Game controller instance
+     * @param server Server instance
+     */
     public DiscardCardActionHandler(GameController gameController, Server server) {
         this.gameController = gameController;
         this.server = server;
     }
 
+    /**
+     * Handles the discard card action.
+     */
     @Override
     public void handle(DiscardCardAction action) {
         logger.debug("Handling discard card action");

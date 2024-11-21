@@ -8,23 +8,46 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Class for controlling the game logic.
+ */
 public class GameController {
+    /**
+     * Constructs a new GameController instance.
+     */
     public GameController() {
         this.game = new Game();
     }
 
+    /**
+     * Returns the host player of the game.
+     * @return The host player of the game
+     */
     public Player getHostPlayer() {
         return game.getState().getHostPlayer();
     }
 
+    /**
+     * Returns the current game.
+     * @return The current game
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Returns the players in the game.
+     * @return The players in the game
+     */
     public Map<String, Player> getPlayers() {
         return game.getState().getPlayers();
     }
 
+    /**
+     * Adds a player to the game.
+     * @param player The player to add
+     * @return True if the player was added, false otherwise
+     */
     public boolean addPlayer(Player player) {
         FullGameState gameState = game.getState();
 
@@ -36,10 +59,19 @@ public class GameController {
         return true;
     }
 
+    /**
+     * Removes a player from the game.
+     * @param player The player to remove
+     * @return The removed player
+     */
     public Player removePlayer(Player player) {
         return game.getState().getPlayers().remove(player.getPlayerName());
     }
 
+    /**
+     * Returns the top card of the discard pile.
+     * @return The top card of the discard pile
+     */
     public Card getTopCard() {
         try {
             return game.getState().getDeck().getDiscardPile().top();
@@ -48,18 +80,38 @@ public class GameController {
         }
     }
 
+    /**
+     * Checks if the card is a wild card.
+     * @param card The card to check
+     * @return True if the card is a wild card, false otherwise
+     */
     public boolean isWildCard(Card card) {
         return card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR;
     }
 
+    /**
+     * Returns the names of the other players in the game.
+     * @param excludedPlayer The player to exclude
+     * @return The names of the other players in the game
+     */
     public List<String> getOtherPlayerNames(Player excludedPlayer) {
         return getGame().getState().getPlayers().keySet().stream().filter(name -> !name.equals(excludedPlayer.getPlayerName())).collect(Collectors.toList());
     }
 
+    /**
+     * Returns the hand sizes of the other players in the game.
+     * @param excludedPlayer The player to exclude
+     * @return The hand sizes of the other players in the game
+     */
     public List<Integer> getOtherPlayerHandSizes(Player excludedPlayer) {
         return getGame().getState().getPlayers().values().stream().filter(p -> !p.getPlayerName().equals(excludedPlayer.getPlayerName())).map(p -> p.getHand().size()).collect(Collectors.toList());
     }
 
+    /**
+     * Adds a card to the discard pile.
+     * @param card The card to add
+     * @return True if the card was added, false otherwise
+     */
     public boolean addCardToDiscardPile(Card card) {
         if (!game.getRules().isValidMove(card)) {
             return false;
@@ -69,11 +121,20 @@ public class GameController {
         return true;
     }
 
+    /**
+     * Draws n cards from the draw pile.
+     * @param n The number of cards to draw
+     * @return The drawn cards
+     */
     public List<Card> drawCards(int n) {
         return game.getState().getDeck().drawCards(n);
     }
 
-    // Selects player at currentPlayerIndex + delta
+    /**
+     * Selects player with the specified offset from the current player.
+     * Takes order of play into account.
+     * @param delta The offset from the current player
+     */
     public void selectPlayerWithDelta(int delta) {
         FullGameState gameState = game.getState();
         int playerCount = gameState.getPlayers().size();
@@ -86,6 +147,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Returns the player with the specified offset from the current player.
+     * Takes order of play into account.
+     * @param delta The offset from the current player
+     * @return The player with the specified offset from the current player
+     */
     public Player getPlayerWithDelta(int delta) {
         FullGameState gameState = game.getState();
         int playerCount = gameState.getPlayers().size();
@@ -105,6 +172,12 @@ public class GameController {
         return gameState.getPlayers().get(playerName);
     }
 
+    /**
+     * Starts the game.
+     * Deals 7 cards to each player and draws a valid starting card. If the starting card is a wild card, it is replaced with a new card.
+     * The game status is set to IN_PROGRESS.
+     * The first player is selected and the effects of the starting card are applied.
+     */
     public void startGame() {
         FullGameState gameState = game.getState();
 
@@ -130,6 +203,11 @@ public class GameController {
         gameState.setGameStatus(GameStatus.IN_PROGRESS);
     }
 
+    /**
+     * Checks if it is the player's turn.
+     * @param player The player to check
+     * @return True if it is the player's turn, false otherwise
+     */
     public boolean isPlayersTurn(Player player) {
         int currentPlayerIndex = game.getState().getCurrentPlayerIndex();
         String currentPlayerName = game.getState().getPlayerNamesInOrder().get(currentPlayerIndex);
@@ -138,6 +216,12 @@ public class GameController {
         return player.equals(currentPlayer);
     }
 
+    /**
+     * Moves to the next round.
+     * If the player has won the game, the game status is set to FINISHED.
+     * If the previous player has forgotten to say UNO, they draw 2 cards.
+     * The next player is selected and the UNO status of the current player is reset.
+     */
     public void nextRound() {
         // player wins game
         if (getPlayerWithDelta(0).getHand().isEmpty()) {
@@ -156,10 +240,19 @@ public class GameController {
         getPlayerWithDelta(0).setHasSaidUno(false); // todo: check if this works as intended
     }
 
+    /**
+     * Sets the host player of the game.
+     * @param player The host player of the game
+     */
     public void setHostPlayer(Player player) {
         game.getState().setHostPlayer(player);
     }
 
+    /**
+     * Applies the effects of the card to the player.
+     * @param card The card to apply effects of
+     * @param player The player to apply effects to
+     */
     public void applyCardEffects(Card card, Player player) {
         logger.debug("Card effects applied: {}", card.getSymbol());
 
@@ -180,10 +273,16 @@ public class GameController {
         }
     }
 
+    /**
+     * Shuffles the draw pile.
+     */
     public void shuffleDrawPile() {
         game.getState().getDeck().shuffle();
     }
 
+    /**
+     * Returns the second card in the discard pile.
+     */
     public Card getSecondCard() {
         try {
             return game.getState().getDeck().getDiscardPile().getSecondCard();

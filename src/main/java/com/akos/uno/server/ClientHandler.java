@@ -9,9 +9,16 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// sources:
-// - https://www.w3schools.com/java/java_threads.asp
+/**
+ * Handles the client connection.
+ * Source: https://www.w3schools.com/java/java_threads.asp
+ */
 public class ClientHandler extends Thread {
+    /**
+     * Constructor.
+     * @param socket Client socket
+     * @param server Server instance
+     */
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
@@ -32,12 +39,18 @@ public class ClientHandler extends Thread {
         }        
     }
 
+    /**
+     * Sends a message to the client.
+     * @param message Message to send
+     */
     public void sendMessageToClient(String message) {
         out.println(message);
         logger.debug("Sent response to client: {}", message);
     }
 
-    // creates a new thread for the client
+    /**
+     * Runs the client thread.
+     */
     @Override
     public void run() {
         try {
@@ -58,6 +71,10 @@ public class ClientHandler extends Thread {
         }
     }
 
+    /**
+     * Gets the client socket.
+     * @return Client socket
+     */
     public Socket getSocket() {
         return socket;
     }

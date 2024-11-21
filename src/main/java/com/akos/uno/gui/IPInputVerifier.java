@@ -6,7 +6,17 @@ import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 
+/**
+ * IPInputVerifier
+ * Verifies that the input is a valid IP address and port.
+ * The input must be in the format "xxx.xxx.xxx.xxx:xxxxx".
+ */
 public class IPInputVerifier extends InputVerifier {
+    /**
+     * Verify that the input is a valid IP address and port.
+     * @param component The component to verify
+     * @return True if the input is a valid IP address and port, false otherwise
+     */
     @Override
     public boolean verify(JComponent component) {
         final String IP_PORT_REGEX = 

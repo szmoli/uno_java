@@ -8,11 +8,21 @@ import org.apache.logging.log4j.Logger;
 import com.akos.uno.communication.response.Response;
 import com.akos.uno.game.PartialGameState;
 
+/**
+ * This class listens for messages from the server and processes them.
+ */
 public class ClientListener extends Thread {
+    /**
+     * Constructor.
+     * @param clientController The client controller managing the listener's client.
+     */
     public ClientListener(ClientController clientController) {
         this.clientController = clientController;
     }
 
+    /**
+     * Listens for messages from the server and processes them on a new thread.
+     */
     @Override
     public void run() {
         Client client = clientController.getClient();

@@ -23,10 +23,15 @@ import com.akos.uno.game.GameController;
 import com.akos.uno.game.PartialGameState;
 import com.akos.uno.game.Player;
 
-// sources:
-// - https://www.geeksforgeeks.org/multithreaded-servers-in-java/
-// - https://betterstack.com/community/guides/logging/how-to-start-logging-with-log4j/
+/**
+ * Server class.
+ * Source: https://www.geeksforgeeks.org/multithreaded-servers-in-java/
+ */
 public class Server extends Thread {
+    /**
+     * Constructor.
+     * @param port Port number
+     */
     public Server(int port) {
         this.port = port;
         this.gameController = new GameController();
@@ -39,11 +44,17 @@ public class Server extends Thread {
         gameActionHandlers.put(GameActionType.START, new StartActionHandler(gameController, this));
     }
 
+    /**
+     * Runs the server thread.
+     */
     @Override
     public void run() {
         startServer();
     }
 
+    /**
+     * Starts the server.
+     */
     public void startServer() {
         try {
             serverSocket = new ServerSocket(port);
@@ -84,6 +95,9 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Stops the server.
+     */
     public void stopServer() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
@@ -94,16 +108,28 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Sends a message to a client.
+     * @param clientHandler Client handler
+     * @param message Message to send
+     */
     public synchronized void sendMessageToClient(ClientHandler clientHandler, String message) {
         clientHandler.sendMessageToClient(message);
     }
 
+    /**
+     * Broadcasts a message to all clients.
+     * @param messageJson Message to broadcast
+     */
     public synchronized void broadcastMessage(String messageJson) {
         for (ClientHandler clientHandler : clients.values()) {
             clientHandler.sendMessageToClient(messageJson);
         }
     }
 
+    /**
+     * Updates all clients.
+     */
     public synchronized void updateClients() {
         logger.debug("updating clients");
 
@@ -114,18 +140,35 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Gets the clients.
+     * @return Clients
+     */
     public synchronized Map<String, ClientHandler> getClients() {
         return clients;
     }
 
+    /**
+     * Gets the game controller.
+     * @return Game controller
+     */
     public synchronized GameController getGameController() {
         return gameController;
     }
 
+    /**
+     * Gets the ready latch.
+     * @return Ready latch
+     */
     public synchronized CountDownLatch getReadyLatch() {
         return readyLatch;
     }
 
+    /**
+     * Processes a message.
+     * @param message Message
+     * @param clientHandler Client handler
+     */
     public synchronized void processMessage(String message, ClientHandler clientHandler) {
         logger.debug("Processing message: {}", message);
         GameAction action = GameAction.createFromJson(message);
@@ -137,6 +180,10 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Disconnects a client.
+     * @param playerName Player name
+     */
     public synchronized void disconnectClient(String playerName) {
         if (playerName == null) {
             logger.error("player name was null");
@@ -161,11 +208,6 @@ public class Server extends Thread {
         } catch (IOException e) {
             logger.error("error disconnecting client: {}", e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        Server server = new Server(11111);
-        server.startServer();
     }
 
     private final int port;

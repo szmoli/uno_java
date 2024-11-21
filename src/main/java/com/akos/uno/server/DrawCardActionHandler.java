@@ -13,12 +13,23 @@ import com.akos.uno.game.GameController;
 import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.Player;
 
+/**
+ * Handles the draw card action.
+ */
 public class DrawCardActionHandler implements GameActionHandler<DrawCardAction> {
+    /**
+     * Constructor.
+     * @param gameController Game controller instance
+     * @param server Server instance
+     */
     public DrawCardActionHandler(GameController gameController, Server server) {
         this.gameController = gameController;
         this.server = server;
     }
 
+    /**
+     * Handles the draw card action.
+     */
     @Override
     public void handle(DrawCardAction action) {
         logger.debug("Handling draw card action: {}", action.getAsJson());

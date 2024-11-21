@@ -11,12 +11,24 @@ import com.akos.uno.game.Game;
 import com.akos.uno.game.GameController;
 import com.akos.uno.game.Player;
 
+/**
+ * Handles the challenge player action.
+ */
 public class ChallengePlayerActionHandler implements GameActionHandler<ChallengePlayerAction> {
+    /**
+     * Constructor.
+     * @param gameController Game controller instance
+     * @param server Server instance
+     */
     public ChallengePlayerActionHandler(GameController gameController, Server server) {
         this.gameController = gameController;
         this.server = server;
     }
 
+    /**
+     * Handles the challenge player action.
+     * @param action Challenge player action
+     */
     @Override
     public void handle(ChallengePlayerAction action) {
         logger.debug("Handling challenge player action: {}", action.getAsJson());

@@ -9,12 +9,24 @@ import com.akos.uno.game.GameController;
 import com.akos.uno.game.GameStatus;
 import com.akos.uno.game.Player;
 
+/**
+ * Handles the start action.
+ */
 public class StartActionHandler implements GameActionHandler<StartAction> {
+    /**
+     * Constructor.
+     * @param gameController Game controller instance
+     * @param server Server instance
+     */
     public StartActionHandler(GameController gameController, Server server) {
         this.gameController = gameController;
         this.server = server;
     }
 
+    /**
+     * Handles the start action.
+     * @param action Start action
+     */
     @Override
     public void handle(StartAction action) {
         logger.debug("Handling start action");

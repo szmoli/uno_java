@@ -17,6 +17,14 @@ import javax.swing.WindowConstants;
 
 import com.akos.uno.client.ClientController;
 
+/**
+ * JoinGameMenuPanel
+ * Panel for joining a game.
+ * Allows the user to input a player name and server address.
+ * Connects to the server as a client.
+ * Switches to the game panel on successful connection.
+ * Exits the application on window close.
+ */
 public class JoinGameMenuPanel extends WindowContentPanel {
     public JoinGameMenuPanel(JFrame frame) {
         super(new JPanel(), frame);

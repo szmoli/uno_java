@@ -2,7 +2,16 @@ package com.akos.uno.game;
 
 import java.util.List;
 
+/**
+ * Represents the deck of cards in the game.
+ */
 public class Deck {
+    /**
+     * Draws a specified number of cards from the draw pile.
+     * If there aren't enough cards in the draw pile, the discard pile is shuffled and its cards are transferred to the draw pile.
+     * @param n The number of cards to draw
+     * @return A list of the drawn cards
+     */
     public List<Card> drawCards(int n) {
         // if there aren't enough cards in the draw pile:
         // - take all the cards except the last discarded one from the discard pile
@@ -23,19 +32,33 @@ public class Deck {
         return drawPile.popCards(n);
     }
 
+    /**
+     * Shuffles the draw pile.
+     */
     public void shuffle() {
         drawPile.shuffle();
     }
 
+    /**
+     * Adds a list of cards to the discard pile.
+     * @param cards The cards to add
+     */
     public void addCardsToDiscardPile(List<Card> cards) {
         discardPile.pushCards(cards);
     }
 
+    /**
+     * Adds a single card to the discard pile.
+     * @param card The card to add
+     */
     public void addCardToDiscardPile(Card card) {
         discardPile.pushCard(card);
     }
 
-    // create deck according to official UNO rules and shuffle it
+    /**
+     * Constructs a new Deck instance.
+     * @param doShuffle Whether to shuffle the deck after initializing it
+     */
     public Deck(boolean doShuffle) {
         drawPile = new CardPile();
         discardPile = new CardPile();
@@ -54,10 +77,18 @@ public class Deck {
         }
     }
 
+    /**
+     * Returns the draw pile.
+     * @return The draw pile
+     */
     public CardPile getDrawPile() {
         return drawPile;
     }
 
+    /**
+     * Returns the discard pile.
+     * @return The discard pile
+     */
     public CardPile getDiscardPile() {
         return discardPile;
     }

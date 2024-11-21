@@ -8,12 +8,24 @@ import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.game.GameController;
 import com.akos.uno.game.Player;
 
+/**
+ * Handles the say uno action.
+ */
 public class SayUnoActionHandler implements GameActionHandler<SayUnoAction> {
+    /**
+     * Constructor.
+     * @param gameController Game controller instance
+     * @param server Server instance
+     */
     public SayUnoActionHandler(GameController gameController, Server server) {
         this.gameController = gameController;
         this.server = server;
     }
 
+    /**
+     * Handles the say uno action.
+     * @param action Say uno action
+     */
     @Override
     public void handle(SayUnoAction action) {
         logger.debug("Handling say uno action");

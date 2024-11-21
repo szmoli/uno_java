@@ -18,7 +18,19 @@ import javax.swing.WindowConstants;
 import com.akos.uno.client.ClientController;
 import com.akos.uno.server.Server;
 
+/**
+ * HostGameMenuPanel 
+ * Panel for hosting a game.
+ * Allows the user to input a player name and server port.
+ * Starts a server and connects to it as a client.
+ * Switches to the game panel on successful connection.
+ * Exits the application on window close.
+ */
 public class HostGameMenuPanel extends WindowContentPanel {
+    /**
+     * HostGameMenuPanel constructor
+     * @param frame The frame to display the panel in
+     */
     public HostGameMenuPanel(JFrame frame) {
         super(new JPanel(), frame);
         getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -119,7 +131,16 @@ public class HostGameMenuPanel extends WindowContentPanel {
     private final JButton hostButton;
     private final JButton cancelButton;
 
+    /**
+     * PortVerifier
+     * Verifies that the input is a valid port number.
+     */
     private class PortVerifier extends javax.swing.InputVerifier {
+        /**
+         * Verify the input
+         * @param component The component to verify
+         * @return True if the input is a valid port number, false otherwise
+         */
         @Override
         public boolean verify(JComponent component) {
             String str = ((JTextField) component).getText();

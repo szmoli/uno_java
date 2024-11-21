@@ -9,11 +9,22 @@ import org.apache.logging.log4j.Logger;
 import com.akos.uno.game.PartialGameState;
 import com.akos.uno.gui.GamePanel;
 
+/**
+ * This class updates the client view with the latest game state.
+ */
 public class ClientView {
+    /**
+     * Constructor.
+     * @param gamePanel The game panel to update.
+     */
     public ClientView(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
+    /**
+     * Updates the client view with the latest game state.
+     * @param state The latest game state.
+     */
     public void updateView(PartialGameState state) {
         logger.debug("Updating client view with: ");
         Map<String, Integer> otherPlayers = new HashMap<>();

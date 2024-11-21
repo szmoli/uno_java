@@ -1,5 +1,8 @@
 package com.akos.uno.game;
 
+/**
+ * Represents the status of a game.
+ */
 public enum GameStatus {
     INIT,
     OPEN, // game is open for players to join

@@ -7,6 +7,11 @@ import javax.swing.JFrame;
 
 import com.akos.uno.client.ClientController;
 
+/**
+ * CloseAdapter
+ * Sends a quit game request to the server when the window is closed.
+ * Exits the application.
+ */
 public class CloseAdapter extends WindowAdapter {
     public CloseAdapter(ClientController clientController, JFrame frame) {
         this.clientController = clientController;

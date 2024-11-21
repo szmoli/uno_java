@@ -8,12 +8,24 @@ import com.akos.uno.communication.response.InvalidActionResponse;
 import com.akos.uno.game.GameController;
 import com.akos.uno.game.Player;
 
+/**
+ * Handles the join action.
+ */
 public class JoinActionHandler implements GameActionHandler<JoinAction> {
+    /**
+     * Constructor.
+     * @param gameController Game controller instance
+     * @param server Server instance
+     */
     public JoinActionHandler(GameController gameController, Server server) {
         this.gameController = gameController;
         this.server = server;
     }
 
+    /**
+     * Handles the join action.
+     * @param action Join action
+     */
     @Override
     public void handle(JoinAction action) {
         logger.debug("Handling join action: {}", action.getAsJson());

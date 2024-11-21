@@ -8,21 +8,33 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
-// sources:
-// - https://www.geeksforgeeks.org/stack-class-in-java/
+/**
+ * Represents a pile of cards in the game.
+ */
 public class CardPile implements Iterable<Card> {
+    /**
+     * Constructs a new CardPile instance.
+     * Initializes the pile as an empty deque.
+     */
     public CardPile() {
         cards = new ArrayDeque<>();
     }
 
-    // adds cards to the top of the pile
+    /**
+     * Adds cards to the top of the pile.
+     * @param cards The cards to initialize the pile with
+     */
     public void pushCards(Collection<Card> cards) {
         for (Card card : cards) {
             this.cards.push(card);
         }
     }
 
-    // removes n cards from the top of the pile
+    /**
+     * Removes and returns a specified number of cards from the top of the pile.
+     * @param n The number of cards to remove
+     * @return A list of the removed cards
+     */
     public List<Card> popCards(int n) {
         if (this.cards.isEmpty()) {
             throw new IllegalStateException("CardPile is empty.");
@@ -37,7 +49,10 @@ public class CardPile implements Iterable<Card> {
         return removedCards;
     }
 
-    // adds a single card to the top of the pile
+    /**
+     * Adds a single card to the top of the pile.
+     * @param card The card to add
+     */
     public void pushCard(Card card) {
         if (card.getColor() == CardColor.NONE || card.getSymbol() == CardSymbol.NONE) {
             return;
@@ -46,7 +61,10 @@ public class CardPile implements Iterable<Card> {
         cards.push(card);
     }
 
-    // removes and returns a single card from the top of the pile
+    /**
+     * Removes and returns the top card from the pile.
+     * @return The top card
+     */
     public Card popCard() {
         if (this.cards.isEmpty()) {
             return new Card(CardColor.NONE, CardSymbol.NONE);
@@ -55,6 +73,9 @@ public class CardPile implements Iterable<Card> {
         return cards.pop();
     }
 
+    /**
+     * Shuffles the cards in the pile.
+     */
     public void shuffle() {
         List<Card> cardsList = new ArrayList<>(cards);
         Collections.shuffle(cardsList);
@@ -65,23 +86,42 @@ public class CardPile implements Iterable<Card> {
         }
     }
 
+    /**
+     * Returns the number of cards in the pile.
+     * @return The number of cards in the pile
+     */
     public int size() {
         return cards.size();
     }
 
+    /**
+     * Returns whether the pile is empty.
+     * @return True if the pile is empty, false otherwise
+     */
     public boolean isEmpty() {
         return cards.isEmpty();
     }
 
+    /**
+     * Removes all cards from the pile.
+     */
     public void clear() {
         cards.clear();
     }
 
+    /**
+     * Returns an iterator over the cards in the pile.
+     * @return An iterator over the cards in the pile
+     */
     @Override
     public Iterator<Card> iterator() {
         return cards.iterator();
     }
 
+    /**
+     * Returns the top card from the pile without removing it.
+     * @return The top card
+     */
     public Card top() {
         if (cards.isEmpty()) {
             return new Card(CardColor.NONE, CardSymbol.NONE);
@@ -90,6 +130,10 @@ public class CardPile implements Iterable<Card> {
         return cards.peek();
     }
 
+    /**
+     * Returns the second card from the top of the pile without removing it.
+     * @return The second card from the top
+     */
     public Card getSecondCard() {
         if (cards.isEmpty()) {
             return new Card(CardColor.NONE, CardSymbol.NONE);
