@@ -6,13 +6,33 @@ package com.akos.uno.communication.action;
  * Source: https://www.baeldung.com/a-guide-to-java-enums
  */
 public enum GameActionType {
+    /**
+     * Discard a card from the player's hand.
+     */
     DISCARD_CARD(DiscardCardAction.class),
+    /**
+     * Draw a card from the deck.
+     */
     DRAW_CARD(DrawCardAction.class),
+    /**
+     * Say UNO.
+     */
     SAY_UNO(SayUnoAction.class),
+    /**
+     * Challenge a player who played a wild draw four card.
+     */
     CHALLENGE_PLAYER(ChallengePlayerAction.class),
-    // JUMP_IN(JumpInAction.class),
+    /**
+     * Quit the game.
+     */
     QUIT(QuitAction.class),
+    /**
+     * Join the game.
+     */
     JOIN(JoinAction.class),
+    /**
+     * Start the game.
+     */
     START(StartAction.class);
 
     private final Class<? extends GameAction> actionClass;

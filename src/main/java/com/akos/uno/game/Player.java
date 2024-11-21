@@ -32,6 +32,7 @@ public class Player {
     /**
      * Draws a single card into the player's hand.
      * @param card The card to draw
+     * @return True if the card was successfully drawn, false otherwise
      */
     public boolean drawCard(Card card) {
         lastDrawnCards.clear();

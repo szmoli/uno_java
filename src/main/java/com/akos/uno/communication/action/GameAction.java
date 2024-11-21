@@ -19,7 +19,7 @@ public abstract class GameAction {
 
     /**
      * Get the name of the player who initiated the action.
-     * @return
+     * @return Player name
      */
     public String getPlayerName() {
         return playerName;
@@ -27,7 +27,7 @@ public abstract class GameAction {
 
     /**
      * Get the type of the action.
-     * @return
+     * @return Action type
      */
     public GameActionType getType() {
         return type;

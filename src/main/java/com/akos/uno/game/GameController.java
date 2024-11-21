@@ -298,6 +298,7 @@ public class GameController {
 
     /**
      * Returns the second card in the discard pile.
+     * @return The second card in the discard pile
      */
     public Card getSecondCard() {
         try {

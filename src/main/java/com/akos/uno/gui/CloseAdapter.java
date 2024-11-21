@@ -13,6 +13,11 @@ import com.akos.uno.client.ClientController;
  * Exits the application.
  */
 public class CloseAdapter extends WindowAdapter {
+    /**
+     * Constructor.
+     * @param clientController The client controller.
+     * @param frame The frame to close.
+     */
     public CloseAdapter(ClientController clientController, JFrame frame) {
         this.clientController = clientController;
         this.frame = frame;

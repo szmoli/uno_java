@@ -18,6 +18,10 @@ import javax.swing.WindowConstants;
  * Source: https://stackoverflow.com/questions/15867148/why-do-we-need-to-extend-jframe-in-a-swing-application
  */
 public class MainMenuPanel extends WindowContentPanel {
+    /**
+     * Constructs a new MainMenuPanel.
+     * @param frame The frame to display the panel in.
+     */
     public MainMenuPanel(JFrame frame) {
         super(new JPanel(), frame);
         getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

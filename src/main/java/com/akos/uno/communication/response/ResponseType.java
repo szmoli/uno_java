@@ -5,8 +5,17 @@ package com.akos.uno.communication.response;
  * Each type has a corresponding response class.
  */
 public enum ResponseType {
+    /**
+     * Response to an invalid action.
+     */
     INVALID_ACTION(InvalidActionResponse.class),
+    /**
+     * Response to a successful action.
+     */
     PARTIAL_GAME_STATE(PartialGameStateResponse.class),
+    /**
+     * General message response.
+     */
     MESSAGE(MessageResponse.class);
 
     private final Class<? extends Response> responseClass;

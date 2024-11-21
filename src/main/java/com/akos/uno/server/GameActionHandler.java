@@ -4,6 +4,7 @@ import com.akos.uno.communication.action.GameAction;
 
 /**
  * Handles game actions.
+ * @param <T> Type of the game action
  */
 public interface GameActionHandler<T extends GameAction> {
     /**

@@ -34,7 +34,6 @@ public class Client {
      * @param playerName The name of the player connecting to the server
      * @param address The server's IP address
      * @param port The port number to connect to
-     * @throws IOException If connection cannot be established or streams cannot be created
      */
     public synchronized void startConnection(String playerName, String address, int port) {
         try {
@@ -96,6 +95,8 @@ public class Client {
 
     /**
      * Reads a message from the server.
+     * @return The message received from the server
+     * @throws IOException If an I/O error occurs
      */
     public String getResponseFromServer() throws IOException {
         return in.readLine();
@@ -103,7 +104,7 @@ public class Client {
 
     /**
      * Sets the partial game state managed by this client.
-     * @param gameState
+     * @param gameState The new partial game state
      */
     public synchronized void setGameState(PartialGameState gameState) {
         this.gameState = gameState;

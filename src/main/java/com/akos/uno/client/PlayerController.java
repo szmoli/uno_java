@@ -46,7 +46,6 @@ public class PlayerController {
 
     /**
      * Get the player's hand size.
-     * @return The player's hand size.
      */
     public void joinGame() {
         try {
@@ -67,6 +66,7 @@ public class PlayerController {
 
     /**
      * Draw a card.
+     * @param n The number of cards to draw.
      */
     public void drawCards(int n) {
         clientController.getClient().sendMessageToServer(new DrawCardAction(getPlayer().getPlayerName(), n).getAsJson());

@@ -26,6 +26,10 @@ import com.akos.uno.client.ClientController;
  * Exits the application on window close.
  */
 public class JoinGameMenuPanel extends WindowContentPanel {
+    /**
+     * Constructs a new JoinGameMenuPanel.
+     * @param frame The frame to display the panel in.
+     */
     public JoinGameMenuPanel(JFrame frame) {
         super(new JPanel(), frame);
         getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
