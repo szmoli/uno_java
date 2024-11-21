@@ -100,7 +100,7 @@ public class GamePanel extends WindowContentPanel {
         handPanel = new JPanel();
         handPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         handScrollPane.setViewportView(handPanel);
-        handScrollPane.setPreferredSize(new Dimension(1000, 200));
+        handScrollPane.setPreferredSize(new Dimension(1000, 220));
         bottomPanel.add(handScrollPane, BorderLayout.CENTER);
 
         // Control panel
