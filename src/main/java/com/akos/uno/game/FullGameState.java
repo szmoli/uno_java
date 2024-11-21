@@ -73,7 +73,7 @@ public class FullGameState {
      * @return The players' names in the order they joined the game
      */
     public List<String> getPlayerNamesInOrder() {
-        return players.keySet().stream().toList();
+        return players.keySet().stream().toList().reversed();
     }
 
     /**

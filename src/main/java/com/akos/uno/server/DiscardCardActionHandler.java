@@ -51,7 +51,7 @@ public class DiscardCardActionHandler implements GameActionHandler<DiscardCardAc
         boolean isGameInProgress = gameController.getGame().getState().getGameStatus() == GameStatus.IN_PROGRESS;
         boolean playerExists = player != null;
         boolean isPlayersTurn = gameController.isPlayersTurn(player);
-        boolean isValidMove = rules.isValidMove(card);
+        boolean isValidMove = rules.isValidMove(card, gameController.getTopCard());
         boolean validAction = 
             isGameInProgress &&
             playerExists && // player doesn't exist

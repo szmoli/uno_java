@@ -15,11 +15,12 @@ public class GameRules {
     /**
      * Checks if the player has a card that matches the color of the top card in the discard pile.
      * @param player The player to check
+     * @param otherCard The card to check against
      * @return True if the player has a matching color card, false otherwise
      */
-    public boolean hasMatchingColorCard(Player player) {
+    public boolean hasMatchingColorCard(Player player, Card otherCard) {
         for (Card card : player.getHand())  {
-            if (card.getColor() == game.getState().getDeck().getDiscardPile().getSecondCard().getColor()) {
+            if (card.getColor() == otherCard.getColor()) {
                 return true;
             }
         }
@@ -30,21 +31,11 @@ public class GameRules {
     /**
      * Checks if the player has a card that matches the symbol or color of the top card in the discard pile.
      * @param card The card to check
+     * @param otherCard The card to check against
      * @return True if the player has a matching card, false otherwise
      */
-    public boolean isValidMove(Card card) {
-        Card topCard = game.getState().getDeck().getDiscardPile().top();
-        return card.getColor() == topCard.getColor() || card.getSymbol() == topCard.getSymbol() || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR;
-    }
-
-    /**
-     * Checks if the card matches the top card completely.
-     * @param card The card to check
-     * @return True if the card matches the top card, false otherwise
-     */
-    public boolean isValidJumpIn(Card card) {
-        Card topCard = game.getState().getDeck().getDiscardPile().top();
-        return card.getColor() == topCard.getColor() && card.getSymbol() == topCard.getSymbol();
+    public boolean isValidMove(Card card, Card otherCard) {
+        return card.getColor() == otherCard.getColor() || card.getSymbol() == otherCard.getSymbol() || card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR || card.getColor() == CardColor.WILD;
     }
 
     /**

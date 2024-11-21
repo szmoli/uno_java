@@ -113,7 +113,7 @@ public class GameController {
      * @return True if the card was added, false otherwise
      */
     public boolean addCardToDiscardPile(Card card) {
-        if (!game.getRules().isValidMove(card)) {
+        if (!game.getRules().isValidMove(card, getTopCard())) {
             return false;
         }
 
@@ -170,6 +170,15 @@ public class GameController {
         }
 
         return gameState.getPlayers().get(playerName);
+    }
+
+    /**
+     * Checks if the card is an effect card.
+     * @param card The card to check
+     * @return True if the card is an effect card, false otherwise
+     */
+    public boolean isEffectCard(Card card) {
+        return card.getSymbol() == CardSymbol.DRAW_TWO || card.getSymbol() == CardSymbol.REVERSE || card.getSymbol() == CardSymbol.SKIP || card.getSymbol() == CardSymbol.WILD_FOUR;
     }
 
     /**
@@ -249,6 +258,13 @@ public class GameController {
     }
 
     /**
+     * Reverses the order of play.
+     */
+    public void reverseOrder() {
+        game.getState().reverseOrder();
+    }
+
+    /**
      * Applies the effects of the card to the player.
      * @param card The card to apply effects of
      * @param player The player to apply effects to
@@ -262,7 +278,7 @@ public class GameController {
                 player.drawCards(drawnCards);
                 selectPlayerWithDelta(1);
             }
-            case CardSymbol.REVERSE -> game.getState().reverseOrder();
+            case CardSymbol.REVERSE -> reverseOrder();
             case CardSymbol.SKIP -> nextRound();
             case CardSymbol.WILD_FOUR -> {
                 List<Card> drawnCards = drawCards(4);

@@ -9,9 +9,6 @@ class DeckTest {
     @Test
     void testDeckCreation() {
         Deck deck = new Deck(false);
-//        for (Card card : deck.getDrawPile()) {
-//            logger.debug(card.toString());
-//        }
 
         assertEquals(108, deck.getDrawPile().size());
         assertEquals(0, deck.getDiscardPile().size());
@@ -64,5 +61,20 @@ class DeckTest {
         assertEquals(105, deck.getDrawPile().size());
         assertEquals(1, deck.getDiscardPile().size());
         assertEquals(2, cards2.size());
+    }
+
+    @Test
+    void testddCardsToDiscardPile() {
+        Deck deck = new Deck(false);
+        List<Card> cards = deck.drawCards(2);
+
+        assertEquals(106, deck.getDrawPile().size());
+        assertEquals(0, deck.getDiscardPile().size());
+
+        deck.addCardsToDiscardPile(cards);
+
+        assertEquals(106, deck.getDrawPile().size());
+        assertEquals(2, deck.getDiscardPile().size());
+        assertEquals(cards.getLast(), deck.getDiscardPile().top());
     }
 }

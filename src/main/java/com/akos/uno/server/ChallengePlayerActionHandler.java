@@ -65,7 +65,7 @@ public class ChallengePlayerActionHandler implements GameActionHandler<Challenge
             return;
         }
 
-        boolean challengedPlayerHasMatchingColorCard = game.getRules().hasMatchingColorCard(challengedPlayer);
+        boolean challengedPlayerHasMatchingColorCard = game.getRules().hasMatchingColorCard(challengedPlayer, gameController.getSecondCard());
         // challengedPlayer loses
         if (challengedPlayerHasMatchingColorCard) {
             challengedPlayer.drawCards(gameController.drawCards(6)); // draw 6 cards

@@ -37,7 +37,7 @@ public class CardPile implements Iterable<Card> {
      */
     public List<Card> popCards(int n) {
         if (this.cards.isEmpty()) {
-            throw new IllegalStateException("CardPile is empty.");
+            return new ArrayList<>(List.of(new Card(CardColor.NONE, CardSymbol.NONE)));
         }
 
         List<Card> removedCards = new ArrayList<>();
@@ -135,7 +135,7 @@ public class CardPile implements Iterable<Card> {
      * @return The second card from the top
      */
     public Card getSecondCard() {
-        if (cards.isEmpty()) {
+        if (cards.size() < 2) {
             return new Card(CardColor.NONE, CardSymbol.NONE);
         }
 
