@@ -39,15 +39,13 @@ public class ClientListener extends Thread {
         Response response = Response.createFromJson(responseJson);
 
         switch (response.getType()) {
-            case PARTIAL_GAME_STATE:
+            case PARTIAL_GAME_STATE -> {
                 PartialGameState gameState = PartialGameState.createFromJson(responseJson);
-                logger.debug("deserialized json:\n{}", gameState.getAsJson());
+                logger.debug("Processed respone:\n{}", gameState.getAsJson());
                 clientController.setGameState(gameState);
                 clientController.updateView(gameState);
-                break;
-            default:
-                logger.debug(response);
-                break;
+            }
+            default -> logger.debug("Default case\n{}", response);
         }
     }
 }

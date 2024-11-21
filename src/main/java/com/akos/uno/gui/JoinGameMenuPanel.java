@@ -53,6 +53,7 @@ public class JoinGameMenuPanel extends WindowContentPanel {
             try {
                 isConnected = connectionLatch.await(5, TimeUnit.SECONDS); // Wait up to 5 seconds for connection
             } catch (InterruptedException e) {
+                clientController.interrupt();
                 isConnected = false; // Connection interrupted
             }
 
@@ -75,7 +76,7 @@ public class JoinGameMenuPanel extends WindowContentPanel {
             // Switch to game panel on successful connection
             SwingUtilities.invokeLater(() -> {
                 frame.setContentPane(gamePanel.getPanel());
-                getFrame().addWindowListener(new CloseAdapter(getClientController(), getFrame()));
+                getFrame().addWindowListener(new CloseAdapter(clientController, getFrame()));
             });
         });
 
@@ -98,10 +99,6 @@ public class JoinGameMenuPanel extends WindowContentPanel {
         for (JComponent component : super.getPanelComponents()) {
             super.getPanel().add(component);
         }
-    }
-
-    public JPanel getPanel() {
-        return super.getPanel();
     }
 
     private final JTextField serverAddressInput;

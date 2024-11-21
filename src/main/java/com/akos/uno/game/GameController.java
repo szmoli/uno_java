@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class GameController {
     public GameController() {
         this.game = new Game();
@@ -138,14 +141,14 @@ public class GameController {
     public void nextRound() {
         // player wins game
         if (getPlayerWithDelta(0).getHand().isEmpty()) {
-            System.out.println("winner: " + getPlayerWithDelta(0).getPlayerName());
+            logger.debug("{} has won the game", getPlayerWithDelta(0).getPlayerName());
             getGame().getState().setWinner(getPlayerWithDelta(0));
             getGame().getState().setGameStatus(GameStatus.FINISHED);
         }
 
         // check if previous player has forgotten to say uno and enforce the penalty
         if (getPlayerWithDelta(-1).getHand().size() == 1 && !getPlayerWithDelta(-1).hasSaidUno()) {
-            System.out.println("forgot to say uno");
+            logger.debug("{} forgot to say UNO", getPlayerWithDelta(-1).getPlayerName());
             getPlayerWithDelta(-1).drawCards(drawCards(2));
         }
         
@@ -158,38 +161,22 @@ public class GameController {
     }
 
     public void applyCardEffects(Card card, Player player) {
+        logger.debug("Card effects applied: {}", card.getSymbol());
+
         switch (card.getSymbol()) {
-            case CardSymbol.DRAW_TWO:
-                System.out.println("apply card effects draw two");
-                {
-                    List<Card> drawnCards = drawCards(2);
-                    player.drawCards(drawnCards);
-                    selectPlayerWithDelta(1);
-                    break;
-                }
-            case CardSymbol.REVERSE:
-                System.out.println("apply card effects reverse");
-                game.getState().reverseOrder();
-                break;
-            case CardSymbol.SKIP:
-                System.out.println("apply card effects skip");
-                nextRound();
-                break;
-            case CardSymbol.WILD:
-                // do nothing I guess?
-                // this card only changes it's color to the desired color by the player who played it
-                break;
-            case CardSymbol.WILD_FOUR:
-                System.out.println("apply card effects wild four");
-                {
-                    List<Card> drawnCards = drawCards(4);
-                    player.drawCards(drawnCards);
-                    selectPlayerWithDelta(1);
-                    break;
-                }
-            default:
-                System.out.println("apply card effects none applied");
-                break;
+            case CardSymbol.DRAW_TWO -> {
+                List<Card> drawnCards = drawCards(2);
+                player.drawCards(drawnCards);
+                selectPlayerWithDelta(1);
+            }
+            case CardSymbol.REVERSE -> game.getState().reverseOrder();
+            case CardSymbol.SKIP -> nextRound();
+            case CardSymbol.WILD_FOUR -> {
+                List<Card> drawnCards = drawCards(4);
+                player.drawCards(drawnCards);
+                selectPlayerWithDelta(1);
+            }
+            default -> {}
         }
     }
 
@@ -206,4 +193,5 @@ public class GameController {
     }
 
     private final Game game;
+    private static final Logger logger = LogManager.getLogger();
 }

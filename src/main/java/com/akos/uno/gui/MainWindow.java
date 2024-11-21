@@ -10,17 +10,14 @@ public class MainWindow {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                frame = new JFrame("Card Game");
-
-                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                frame.setContentPane(new MainMenuPanel(frame).getPanel());
-                frame.pack();
-                frame.setLocationByPlatform(true);
-                frame.setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            frame = new JFrame("Card Game");
+            
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            frame.setContentPane(new MainMenuPanel(frame).getPanel());
+            frame.pack();
+            frame.setLocationByPlatform(true);
+            frame.setVisible(true);
         });
     }
 

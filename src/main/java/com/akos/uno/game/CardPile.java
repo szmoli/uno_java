@@ -1,17 +1,18 @@
 package com.akos.uno.game;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 
 // sources:
 // - https://www.geeksforgeeks.org/stack-class-in-java/
 public class CardPile implements Iterable<Card> {
     public CardPile() {
-        cards = new Stack<>();
+        cards = new ArrayDeque<>();
     }
 
     // adds cards to the top of the pile
@@ -41,11 +42,6 @@ public class CardPile implements Iterable<Card> {
         if (card.getColor() == CardColor.NONE || card.getSymbol() == CardSymbol.NONE) {
             return;
         }
-
-        // make the used up wild card wild again
-        // if (card.getColor() != CardColor.WILD && (card.getSymbol() == CardSymbol.WILD || card.getSymbol() == CardSymbol.WILD_FOUR)) {
-        //     card = new Card(CardColor.WILD, card.getSymbol());
-        // }
 
         cards.push(card);
     }
@@ -99,8 +95,8 @@ public class CardPile implements Iterable<Card> {
             return new Card(CardColor.NONE, CardSymbol.NONE);
         }
 
-        return cards.get(cards.size() - 2);
+        return cards.stream().toList().get(cards.size() - 2);
     }
 
-    private final Stack<Card> cards;
+    private final Deque<Card> cards;
 }

@@ -34,10 +34,6 @@ public class MainMenuPanel extends WindowContentPanel {
         }
     }
 
-    public JPanel getPanel() {
-        return super.getPanel();
-    }
-
-    private JButton joinGameButton;
-    private JButton hostGameButton;
+    private final JButton joinGameButton;
+    private final JButton hostGameButton;
 }

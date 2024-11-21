@@ -50,6 +50,7 @@ public class HostGameMenuPanel extends WindowContentPanel {
                 JOptionPane.showMessageDialog(frame, "Failed to join the game: " + e.getMessage(), "Join Error", JOptionPane.ERROR_MESSAGE);
                 frame.setContentPane(new MainMenuPanel(frame).getPanel());
                 frame.pack();
+                server.interrupt();
                 return;
             }
 
@@ -65,6 +66,7 @@ public class HostGameMenuPanel extends WindowContentPanel {
             try {
                 isConnected = connectionLatch.await(5, TimeUnit.SECONDS); // Wait up to 5 seconds for connection
             } catch (InterruptedException e) {
+                clientController.interrupt();
                 isConnected = false; // Connection interrupted
             }
 
@@ -87,7 +89,7 @@ public class HostGameMenuPanel extends WindowContentPanel {
             // Switch to game panel on successful connection
             SwingUtilities.invokeLater(() -> {
                 frame.setContentPane(gamePanel.getPanel());
-                getFrame().addWindowListener(new CloseAdapter(getClientController(), getFrame()));
+                getFrame().addWindowListener(new CloseAdapter(clientController, getFrame()));
             });
         });
 
@@ -110,10 +112,6 @@ public class HostGameMenuPanel extends WindowContentPanel {
         for (JComponent component : super.getPanelComponents()) {
             super.getPanel().add(component);
         }
-    }
-
-    public JPanel getPanel() {
-        return super.getPanel();
     }
 
     private final JTextField serverPortInput;

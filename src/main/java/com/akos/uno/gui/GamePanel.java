@@ -145,6 +145,8 @@ public class GamePanel extends WindowContentPanel {
         if (status != GameStatus.FINISHED || winnerName == null || hasDisplayedWinnerDialog) {
             return;
         }
+
+        hasDisplayedWinnerDialog = true;
         
         JOptionPane.showConfirmDialog(
             getFrame(), 
@@ -163,7 +165,7 @@ public class GamePanel extends WindowContentPanel {
             yourTurnLabel.setForeground(new Color(0, 255, 0));
         }
 
-        yourTurnLabel.setVisible((playerName.equals(currentPlayerName) && status == GameStatus.IN_PROGRESS) || status == GameStatus.FINISHED);
+        yourTurnLabel.setVisible((playerName.equals(currentPlayerName) && status == GameStatus.IN_PROGRESS) || (playerName.equals(winnerName) && status == GameStatus.FINISHED));
     }
 
     public void drawPlayerHand(List<Card> cards) {
@@ -179,7 +181,7 @@ public class GamePanel extends WindowContentPanel {
     private final JPanel handPanel;
     private final JPanel bottomPanel;
     private final JPanel controlPanel;
-    private JButton discardButton;
+    private final JButton discardButton;
     private final JButton drawButton;
     private final JLabel yourTurnLabel;
     private static final Logger logger = LogManager.getLogger();
@@ -197,11 +199,11 @@ public class GamePanel extends WindowContentPanel {
         }
     
         Image resizedImage = null;
-        int width = 0;
-        int height = 0;
+        int width;
+        int height;
         if (originalImage != null) {
-            width = (int) Math.round(originalImage.getWidth() * 0.4);
-            height = (int) Math.round(originalImage.getHeight() * 0.4);
+            width = (int) Math.round(originalImage.getWidth() * 0.5);
+            height = (int) Math.round(originalImage.getHeight() * 0.5);
             resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_FAST);
         }
 
@@ -248,7 +250,6 @@ public class GamePanel extends WindowContentPanel {
             }
 
             clientController.getPlayerController().discardCard(new Card(card.getColor(), card.getSymbol()), desiredColor);
-            System.out.println(desiredColor);
         }
 
         private final Card card;
@@ -275,8 +276,6 @@ public class GamePanel extends WindowContentPanel {
             dialog.add(okButton);
             dialog.setLocationRelativeTo(frame);
             dialog.setVisible(true);
-
-            System.out.println(selectedColor[0].toString());
     
             return selectedColor[0];
         }

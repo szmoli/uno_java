@@ -2,12 +2,10 @@ package com.akos.uno.game;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-public class DeckTest {
+class DeckTest {
     @Test
     void testDeckCreation() {
         Deck deck = new Deck(false);
@@ -67,6 +65,4 @@ public class DeckTest {
         assertEquals(1, deck.getDiscardPile().size());
         assertEquals(2, cards2.size());
     }
-
-    private static final Logger logger = LogManager.getLogger(DeckTest.class);
 }
