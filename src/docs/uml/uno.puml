@@ -432,7 +432,6 @@ class Server {
   + getClients(): Map<String, ClientHandler>
   + run(): void
   + getGameController(): GameController
-  + main(String[]): void
   + stopServer(): void
   + updateClients(): void
   + startServer(): void
